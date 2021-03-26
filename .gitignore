@@ -1,0 +1,7 @@
+*.*~
+venv/
+.ipynb_checkpoints/
+.coverage
+test-results/
+__pycache__/
+TAGS
