@@ -293,17 +293,18 @@ def parse_args(args: Optional[List[str]] = None) -> Namespace:
     return parsed_args
 
 
-models = []
-for i in [4, 7, 8, 10]:
-    output_filename = f"task{i}/isabelle.out"
-    models += isabelle_response_to_binar(output_filename)
-binars = [
-    binar
-    for binar in models
-    if binar.label in {"T30", "T61", "T92", "T123", "T154", "T185"}
-]
-for binar in binars:
-    binar.change_symbols()
-    print("%", binar.label)
-    print(binar.latex_mult_table())
-    print(binar.tikz_repr())
+if __name__ == "__main__":
+    models = []
+    for i in [4, 7, 8, 10]:
+        output_filename = f"task{i}/isabelle.out"
+        models += isabelle_response_to_binar(output_filename)
+    binars = [
+        binar
+        for binar in models
+        if binar.label in {"T30", "T61", "T92", "T123", "T154", "T185"}
+    ]
+    for binar in binars:
+        binar.change_symbols()
+        print("%", binar.label)
+        print(binar.latex_mult_table())
+        print(binar.tikz_repr())

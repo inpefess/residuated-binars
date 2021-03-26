@@ -38,13 +38,14 @@ def filter_theories(source_path: str, target_path: str) -> None:
     if not os.path.exists(target_path):
         os.mkdir(target_path)
     with open(os.path.join(source_path, "isabelle.out"), "r") as out_file:
-        raw_output = out_file.readlines()
-    isabelle_output = [
-        json.loads(re.compile(".*FINISHED (.*)\n?").match(line).group(1))
-        for line in raw_output
-        if "FINISHED" in line
-        and ("Sledgehammering" in line or "Nitpick" in line)
-    ][0]["nodes"]
+        final_line = [
+            re.compile(".*FINISHED (.*)\n?").match(line)
+            for line in out_file.readlines()
+            if "FINISHED" in line
+            and ("Sledgehammering" in line or "Nitpick" in line)
+        ][0]
+    if final_line is None:
+        raise ValueError(f"Unexpected Isabelle server response: {final_line}")
     results = {
         node["theory_name"][6:]: [
             message["message"]
@@ -55,7 +56,7 @@ def filter_theories(source_path: str, target_path: str) -> None:
             in message["message"]
             or "Nitpick found no counterexample" in message["message"]
         ][0]
-        for node in isabelle_output
+        for node in json.loads(final_line.group(1))["nodes"]
     }
     for result in results:
         if (
