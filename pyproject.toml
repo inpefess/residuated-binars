@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "residuated-binars"
-version = "0.0.1"
+version = "0.0.2"
 description = ""
 authors = ["Boris Shminke <boris@shminke.ml>"]
 license = "GPLv3+"
@@ -21,6 +21,7 @@ pytest = "*"
 pytest-cov = "*"
 jedi = "0.17.2"
 pre-commit = "*"
+rise = "*"
 
 [tool.black]
 line-length=79
