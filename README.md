@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/inpefess/residuated-binars.svg?style=svg)](https://circleci.com/gh/inpefess/residuated-binars)
+
 # Distributivity Laws in Residuated Binars with Involution
 
 This repo generates counter-examples for inter-relations between abstract distributivity laws in residuated binars with involution. For previous work in this field and more mathematical context see [Fussner, W., Jipsen, P. Distributive laws in residuated binars. Algebra Univers. 80, 54 (2019)](https://doi.org/10.1007/s00012-019-0625-1).
