@@ -1,0 +1,46 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@1.2
+
+jobs:
+  build-and-test:
+    docker:
+      - image: circleci/python:3.9.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "poetry.lock" }}
+            - v1-dependencies-
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -U pip poetry
+            poetry install
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "poetry.lock" }}
+      - run:
+          name: run linters
+          command: |
+            . venv/bin/activate
+            pycodestyle --max-doc-length 160 --ignore E203,E501,W503\
+                residuated_binars
+            pylint --rcfile=.pylintrc residuated_binars
+      - run:
+          name: run type checks
+          command: |
+            . venv/bin/activate
+            mypy --config-file mypy.ini residuated_binars
+      - store_artifacts:
+          path: build
+
+workflows:
+  main:
+    jobs:
+      - build-and-test
