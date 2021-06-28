@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/inpefess/residuated-binars.svg?style=svg)](https://circleci.com/gh/inpefess/residuated-binars)
+[![CircleCI](https://circleci.com/gh/inpefess/residuated-binars.svg?style=svg)](https://circleci.com/gh/inpefess/residuated-binars)[![codecov](https://codecov.io/gh/inpefess/residuated-binars/branch/master/graph/badge.svg)](https://codecov.io/gh/inpefess/residuated-binars)
 
 # Distributivity Laws in Residuated Binars with Involution
 
