@@ -103,7 +103,7 @@ class ResiduatedBinar:
         """
         return len(self.mult)
 
-    def change_symbols(self) -> None:
+    def canonise_symbols(self) -> None:
         """
         renumerate binar's items in a canonical way
         """
@@ -122,6 +122,10 @@ class ResiduatedBinar:
                 ],
             )
         }
+        self.remap_symbols(symbol_map)
+
+    def remap_symbols(self, symbol_map: Dict[str, str]) -> None:
+        """rename symbols in a given way"""
         for table_name in ["mult", "join", "meet", "over", "undr"]:
             table = getattr(self, table_name)
             new_table: CayleyTable = dict()
@@ -279,7 +283,8 @@ def isabelle_response_to_binar(filename: str) -> List[ResiduatedBinar]:
     ]
 
 
-if __name__ == "__main__":
+def main():
+    """the main function of this module"""
     models = []
     for i in [4, 7, 8, 10]:
         output_filename = f"task{i}/isabelle.out"
@@ -290,7 +295,11 @@ if __name__ == "__main__":
         if binar.label in {"T30", "T61", "T92", "T123", "T154", "T185"}
     ]
     for binar in binars:
-        binar.change_symbols()
+        binar.remap_symbols()
         print("%", binar.label)
         print(binar.latex_mult_table())
         print(binar.tikz_repr())
+
+
+if __name__ == "__main__":
+    main()
