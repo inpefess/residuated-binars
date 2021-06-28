@@ -5,3 +5,4 @@ venv/
 test-results/
 __pycache__/
 TAGS
+dist/
