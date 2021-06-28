@@ -17,9 +17,8 @@
 """
 import json
 import re
-from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Tuple, Union
 
 from dot2tex import dot2tex
 
@@ -28,7 +27,7 @@ CayleyTable = Dict[str, Dict[str, str]]
 
 @dataclass
 class ResiduatedBinar:
-    """ a representation of a residuated binar (with involution) """
+    """a representation of a residuated binar (with involution)"""
 
     label: str
     join: CayleyTable
@@ -278,19 +277,6 @@ def isabelle_response_to_binar(filename: str) -> List[ResiduatedBinar]:
         for message in messages
         if message[0] != []
     ]
-
-
-def parse_args(args: Optional[List[str]] = None) -> Namespace:
-    """
-
-    :param args: a list of string arguments
-        (for testing and use in a non script scenario)
-    :returns: arguments namespace for the script
-    """
-    argument_parser = ArgumentParser()
-    argument_parser.add_argument("--filename", type=str, required=True)
-    parsed_args = argument_parser.parse_args(args)
-    return parsed_args
 
 
 if __name__ == "__main__":

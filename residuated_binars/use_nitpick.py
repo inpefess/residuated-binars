@@ -16,6 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import os
+from argparse import ArgumentParser, Namespace
+from typing import List, Optional
 
 from residuated_binars.add_task import TaskType, add_task
 from residuated_binars.check_assumptions import check_assumptions
@@ -23,14 +25,16 @@ from residuated_binars.filter_theories import filter_theories
 from residuated_binars.generate_theories import generate_theories
 
 
-def use_nitpick():
+def use_nitpick(max_cardinality: int):
     """
     incrementally search for finite counter-examples
+
+    :param max_cardinality: maximal cardinality of a model to search for
     """
     cardinality = 2
     hypotheses = f"hyp{cardinality}"
     generate_theories(hypotheses)
-    while cardinality <= 100 and os.listdir(hypotheses) != []:
+    while cardinality <= max_cardinality and os.listdir(hypotheses) != []:
         tasks = f"task{cardinality}"
         add_task(hypotheses, tasks, TaskType.NITPICK, cardinality)
         check_assumptions(tasks)
@@ -39,5 +43,18 @@ def use_nitpick():
         filter_theories(tasks, hypotheses)
 
 
+def parse_args(args: Optional[List[str]] = None) -> Namespace:
+    """
+
+    :param args: a list of string arguments
+        (for testing and use in a non script scenario)
+    :returns: arguments namespace for the script
+    """
+    argument_parser = ArgumentParser()
+    argument_parser.add_argument("--max_cardinality", type=int, required=True)
+    parsed_args = argument_parser.parse_args(args)
+    return parsed_args
+
+
 if __name__ == "__main__":
-    use_nitpick()
+    use_nitpick(parse_args().max_cardinality)
