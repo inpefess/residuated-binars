@@ -117,7 +117,10 @@ class ResiduatedBinar:
                     key
                     for key, value in sorted(
                         self.less().items(),
-                        key=lambda key_value: len(key_value[1]),
+                        key=lambda key_value: (
+                            len(key_value[1]),
+                            key_value[0],
+                        ),
                     )
                 ],
             )
@@ -283,6 +286,27 @@ def isabelle_response_to_binar(filename: str) -> List[ResiduatedBinar]:
     ]
 
 
+def hard_coded_order(binars) -> None:
+    """
+    remap item names of all binars to have the same Hasse diagram
+
+    :param binars: a list of some very specific binars
+    :returns:
+    """
+    some_map = {
+        c: c
+        for c in [chr(ord("a") + i) for i in range(8)] + [r"\top", r"\bot"]
+    }
+    some_map.update({"f": "g", "g": "f"})
+    binars[1].remap_symbols(some_map)
+    binars[5].remap_symbols(some_map)
+    some_map.update({"a": "b", "b": "a"})
+    binars[2].remap_symbols(some_map)
+    some_map.update({"d": "e", "e": "d"})
+    binars[3].remap_symbols(some_map)
+    binars[4].remap_symbols(some_map)
+
+
 def main():
     """the main function of this module"""
     models = []
@@ -295,7 +319,9 @@ def main():
         if binar.label in {"T30", "T61", "T92", "T123", "T154", "T185"}
     ]
     for binar in binars:
-        binar.remap_symbols()
+        binar.canonise_symbols()
+    hard_coded_order(binars)
+    for binar in binars:
         print("%", binar.label)
         print(binar.latex_mult_table())
         print(binar.tikz_repr())
