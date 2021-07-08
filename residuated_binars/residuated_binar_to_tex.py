@@ -43,9 +43,9 @@ class ResiduatedBinar:
             of the binar
         """
         relation: Dict[str, List[str]] = dict()
-        for one in self.symbols():
+        for one in self.symbols:
             relation[one] = list()
-            for two in self.symbols():
+            for two in self.symbols:
                 if self.join[one][two] == two and one != two:
                     relation[one].append(two)
         return relation
@@ -144,6 +144,7 @@ class ResiduatedBinar:
             new_invo[symbol_map[one]] = symbol_map[self.invo[one]]
         self.invo = new_invo
 
+    @property
     def symbols(self) -> List[str]:
         """
         :returns: a list of symbols denoting items of a binar
@@ -169,12 +170,12 @@ class ResiduatedBinar:
             + "\\begin{tabular}"
             + f"{{l|{''.join((self.cardinality()) * 'l')}}}\n"
             + "$"
-            + "$ & $".join([r"\cdot"] + self.symbols())
+            + "$ & $".join([r"\cdot"] + self.symbols)
             + "$\\\\\\hline\n"
         )
-        for row in self.symbols():
+        for row in self.symbols:
             table += "$" + row + "$ & "
-            for col in self.symbols():
+            for col in self.symbols:
                 table += "$" + self.mult[row][col] + "$"
                 if col != r"\bot":
                     table += " & "
@@ -183,6 +184,24 @@ class ResiduatedBinar:
             table += "\n"
         table += "\\end{tabular}\n" + "\\end{table}\n"
         return table
+
+    def mace4_format(self) -> str:
+        """
+        represent the binar in ``Prover9/Mace4`` format
+        :returns: a string representation
+        """
+        self.remap_symbols(
+            {value: str(key) for key, value in enumerate(self.symbols)}
+        )
+        result = ""
+        for i in self.symbols:
+            for j in self.symbols:
+                result += f"{i} ^ {j} = {self.meet[i][j]}.\n"
+                result += f"{i} v {j} = {self.join[i][j]}.\n"
+                result += f"{i} \\ {j} = {self.undr[i][j]}.\n"
+                result += f"{i} / {j} = {self.over[i][j]}.\n"
+                result += f"{i} * {j} = {self.mult[i][j]}.\n"
+        return result
 
 
 def parse_binary_operation(line: str) -> CayleyTable:
@@ -307,8 +326,8 @@ def hard_coded_order(binars) -> None:
     binars[4].remap_symbols(some_map)
 
 
-def main():
-    """the main function of this module"""
+def generate_tex():
+    """generate some TeX code"""
     models = []
     for i in [4, 7, 8, 10]:
         output_filename = f"task{i}/isabelle.out"
@@ -327,5 +346,17 @@ def main():
         print(binar.tikz_repr())
 
 
+def generate_mace():
+    """generate Mace4 input format"""
+    models = []
+    for i in [4, 7, 8, 10]:
+        output_filename = f"task{i}/isabelle.out"
+        models += isabelle_response_to_binar(output_filename)
+    binars = [binar for binar in models if binar.label in {"T123"}]
+    for binar in binars:
+        print(binar.mace4_format())
+        break
+
+
 if __name__ == "__main__":
-    main()
+    generate_mace()
