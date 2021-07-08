@@ -203,6 +203,31 @@ class ResiduatedBinar:
                 result += f"{i} * {j} = {self.mult[i][j]}.\n"
         return result
 
+    def _cayley_tabular_view(
+        self, cayley_table: CayleyTable
+    ) -> List[List[int]]:
+        inverse_index = {symbol: i for i, symbol in enumerate(self.symbols)}
+        table: List[List[int]] = list()
+        for one in self.symbols:
+            table.append(list())
+            for two in self.symbols:
+                table[inverse_index[one]].append(
+                    inverse_index[cayley_table[one][two]]
+                )
+        return table
+
+    def tabular_format(self) -> Dict[str, List[List[int]]]:
+        """
+        :returns: a dictionary of Cayley tables as lists of lists
+        """
+        return {
+            "^": self._cayley_tabular_view(self.meet),
+            "v": self._cayley_tabular_view(self.join),
+            "*": self._cayley_tabular_view(self.mult),
+            "\\": self._cayley_tabular_view(self.undr),
+            "/": self._cayley_tabular_view(self.over),
+        }
+
 
 def parse_binary_operation(line: str) -> CayleyTable:
     """
