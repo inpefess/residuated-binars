@@ -9,4 +9,4 @@ mypy --config-file mypy.ini ${PACKAGE_NAME}
 pytest --cov ${PACKAGE_NAME} --cov-report term-missing --cov-fail-under=50 \
        --junit-xml test-results/residuated_binars.xml \
        --doctest-modules ${PACKAGE_NAME} tests
-cloc ${PACKAGE_NAME}
+cloc --include-lang Python ${PACKAGE_NAME}
