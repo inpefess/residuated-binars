@@ -43,9 +43,9 @@ class ResiduatedBinar:
             of the binar
         """
         relation: Dict[str, List[str]] = dict()
-        for one in self.symbols():
+        for one in self.symbols:
             relation[one] = list()
-            for two in self.symbols():
+            for two in self.symbols:
                 if self.join[one][two] == two and one != two:
                     relation[one].append(two)
         return relation
@@ -103,7 +103,7 @@ class ResiduatedBinar:
         """
         return len(self.mult)
 
-    def change_symbols(self) -> None:
+    def canonise_symbols(self) -> None:
         """
         renumerate binar's items in a canonical way
         """
@@ -117,11 +117,18 @@ class ResiduatedBinar:
                     key
                     for key, value in sorted(
                         self.less().items(),
-                        key=lambda key_value: len(key_value[1]),
+                        key=lambda key_value: (
+                            len(key_value[1]),
+                            key_value[0],
+                        ),
                     )
                 ],
             )
         }
+        self.remap_symbols(symbol_map)
+
+    def remap_symbols(self, symbol_map: Dict[str, str]) -> None:
+        """rename symbols in a given way"""
         for table_name in ["mult", "join", "meet", "over", "undr"]:
             table = getattr(self, table_name)
             new_table: CayleyTable = dict()
@@ -137,6 +144,7 @@ class ResiduatedBinar:
             new_invo[symbol_map[one]] = symbol_map[self.invo[one]]
         self.invo = new_invo
 
+    @property
     def symbols(self) -> List[str]:
         """
         :returns: a list of symbols denoting items of a binar
@@ -162,12 +170,12 @@ class ResiduatedBinar:
             + "\\begin{tabular}"
             + f"{{l|{''.join((self.cardinality()) * 'l')}}}\n"
             + "$"
-            + "$ & $".join([r"\cdot"] + self.symbols())
+            + "$ & $".join([r"\cdot"] + self.symbols)
             + "$\\\\\\hline\n"
         )
-        for row in self.symbols():
+        for row in self.symbols:
             table += "$" + row + "$ & "
-            for col in self.symbols():
+            for col in self.symbols:
                 table += "$" + self.mult[row][col] + "$"
                 if col != r"\bot":
                     table += " & "
@@ -176,6 +184,49 @@ class ResiduatedBinar:
             table += "\n"
         table += "\\end{tabular}\n" + "\\end{table}\n"
         return table
+
+    def mace4_format(self) -> str:
+        """
+        represent the binar in ``Prover9/Mace4`` format
+        :returns: a string representation
+        """
+        self.remap_symbols(
+            {value: str(key) for key, value in enumerate(self.symbols)}
+        )
+        result = ""
+        for i in self.symbols:
+            for j in self.symbols:
+                result += f"{i} ^ {j} = {self.meet[i][j]}.\n"
+                result += f"{i} v {j} = {self.join[i][j]}.\n"
+                result += f"{i} \\ {j} = {self.undr[i][j]}.\n"
+                result += f"{i} / {j} = {self.over[i][j]}.\n"
+                result += f"{i} * {j} = {self.mult[i][j]}.\n"
+        return result
+
+    def _cayley_tabular_view(
+        self, cayley_table: CayleyTable
+    ) -> List[List[int]]:
+        inverse_index = {symbol: i for i, symbol in enumerate(self.symbols)}
+        table: List[List[int]] = list()
+        for one in self.symbols:
+            table.append(list())
+            for two in self.symbols:
+                table[inverse_index[one]].append(
+                    inverse_index[cayley_table[one][two]]
+                )
+        return table
+
+    def tabular_format(self) -> Dict[str, List[List[int]]]:
+        """
+        :returns: a dictionary of Cayley tables as lists of lists
+        """
+        return {
+            "^": self._cayley_tabular_view(self.meet),
+            "v": self._cayley_tabular_view(self.join),
+            "*": self._cayley_tabular_view(self.mult),
+            "\\": self._cayley_tabular_view(self.undr),
+            "/": self._cayley_tabular_view(self.over),
+        }
 
 
 def parse_binary_operation(line: str) -> CayleyTable:
@@ -279,7 +330,29 @@ def isabelle_response_to_binar(filename: str) -> List[ResiduatedBinar]:
     ]
 
 
-if __name__ == "__main__":
+def hard_coded_order(binars) -> None:
+    """
+    remap item names of all binars to have the same Hasse diagram
+
+    :param binars: a list of some very specific binars
+    :returns:
+    """
+    some_map = {
+        c: c
+        for c in [chr(ord("a") + i) for i in range(8)] + [r"\top", r"\bot"]
+    }
+    some_map.update({"f": "g", "g": "f"})
+    binars[1].remap_symbols(some_map)
+    binars[5].remap_symbols(some_map)
+    some_map.update({"a": "b", "b": "a"})
+    binars[2].remap_symbols(some_map)
+    some_map.update({"d": "e", "e": "d"})
+    binars[3].remap_symbols(some_map)
+    binars[4].remap_symbols(some_map)
+
+
+def generate_tex():
+    """generate some TeX code"""
     models = []
     for i in [4, 7, 8, 10]:
         output_filename = f"task{i}/isabelle.out"
@@ -290,7 +363,25 @@ if __name__ == "__main__":
         if binar.label in {"T30", "T61", "T92", "T123", "T154", "T185"}
     ]
     for binar in binars:
-        binar.change_symbols()
+        binar.canonise_symbols()
+    hard_coded_order(binars)
+    for binar in binars:
         print("%", binar.label)
         print(binar.latex_mult_table())
         print(binar.tikz_repr())
+
+
+def generate_mace():
+    """generate Mace4 input format"""
+    models = []
+    for i in [4, 7, 8, 10]:
+        output_filename = f"task{i}/isabelle.out"
+        models += isabelle_response_to_binar(output_filename)
+    binars = [binar for binar in models if binar.label in {"T123"}]
+    for binar in binars:
+        print(binar.mace4_format())
+        break
+
+
+if __name__ == "__main__":
+    generate_mace()

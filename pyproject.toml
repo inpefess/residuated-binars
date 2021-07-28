@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "residuated-binars"
-version = "0.0.4"
+version = "0.0.5"
 description = ""
-authors = ["Boris Shminke <boris@shminke.ml>"]
+authors = ["Boris Shminke <boris@shminke.ml>", "Carlos Simpson"]
 license = "GPLv3+"
 
 [tool.poetry.dependencies]

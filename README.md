@@ -4,6 +4,8 @@
 
 This repo generates counter-examples for inter-relations between abstract distributivity laws in residuated binars with involution. For previous work in this field and more mathematical context see [Fussner, W., Jipsen, P. Distributive laws in residuated binars. Algebra Univers. 80, 54 (2019)](https://doi.org/10.1007/s00012-019-0625-1).
 
+`notebooks/rb-check.ipynb` file is a contribution of [Carlos Simpson](https://github.com/carlostsimpson).
+
 # Running this code
 
 * an installation of [Isabelle proof assistant](https://isabelle.in.tum.de) is on the `$PATH`
@@ -82,3 +84,15 @@ A mostly hard-coded script which:
 * the output is in `LaTeX` format using `tikz` package
 
 This script depends on [dot2tex](https://pypi.org/project/dot2tex).
+
+## `notebooks/binars.pkl`
+
+A serialisation of tabular representation of six binars having some particular properties. Can be obtained using `residuated_binar_to_tex.py`
+
+## `notebooks/rb-check.ipynb`
+
+A file for checking algebraic properties of `binars.pkl`
+
+## `notebooks/another-check.ipynb`
+
+Another file for checking algebraic properties of `binars.pkl`
