@@ -42,9 +42,9 @@ class ResiduatedBinar:
         :returns: some representation of a 'less' relation of a lattice reduct
             of the binar
         """
-        relation: Dict[str, List[str]] = dict()
+        relation: Dict[str, List[str]] = {}
         for one in self.symbols:
-            relation[one] = list()
+            relation[one] = []
             for two in self.symbols:
                 if self.join[one][two] == two and one != two:
                     relation[one].append(two)
@@ -62,7 +62,7 @@ class ResiduatedBinar:
                 key=lambda key_value: len(key_value[1]),
             )
         }
-        hasse = list()
+        hasse = []
         for lower in less:
             nearest = set(less[lower])
             for higher in less[lower]:
@@ -131,15 +131,15 @@ class ResiduatedBinar:
         """rename symbols in a given way"""
         for table_name in ["mult", "join", "meet", "over", "undr"]:
             table = getattr(self, table_name)
-            new_table: CayleyTable = dict()
+            new_table: CayleyTable = {}
             for one in symbol_map.keys():
-                new_table[symbol_map[one]] = dict()
+                new_table[symbol_map[one]] = {}
                 for two in symbol_map.keys():
                     new_table[symbol_map[one]][symbol_map[two]] = symbol_map[
                         table[one][two]
                     ]
             setattr(self, table_name, new_table)
-        new_invo: Dict[str, str] = dict()
+        new_invo: Dict[str, str] = {}
         for one in symbol_map.keys():
             new_invo[symbol_map[one]] = symbol_map[self.invo[one]]
         self.invo = new_invo
@@ -207,9 +207,9 @@ class ResiduatedBinar:
         self, cayley_table: CayleyTable
     ) -> List[List[int]]:
         inverse_index = {symbol: i for i, symbol in enumerate(self.symbols)}
-        table: List[List[int]] = list()
+        table: List[List[int]] = []
         for one in self.symbols:
-            table.append(list())
+            table.append([])
             for two in self.symbols:
                 table[inverse_index[one]].append(
                     inverse_index[cayley_table[one][two]]
@@ -237,14 +237,14 @@ def parse_binary_operation(line: str) -> CayleyTable:
         operation
     :returns: a Cayley table
     """
-    table: CayleyTable = dict()
+    table: CayleyTable = {}
     regex = re.compile(r"\((\d+), (\d+)\) := (\d+)")
     match = regex.search(line)
     while match is not None:
         pos = match.span()[0] + 1
         args = list(match.groups())
         if args[0] not in table:
-            table[args[0]] = dict()
+            table[args[0]] = {}
         table[args[0]][args[1]] = args[2]
         match = regex.search(line, pos)
     return table
@@ -258,7 +258,7 @@ def parse_unary_operation(line: str) -> Dict[str, str]:
         operation
     :returns: an inner representation of an unary operation
     """
-    table: Dict[str, str] = dict()
+    table: Dict[str, str] = {}
     regex = re.compile(r"(\d+) := (\d+)")
     match = regex.search(line)
     while match is not None:
@@ -287,7 +287,7 @@ def isabelle_format_to_binar(
         table: Union[CayleyTable, Dict[str, str]] = parse_binary_operation(
             match.group(2)
         )
-        if table == dict():
+        if table == {}:
             table = parse_unary_operation(match.group(2))
         args[match.group(1)] = table
         pos = match.span()[0] + 1
@@ -304,7 +304,7 @@ def isabelle_response_to_binar(filename: str) -> List[ResiduatedBinar]:
         where written
     :returns: a list of residuated binars
     """
-    with open(filename, "r") as isabelle_log:
+    with open(filename, "r", encoding="utf-8") as isabelle_log:
         nodes = json.loads(
             [
                 line
