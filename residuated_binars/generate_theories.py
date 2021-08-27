@@ -78,7 +78,9 @@ def generate_theories(path: str) -> None:
                     f"T{theory_number}", list(assumption_indices), goal_index
                 )
                 with open(
-                    os.path.join(path, f"T{theory_number}.thy"), "w"
+                    os.path.join(path, f"T{theory_number}.thy"),
+                    "w",
+                    encoding="utf-8",
                 ) as theory_file:
                     theory_file.write("\n".join(lines))
                 theory_number += 1

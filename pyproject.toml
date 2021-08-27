@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "residuated-binars"
-version = "0.0.5"
+version = "0.0.6"
 description = ""
 authors = ["Boris Shminke <boris@shminke.ml>", "Carlos Simpson"]
 license = "GPLv3+"
@@ -27,5 +27,5 @@ rise = "*"
 line-length=79
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.1.7"]
 build-backend = "poetry.core.masonry.api"

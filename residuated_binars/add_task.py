@@ -52,7 +52,9 @@ def add_task(
     if not os.path.exists(target_path):
         os.mkdir(target_path)
     for theory_name in os.listdir(source_path):
-        with open(os.path.join(source_path, theory_name), "r") as theory_file:
+        with open(
+            os.path.join(source_path, theory_name), "r", encoding="utf-8"
+        ) as theory_file:
             theory_text = theory_file.read()
         theory_text = re.sub(
             "cardinality",
@@ -63,7 +65,9 @@ def add_task(
                 theory_text,
             ),
         )
-        with open(os.path.join(target_path, theory_name), "w") as theory_file:
+        with open(
+            os.path.join(target_path, theory_name), "w", encoding="utf-8"
+        ) as theory_file:
             theory_file.write(theory_text)
 
 

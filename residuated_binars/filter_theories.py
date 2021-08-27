@@ -37,7 +37,9 @@ def filter_theories(source_path: str, target_path: str) -> None:
     """
     if not os.path.exists(target_path):
         os.mkdir(target_path)
-    with open(os.path.join(source_path, "isabelle.out"), "r") as out_file:
+    with open(
+        os.path.join(source_path, "isabelle.out"), "r", encoding="utf-8"
+    ) as out_file:
         final_line = [
             re.compile(".*FINISHED (.*)\n?").match(line)
             for line in out_file.readlines()
