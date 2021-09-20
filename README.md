@@ -2,7 +2,13 @@
 
 # Distributivity Laws in Residuated Binars with Involution
 
-This repo generates counter-examples for inter-relations between abstract distributivity laws in residuated binars with involution. For previous work in this field and more mathematical context see [Fussner, W., Jipsen, P. Distributive laws in residuated binars. Algebra Univers. 80, 54 (2019)](https://doi.org/10.1007/s00012-019-0625-1).
+This repo generates counter-examples for inter-relations between abstract distributivity laws in residuated binars with involution.
+
+If you would like to listen to a talk about this work, see [6th Conference on Artificial Intelligence and Theorem Proving](http://grid01.ciirc.cvut.cz/~mptp/zoomaitp/2021-09-06a/zoom_0.mp4)
+
+If you would like to cite this work, use [arXiv preprint](https://arxiv.org/abs/2109.05264).
+
+For previous work in this field and more mathematical context see [Fussner, W., Jipsen, P. Distributive laws in residuated binars. Algebra Univers. 80, 54 (2019)](https://doi.org/10.1007/s00012-019-0625-1).
 
 `notebooks/rb-check.ipynb` file is a contribution of [Carlos Simpson](https://github.com/carlostsimpson).
 
