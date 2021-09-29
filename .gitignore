@@ -7,3 +7,11 @@ test-results/
 __pycache__/
 TAGS
 dist/
+*.log
+*.nav
+*.out
+*.pdf
+*.aux
+*.toc
+*.vrb
+*.snm
