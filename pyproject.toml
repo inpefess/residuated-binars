@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "residuated-binars"
-version = "0.0.6"
+version = "0.0.7"
 description = ""
 authors = ["Boris Shminke <boris@shminke.ml>", "Carlos Simpson"]
 license = "GPLv3+"
