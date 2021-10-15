@@ -27,7 +27,84 @@ CayleyTable = Dict[str, Dict[str, str]]
 
 @dataclass
 class ResiduatedBinar:
-    """a representation of a residuated binar (with involution)"""
+    r"""
+        a representation of a residuated binar (with involution)
+
+    >>> binar = ResiduatedBinar(
+    ...     label="test",
+    ...     join={"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}},
+    ...     meet={"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}},
+    ...     mult={"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}},
+    ...     over={"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}},
+    ...     undr={"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}},
+    ...     invo={"0": "1", "1": "0"}
+    ... )
+    >>> binar.canonise_symbols()
+    >>> binar.less()
+    {'\\top': [], '\\bot': ['\\top']}
+    >>> binar.hasse()
+    [('\\bot', '\\top')]
+    >>> binar.graphviz_repr()
+    'graph{\n"\\top" -- "\\bot";}'
+    >>> print(binar.mace4_format())
+    0 ^ 0 = 0.
+    0 v 0 = 0.
+    0 \ 0 = 0.
+    0 / 0 = 0.
+    0 * 0 = 1.
+    0 ^ 1 = 1.
+    0 v 1 = 0.
+    0 \ 1 = 0.
+    0 / 1 = 0.
+    0 * 1 = 1.
+    1 ^ 0 = 1.
+    1 v 0 = 0.
+    1 \ 0 = 0.
+    1 / 0 = 0.
+    1 * 0 = 1.
+    1 ^ 1 = 1.
+    1 v 1 = 1.
+    1 \ 1 = 0.
+    1 / 1 = 0.
+    1 * 1 = 1.
+    <BLANKLINE>
+    >>> print(binar.latex_mult_table())
+    \begin{table}[]
+    \begin{tabular}{l|ll}
+    $\cdot$ & $0$ & $1$\\\hline
+    $0$ & $1$ & $1$ & \\
+    $1$ & $1$ & $1$ & \\
+    \end{tabular}
+    \end{table}
+    <BLANKLINE>
+    >>> print(binar.tikz_repr())
+    <BLANKLINE>
+    \begin{tikzpicture}[>=latex,line join=bevel,]
+      \pgfsetlinewidth{1bp}
+    %%
+    \pgfsetcolor{black}
+      % Edge: 0 -- 1
+      \draw [] (13.5bp,56.92bp) .. controls (13.5bp,46.948bp) and (13.5bp,31.408bp)  .. (13.5bp,21.341bp);
+      % Node: 0
+    \begin{scope}
+      \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+      \pgfsetstrokecolor{strokecol}
+      \draw (13.5bp,67.5bp) ellipse (13.5bp and 10.5bp);
+      \draw (13.5bp,67.5bp) node {$0$};
+    \end{scope}
+      % Node: 1
+    \begin{scope}
+      \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+      \pgfsetstrokecolor{strokecol}
+      \draw (13.5bp,10.5bp) ellipse (13.5bp and 10.5bp);
+      \draw (13.5bp,10.5bp) node {$1$};
+    \end{scope}
+    %
+    \end{tikzpicture}
+    <BLANKLINE>
+    >>> print("this_is_a_test_case", binar.tabular_format())
+    this_is_a_test_case {'^': [[0, 1], [1, 1]], 'v': [[0, 0], [0, 1]], '*': [[1, 1], [1, 1]], '\\': [[0, 0], [0, 0]], '/': [[0, 0], [0, 0]]}
+    """
 
     label: str
     join: CayleyTable

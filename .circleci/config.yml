@@ -41,7 +41,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest --cov residuated_binars --cov-report xml --cov-fail-under=40\
+            pytest --cov residuated_binars --cov-report xml --cov-fail-under=70\
                    --junit-xml test-results/residuated-binars.xml residuated_binars\
                    tests
       - run:
