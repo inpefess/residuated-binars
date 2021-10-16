@@ -377,6 +377,16 @@ def isabelle_response_to_binar(filename: str) -> List[ResiduatedBinar]:
     read file with replies from ``isabelle`` server and parse all residuated
     binars from it
 
+    >>> import sys
+    >>> if sys.version_info.major == 3 and sys.version_info.minor == 9:
+    ...     from importlib.resources import files
+    ... else:
+    ...     from importlib_resources import files
+    >>> len(isabelle_response_to_binar(
+    ...     files("residuated_binars").joinpath("resources/isabelle2.out")
+    ... ))
+    6
+
     :param filename: a name of a file to which all replies from Isabelle server
         where written
     :returns: a list of residuated binars
