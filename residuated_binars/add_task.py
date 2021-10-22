@@ -73,6 +73,9 @@ def add_task(
 
 def parse_args(args: Optional[List[str]] = None) -> Namespace:
     """
+    >>> print(parse_args(["--source_path", "one", "--target_path", "two",
+    ...     "--task_type", "NITPICK"]).task_type)
+    NITPICK
 
     :param args: a list of string arguments
         (for testing and use in a non script scenario)
