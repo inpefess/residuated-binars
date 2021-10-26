@@ -20,9 +20,12 @@ import re
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Union
 
+import graphviz
 from dot2tex import dot2tex
 
 CayleyTable = Dict[str, Dict[str, str]]
+TOP = r"⟙"
+BOT = r"⟘"
 
 
 @dataclass
@@ -41,11 +44,13 @@ class ResiduatedBinar:
     ... )
     >>> binar.canonise_symbols()
     >>> binar.less()
-    {'\\top': [], '\\bot': ['\\top']}
+    {'⟙': [], '⟘': ['⟙']}
     >>> binar.hasse()
-    [('\\bot', '\\top')]
-    >>> binar.graphviz_repr()
-    'graph{\n"\\top" -- "\\bot";}'
+    [('⟘', '⟙')]
+    >>> print(binar.graphviz_repr())
+    graph {
+        "⟘" -- "⟙"
+    }
     >>> print(binar.mace4_format())
     0 ^ 0 = 0.
     0 v 0 = 0.
@@ -83,21 +88,21 @@ class ResiduatedBinar:
       \pgfsetlinewidth{1bp}
     %%
     \pgfsetcolor{black}
-      % Edge: 0 -- 1
+      % Edge: 1 -- 0
       \draw [] (13.5bp,56.92bp) .. controls (13.5bp,46.948bp) and (13.5bp,31.408bp)  .. (13.5bp,21.341bp);
-      % Node: 0
-    \begin{scope}
-      \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
-      \pgfsetstrokecolor{strokecol}
-      \draw (13.5bp,67.5bp) ellipse (13.5bp and 10.5bp);
-      \draw (13.5bp,67.5bp) node {$0$};
-    \end{scope}
       % Node: 1
     \begin{scope}
       \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
       \pgfsetstrokecolor{strokecol}
+      \draw (13.5bp,67.5bp) ellipse (13.5bp and 10.5bp);
+      \draw (13.5bp,67.5bp) node {$1$};
+    \end{scope}
+      % Node: 0
+    \begin{scope}
+      \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+      \pgfsetstrokecolor{strokecol}
       \draw (13.5bp,10.5bp) ellipse (13.5bp and 10.5bp);
-      \draw (13.5bp,10.5bp) node {$1$};
+      \draw (13.5bp,10.5bp) node {$0$};
     \end{scope}
     %
     \end{tikzpicture}
@@ -152,12 +157,10 @@ class ResiduatedBinar:
         :returns: a representation usable by ``graphviz`` of a Hasse diagram of
             a lattice reduct of the binar
         """
-        graphviz_string = "graph{\n"
-        graphviz_string += "\n".join(
-            [f'"{pair[1]}" -- "{pair[0]}";' for pair in self.hasse()]
-        )
-        graphviz_string += "}"
-        return graphviz_string
+        graph = graphviz.Graph()
+        for pair in self.hasse():
+            graph.edge(pair[0], pair[1])
+        return graph
 
     def tikz_repr(self) -> str:
         """
@@ -166,7 +169,7 @@ class ResiduatedBinar:
         """
         return dot2tex(
             dot2tex(
-                self.graphviz_repr(),
+                str(self.graphviz_repr()),
                 texpreproc=True,
                 nominsize=True,
                 texmode="math",
@@ -187,9 +190,9 @@ class ResiduatedBinar:
         symbol_map = {
             pair[1]: pair[0]
             for pair in zip(
-                [r"\top"]
+                [TOP]
                 + [chr(ord("a") + i) for i in range(self.cardinality() - 2)]
-                + [r"\bot"],
+                + [BOT],
                 [
                     key
                     for key, value in sorted(
@@ -228,14 +231,14 @@ class ResiduatedBinar:
         """
         keys = list(self.mult.keys())
         pure_keys = keys.copy()
-        if r"\top" in pure_keys:
-            pure_keys.remove(r"\top")
-        if r"\bot" in pure_keys:
-            pure_keys.remove(r"\bot")
+        if TOP in pure_keys:
+            pure_keys.remove(TOP)
+        if BOT in pure_keys:
+            pure_keys.remove(BOT)
         return (
-            ([r"\top"] if r"\top" in keys else [])
+            ([TOP] if TOP in keys else [])
             + list(sorted(pure_keys))
-            + ([r"\bot"] if r"\bot" in keys else [])
+            + ([BOT] if BOT in keys else [])
         )
 
     def latex_mult_table(self) -> str:
@@ -254,9 +257,9 @@ class ResiduatedBinar:
             table += "$" + row + "$ & "
             for col in self.symbols:
                 table += "$" + self.mult[row][col] + "$"
-                if col != r"\bot":
+                if col != BOT:
                     table += " & "
-            if row != r"\bot":
+            if row != BOT:
                 table += r"\\"
             table += "\n"
         table += "\\end{tabular}\n" + "\\end{table}\n"
@@ -425,8 +428,7 @@ def hard_coded_order(binars) -> None:
     :returns:
     """
     some_map = {
-        c: c
-        for c in [chr(ord("a") + i) for i in range(8)] + [r"\top", r"\bot"]
+        c: c for c in [chr(ord("a") + i) for i in range(8)] + [TOP, BOT]
     }
     some_map.update({"f": "g", "g": "f"})
     binars[1].remap_symbols(some_map)
@@ -455,7 +457,7 @@ def generate_tex():
     for binar in binars:
         print("%", binar.label)
         print(binar.latex_mult_table())
-        print(binar.tikz_repr())
+        binar.graphviz_repr().render(binar.label)
 
 
 def generate_mace():
@@ -471,4 +473,4 @@ def generate_mace():
 
 
 if __name__ == "__main__":
-    generate_mace()
+    generate_tex()

@@ -9,6 +9,7 @@ license = "GPLv3+"
 python = "^3.9"
 isabelle-client = "*"
 dot2tex = "*"
+graphviz = "*"
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "*"
