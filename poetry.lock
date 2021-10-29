@@ -249,17 +249,6 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "dot2tex"
-version = "2.11.3"
-description = "A Graphviz to LaTeX converter"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-pyparsing = "*"
-
-[[package]]
 name = "entrypoints"
 version = "0.3"
 description = "Discover and load entry points from installed packages."
@@ -986,7 +975,7 @@ typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""
 name = "pyparsing"
 version = "3.0.3"
 description = "Python parsing module"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 
@@ -1334,7 +1323,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "761cb8da4d5b2f5f033d36a6f9e0e959a9a19ba175ae0e8cab048af97dd5629a"
+content-hash = "2c7f71a628b9d4e836d9ea6fa19f4aa5c509dd41caae70a008beb3fa3d30fe31"
 
 [metadata.files]
 anyio = [
@@ -1531,10 +1520,6 @@ defusedxml = [
 distlib = [
     {file = "distlib-0.3.3-py2.py3-none-any.whl", hash = "sha256:c8b54e8454e5bf6237cc84c20e8264c3e991e824ef27e8f1e81049867d861e31"},
     {file = "distlib-0.3.3.zip", hash = "sha256:d982d0751ff6eaaab5e2ec8e691d949ee80eddf01a62eaa96ddb11531fe16b05"},
-]
-dot2tex = [
-    {file = "dot2tex-2.11.3-py2.py3-none-any.whl", hash = "sha256:6a1f451823b27d331edca733c7f486a1849e97e77b4bafd562443f5c6e6583e2"},
-    {file = "dot2tex-2.11.3.tar.gz", hash = "sha256:299a2af05aee5bbe0257a562a506a93e279293d5c38f28d08ab8acb3233fe7ce"},
 ]
 entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},

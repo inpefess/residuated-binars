@@ -21,7 +21,6 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple, Union
 
 import graphviz
-from dot2tex import dot2tex
 
 CayleyTable = Dict[str, Dict[str, str]]
 TOP = r"⟙"
@@ -82,31 +81,6 @@ class ResiduatedBinar:
     \end{tabular}
     \end{table}
     <BLANKLINE>
-    >>> print(binar.tikz_repr())
-    <BLANKLINE>
-    \begin{tikzpicture}[>=latex,line join=bevel,]
-      \pgfsetlinewidth{1bp}
-    %%
-    \pgfsetcolor{black}
-      % Edge: 1 -- 0
-      \draw [] (13.5bp,56.92bp) .. controls (13.5bp,46.948bp) and (13.5bp,31.408bp)  .. (13.5bp,21.341bp);
-      % Node: 1
-    \begin{scope}
-      \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
-      \pgfsetstrokecolor{strokecol}
-      \draw (13.5bp,67.5bp) ellipse (13.5bp and 10.5bp);
-      \draw (13.5bp,67.5bp) node {$1$};
-    \end{scope}
-      % Node: 0
-    \begin{scope}
-      \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
-      \pgfsetstrokecolor{strokecol}
-      \draw (13.5bp,10.5bp) ellipse (13.5bp and 10.5bp);
-      \draw (13.5bp,10.5bp) node {$0$};
-    \end{scope}
-    %
-    \end{tikzpicture}
-    <BLANKLINE>
     >>> print("this_is_a_test_case", binar.tabular_format())
     this_is_a_test_case {'^': [[0, 1], [1, 1]], 'v': [[0, 0], [0, 1]], '*': [[1, 1], [1, 1]], '\\': [[0, 0], [0, 0]], '/': [[0, 0], [0, 0]]}
     """
@@ -161,21 +135,6 @@ class ResiduatedBinar:
         for pair in self.hasse():
             graph.edge(pair[0], pair[1])
         return graph
-
-    def tikz_repr(self) -> str:
-        """
-        :returns: TeX code for ``tikz`` drawing of a Hasse diagram of a lattice
-            reduct of the binar
-        """
-        return dot2tex(
-            dot2tex(
-                str(self.graphviz_repr()),
-                texpreproc=True,
-                nominsize=True,
-                texmode="math",
-            ),
-            figonly=True,
-        )
 
     def cardinality(self) -> int:
         """
