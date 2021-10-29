@@ -20,14 +20,70 @@ import re
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Union
 
-from dot2tex import dot2tex
+import graphviz
 
 CayleyTable = Dict[str, Dict[str, str]]
+TOP = r"⟙"
+BOT = r"⟘"
 
 
 @dataclass
 class ResiduatedBinar:
-    """a representation of a residuated binar (with involution)"""
+    r"""
+        a representation of a residuated binar (with involution)
+
+    >>> binar = ResiduatedBinar(
+    ...     label="test",
+    ...     join={"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}},
+    ...     meet={"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}},
+    ...     mult={"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}},
+    ...     over={"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}},
+    ...     undr={"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}},
+    ...     invo={"0": "1", "1": "0"}
+    ... )
+    >>> binar.canonise_symbols()
+    >>> binar.less()
+    {'⟙': [], '⟘': ['⟙']}
+    >>> binar.hasse()
+    [('⟘', '⟙')]
+    >>> print(binar.graphviz_repr())
+    graph {
+        "⟘" -- "⟙"
+    }
+    >>> print(binar.mace4_format())
+    0 ^ 0 = 0.
+    0 v 0 = 0.
+    0 \ 0 = 0.
+    0 / 0 = 0.
+    0 * 0 = 1.
+    0 ^ 1 = 1.
+    0 v 1 = 0.
+    0 \ 1 = 0.
+    0 / 1 = 0.
+    0 * 1 = 1.
+    1 ^ 0 = 1.
+    1 v 0 = 0.
+    1 \ 0 = 0.
+    1 / 0 = 0.
+    1 * 0 = 1.
+    1 ^ 1 = 1.
+    1 v 1 = 1.
+    1 \ 1 = 0.
+    1 / 1 = 0.
+    1 * 1 = 1.
+    <BLANKLINE>
+    >>> print(binar.latex_mult_table())
+    \begin{table}[]
+    \begin{tabular}{l|ll}
+    $\cdot$ & $0$ & $1$\\\hline
+    $0$ & $1$ & $1$ & \\
+    $1$ & $1$ & $1$ & \\
+    \end{tabular}
+    \end{table}
+    <BLANKLINE>
+    >>> print("this_is_a_test_case", binar.tabular_format())
+    this_is_a_test_case {'^': [[0, 1], [1, 1]], 'v': [[0, 0], [0, 1]], '*': [[1, 1], [1, 1]], '\\': [[0, 0], [0, 0]], '/': [[0, 0], [0, 0]]}
+    """
 
     label: str
     join: CayleyTable
@@ -75,27 +131,10 @@ class ResiduatedBinar:
         :returns: a representation usable by ``graphviz`` of a Hasse diagram of
             a lattice reduct of the binar
         """
-        graphviz_string = "graph{\n"
-        graphviz_string += "\n".join(
-            [f'"{pair[1]}" -- "{pair[0]}";' for pair in self.hasse()]
-        )
-        graphviz_string += "}"
-        return graphviz_string
-
-    def tikz_repr(self) -> str:
-        """
-        :returns: TeX code for ``tikz`` drawing of a Hasse diagram of a lattice
-            reduct of the binar
-        """
-        return dot2tex(
-            dot2tex(
-                self.graphviz_repr(),
-                texpreproc=True,
-                nominsize=True,
-                texmode="math",
-            ),
-            figonly=True,
-        )
+        graph = graphviz.Graph()
+        for pair in self.hasse():
+            graph.edge(pair[0], pair[1])
+        return graph
 
     def cardinality(self) -> int:
         """
@@ -110,9 +149,9 @@ class ResiduatedBinar:
         symbol_map = {
             pair[1]: pair[0]
             for pair in zip(
-                [r"\top"]
+                [TOP]
                 + [chr(ord("a") + i) for i in range(self.cardinality() - 2)]
-                + [r"\bot"],
+                + [BOT],
                 [
                     key
                     for key, value in sorted(
@@ -151,14 +190,14 @@ class ResiduatedBinar:
         """
         keys = list(self.mult.keys())
         pure_keys = keys.copy()
-        if r"\top" in pure_keys:
-            pure_keys.remove(r"\top")
-        if r"\bot" in pure_keys:
-            pure_keys.remove(r"\bot")
+        if TOP in pure_keys:
+            pure_keys.remove(TOP)
+        if BOT in pure_keys:
+            pure_keys.remove(BOT)
         return (
-            ([r"\top"] if r"\top" in keys else [])
+            ([TOP] if TOP in keys else [])
             + list(sorted(pure_keys))
-            + ([r"\bot"] if r"\bot" in keys else [])
+            + ([BOT] if BOT in keys else [])
         )
 
     def latex_mult_table(self) -> str:
@@ -177,9 +216,9 @@ class ResiduatedBinar:
             table += "$" + row + "$ & "
             for col in self.symbols:
                 table += "$" + self.mult[row][col] + "$"
-                if col != r"\bot":
+                if col != BOT:
                     table += " & "
-            if row != r"\bot":
+            if row != BOT:
                 table += r"\\"
             table += "\n"
         table += "\\end{tabular}\n" + "\\end{table}\n"
@@ -300,6 +339,16 @@ def isabelle_response_to_binar(filename: str) -> List[ResiduatedBinar]:
     read file with replies from ``isabelle`` server and parse all residuated
     binars from it
 
+    >>> import sys
+    >>> if sys.version_info.major == 3 and sys.version_info.minor >= 9:
+    ...     from importlib.resources import files
+    ... else:
+    ...     from importlib_resources import files
+    >>> len(isabelle_response_to_binar(
+    ...     files("residuated_binars").joinpath("resources/isabelle2.out")
+    ... ))
+    6
+
     :param filename: a name of a file to which all replies from Isabelle server
         where written
     :returns: a list of residuated binars
@@ -338,8 +387,7 @@ def hard_coded_order(binars) -> None:
     :returns:
     """
     some_map = {
-        c: c
-        for c in [chr(ord("a") + i) for i in range(8)] + [r"\top", r"\bot"]
+        c: c for c in [chr(ord("a") + i) for i in range(8)] + [TOP, BOT]
     }
     some_map.update({"f": "g", "g": "f"})
     binars[1].remap_symbols(some_map)
@@ -368,7 +416,7 @@ def generate_tex():
     for binar in binars:
         print("%", binar.label)
         print(binar.latex_mult_table())
-        print(binar.tikz_repr())
+        binar.graphviz_repr().render(binar.label)
 
 
 def generate_mace():
@@ -384,4 +432,4 @@ def generate_mace():
 
 
 if __name__ == "__main__":
-    generate_mace()
+    generate_tex()

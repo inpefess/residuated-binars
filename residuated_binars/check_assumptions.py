@@ -68,6 +68,8 @@ def check_assumptions(path: str) -> None:
 
 def parse_args(args: Optional[List[str]] = None) -> Namespace:
     """
+    >>> print(parse_args(["--path", "one"]).path)
+    one
 
     :param args: a list of string arguments
         (for testing and use in a non script scenario)

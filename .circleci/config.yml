@@ -1,14 +1,16 @@
 version: 2.1
 
-orbs:
-  python: circleci/python@1.2
-
 jobs:
   build-and-test:
     docker:
-      - image: circleci/python:3.9.1
+      - image: cimg/python:3.10.0
     working_directory: ~/repo
     steps:
+      - run:
+          name: install graphviz
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y graphviz
       - checkout
       - restore_cache:
           keys:
@@ -17,7 +19,7 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            python3 -m venv venv
+            python -m venv venv
             . venv/bin/activate
             pip install -U pip poetry
             poetry install
@@ -29,7 +31,7 @@ jobs:
           name: run linters
           command: |
             . venv/bin/activate
-            pycodestyle --max-doc-length 160 --ignore E203,E501,W503\
+            pycodestyle --max-doc-length 1000 --ignore E203,E501,W503\
                 residuated_binars
             pylint --rcfile=.pylintrc residuated_binars
       - run:
@@ -41,9 +43,10 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest --cov residuated_binars --cov-report xml --cov-fail-under=40\
-                   --junit-xml test-results/residuated-binars.xml residuated_binars\
-                   tests
+            pytest --cov residuated_binars --cov-report xml\
+                --cov-fail-under=87\
+                --junit-xml test-results/residuated-binars.xml\
+                --doctest-modules residuated_binars tests
       - run:
           name: upload data to codecov
           command: |

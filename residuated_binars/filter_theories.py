@@ -73,6 +73,9 @@ def filter_theories(source_path: str, target_path: str) -> None:
 
 def parse_args(args: Optional[List[str]] = None) -> Namespace:
     """
+    >>> print(parse_args(["--source_path", "one", "--target_path", "two"])
+    ...     .source_path)
+    one
 
     :param args: a list of string arguments
         (for testing and use in a non script scenario)

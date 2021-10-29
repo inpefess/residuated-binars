@@ -89,7 +89,7 @@ A mostly hard-coded script which:
 * represents the models as Cayley tables (for semigroup reduct), Hasse diagrams (for a lattice reduct), and a table for involution operation
 * the output is in `LaTeX` format using `tikz` package
 
-This script depends on [dot2tex](https://pypi.org/project/dot2tex).
+This script depends on [Graphviz](https://graphviz.org/).
 
 ## `notebooks/binars.pkl`
 

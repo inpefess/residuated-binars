@@ -15,16 +15,26 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+# pylint: disable=all
 import os
 import shutil
+import sys
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
 from residuated_binars.use_nitpick import parse_args, use_nitpick
 
+if sys.version_info.major == 3 and sys.version_info.minor >= 9:
+    from importlib.resources import files
+else:
+    from importlib_resources import files  # type: ignore
+
 
 def mock_use_theories(folder, master_dir, watchdog_timeout):
-    shutil.copyfile("resources/isabelle.out", "task2/isabelle.out")
+    shutil.copyfile(
+        files("residuated_binars").joinpath("resources/isabelle.out"),
+        "task2/isabelle.out",
+    )
 
 
 class TestUseNitpick(TestCase):

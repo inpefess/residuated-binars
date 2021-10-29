@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "residuated-binars"
-version = "0.0.7"
+version = "0.0.8"
 description = ""
 authors = ["Boris Shminke <boris@shminke.ml>", "Carlos Simpson"]
 license = "GPLv3+"
@@ -8,7 +8,7 @@ license = "GPLv3+"
 [tool.poetry.dependencies]
 python = "^3.9"
 isabelle-client = "*"
-dot2tex = "*"
+graphviz = "*"
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "*"
@@ -19,13 +19,14 @@ pylint = "*"
 mypy = "*"
 pytest = "*"
 pytest-cov = "*"
-jedi = "0.17.2"
+jedi = "*"
 pre-commit = "*"
 rise = "*"
+importlib_resources = {version = "*", markers = "python_version < \"3.9\" and python_version >= \"3.7\""}
 
 [tool.black]
 line-length=79
 
 [build-system]
-requires = ["poetry-core>=1.1.7"]
+requires = ["poetry-core>=1.1.11"]
 build-backend = "poetry.core.masonry.api"
