@@ -381,7 +381,7 @@ def isabelle_response_to_binar(filename: str) -> List[ResiduatedBinar]:
     binars from it
 
     >>> import sys
-    >>> if sys.version_info.major == 3 and sys.version_info.minor == 9:
+    >>> if sys.version_info.major == 3 and sys.version_info.minor >= 9:
     ...     from importlib.resources import files
     ... else:
     ...     from importlib_resources import files

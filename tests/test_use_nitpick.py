@@ -24,7 +24,7 @@ from unittest.mock import Mock, patch
 
 from residuated_binars.use_nitpick import parse_args, use_nitpick
 
-if sys.version_info.major == 3 and sys.version_info.minor == 9:
+if sys.version_info.major == 3 and sys.version_info.minor >= 9:
     from importlib.resources import files
 else:
     from importlib_resources import files  # type: ignore
