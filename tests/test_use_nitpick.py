@@ -22,7 +22,11 @@ import sys
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-from residuated_binars.use_nitpick import parse_args, use_nitpick
+from residuated_binars.use_nitpick import (
+    check_assumptions,
+    parse_args,
+    use_nitpick,
+)
 
 if sys.version_info.major == 3 and sys.version_info.minor >= 9:
     from importlib.resources import files
@@ -50,4 +54,5 @@ class TestUseNitpick(TestCase):
         shutil.rmtree("hyp3", ignore_errors=True)
         shutil.rmtree("task2", ignore_errors=True)
         use_nitpick(parse_args(["--max_cardinality", "2"]).max_cardinality)
+        check_assumptions("task2")
         self.assertEqual(len(os.listdir("hyp3")), 186)
