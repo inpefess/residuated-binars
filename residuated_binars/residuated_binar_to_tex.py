@@ -326,7 +326,7 @@ def isabelle_format_to_binar(
         table: Union[CayleyTable, Dict[str, str]] = parse_binary_operation(
             match.group(2)
         )
-        if table == {}:
+        if not table:
             table = parse_unary_operation(match.group(2))
         args[match.group(1)] = table
         pos = match.span()[0] + 1
