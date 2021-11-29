@@ -96,9 +96,8 @@ class ResiduatedBinar:
         self.mult: CayleyTable = operations["mult"]
         self.over: CayleyTable = operations["over"]
         self.undr: CayleyTable = operations["undr"]
-        self.invo: Dict[str, str] = (
-            operations["invo"] if operations["invo"] is not None else {}
-        )
+        empty_dict: Dict[str, str] = {}
+        self.invo: Dict[str, str] = operations.get("invo", empty_dict)
 
     def less(self) -> Dict[str, List[str]]:
         """
@@ -186,8 +185,9 @@ class ResiduatedBinar:
                     ]
             setattr(self, table_name, new_table)
         new_invo: Dict[str, str] = {}
-        for one in symbol_map.keys():
-            new_invo[symbol_map[one]] = symbol_map[self.invo[one]]
+        if self.invo != {}:
+            for one in symbol_map.keys():
+                new_invo[symbol_map[one]] = symbol_map[self.invo[one]]
         self.invo = new_invo
 
     @property
