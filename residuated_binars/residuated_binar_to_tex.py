@@ -17,8 +17,7 @@
 """
 import json
 import re
-from dataclasses import dataclass
-from typing import Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 import graphviz
 
@@ -27,19 +26,20 @@ TOP = r"⟙"
 BOT = r"⟘"
 
 
-@dataclass
 class ResiduatedBinar:
     r"""
         a representation of a residuated binar (with involution)
 
     >>> binar = ResiduatedBinar(
     ...     label="test",
-    ...     join={"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}},
-    ...     meet={"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}},
-    ...     mult={"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}},
-    ...     over={"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}},
-    ...     undr={"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}},
-    ...     invo={"0": "1", "1": "0"}
+    ...     operations={
+    ...         "join": {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}},
+    ...         "meet": {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}},
+    ...         "mult": {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}},
+    ...         "over": {"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}},
+    ...         "undr": {"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}},
+    ...         "invo": {"0": "1", "1": "0"}
+    ...     }
     ... )
     >>> binar.canonise_symbols()
     >>> binar.less()
@@ -85,13 +85,20 @@ class ResiduatedBinar:
     this_is_a_test_case {'^': [[0, 1], [1, 1]], 'v': [[0, 0], [0, 1]], '*': [[1, 1], [1, 1]], '\\': [[0, 0], [0, 0]], '/': [[0, 0], [0, 0]]}
     """
 
-    label: str
-    join: CayleyTable
-    meet: CayleyTable
-    mult: CayleyTable
-    over: CayleyTable
-    undr: CayleyTable
-    invo: Dict[str, str]
+    def __init__(
+        self,
+        label: str,
+        operations: Dict[str, Dict[str, Any]],
+    ):
+        self.label = label
+        self.join: CayleyTable = operations["join"]
+        self.meet: CayleyTable = operations["meet"]
+        self.mult: CayleyTable = operations["mult"]
+        self.over: CayleyTable = operations["over"]
+        self.undr: CayleyTable = operations["undr"]
+        self.invo: Dict[str, str] = (
+            operations["invo"] if operations["invo"] is not None else {}
+        )
 
     def less(self) -> Dict[str, List[str]]:
         """
@@ -321,17 +328,17 @@ def isabelle_format_to_binar(
         re.DOTALL,
     )
     match = regex.search(isabelle_message)
-    args: Dict[str, Union[str, CayleyTable, Dict[str, str]]] = {"label": label}
+    operations: Dict[str, Union[CayleyTable, Dict[str, str]]] = {}
     while match is not None:
         table: Union[CayleyTable, Dict[str, str]] = parse_binary_operation(
             match.group(2)
         )
         if not table:
             table = parse_unary_operation(match.group(2))
-        args[match.group(1)] = table
+        operations[match.group(1)] = table
         pos = match.span()[0] + 1
         match = regex.search(isabelle_message, pos)
-    return ResiduatedBinar(**args)  # type: ignore
+    return ResiduatedBinar(label, operations)
 
 
 def isabelle_response_to_binar(filename: str) -> List[ResiduatedBinar]:
