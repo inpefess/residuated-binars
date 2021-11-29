@@ -20,6 +20,7 @@ import os
 from argparse import ArgumentParser, Namespace
 from typing import List, Optional
 
+import nest_asyncio
 from isabelle_client import get_isabelle_client
 from isabelle_client.utils import start_isabelle_server
 
@@ -48,6 +49,7 @@ def check_assumptions(path: str) -> None:
     :param path: a folder with theory files
     :returns:
     """
+    nest_asyncio.apply()
     theories = [
         theory_name[0]
         for theory_name in [
