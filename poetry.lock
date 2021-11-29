@@ -283,7 +283,7 @@ pyflakes = ">=2.4.0,<2.5.0"
 
 [[package]]
 name = "graphviz"
-version = "0.18.2"
+version = "0.19"
 description = "Simple Python interface for Graphviz"
 category = "main"
 optional = false
@@ -1535,8 +1535,8 @@ flake8 = [
     {file = "flake8-4.0.1.tar.gz", hash = "sha256:806e034dda44114815e23c16ef92f95c91e4c71100ff52813adf7132a6ad870d"},
 ]
 graphviz = [
-    {file = "graphviz-0.18.2-py3-none-any.whl", hash = "sha256:b0fda999966e75e974197c2a80946e9345f730837921a1180b4fd8397bea2799"},
-    {file = "graphviz-0.18.2.zip", hash = "sha256:b876ad68bc7b441f05dee6b36cc338c6b95ddb4e523bb7313c9f3dfe56fc342a"},
+    {file = "graphviz-0.19-py3-none-any.whl", hash = "sha256:60704af002770700b099e5d684b7f2bd59c06bbaec8f575def7fba7a31a1a27a"},
+    {file = "graphviz-0.19.zip", hash = "sha256:b42554a1c47f24a9473b7f4e380d17b228586a067c97ea69d5354d6074be8dfd"},
 ]
 identify = [
     {file = "identify-2.4.0-py2.py3-none-any.whl", hash = "sha256:eba31ca80258de6bb51453084bff4a923187cd2193b9c13710f2516ab30732cc"},
