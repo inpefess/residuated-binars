@@ -22,11 +22,8 @@ import sys
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-from residuated_binars.use_nitpick import (
-    check_assumptions,
-    parse_args,
-    use_nitpick,
-)
+from residuated_binars.check_assumptions import check_assumptions
+from residuated_binars.use_nitpick import parse_args, use_nitpick
 
 if sys.version_info.major == 3 and sys.version_info.minor >= 9:
     from importlib.resources import files

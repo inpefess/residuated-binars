@@ -24,35 +24,66 @@ from residuated_binars.constants import (
     ASSUMPTIONS,
     BOUNDED_LATTICE,
     INVOLUTION,
+    LEFT_DISTRIBUTIVITY,
     RESIDUATED_BINAR,
+    RIGHT_DISTRIBUTIVITY,
 )
 
 
-def get_isabelle_theory(
-    theory_name: str,
-    assumption_indices: List[int],
-    goal_index: int,
+def generate_isabelle_theory_file(
+    theory_name: str, assumptions: List[str], goal: str
 ) -> List[str]:
     """
-    generate a text of ``isabelle`` theory file
+    generate a text of Isabelle theory file with only ones lemma inside
 
     :param theory_name: name of a theory file
-    :param assumption_indices: indices of assumption to use
-    :param goal_index: index of a goal to prove
+    :param assumptions: a list of lemma assumptions in Isabelle language
+    :param goal: the lemma goal in Isabelle language
     :returns: a list of lines of a theory file
     """
     theory_text = [f"theory {theory_name}"]
     theory_text += ["imports Main", "begin", 'lemma "(']
+    theory_text += [" &\n".join(assumptions)]
+    theory_text += [") \\<longrightarrow>"]
+    theory_text += [goal]
+    theory_text += ['"', "oops", "end"]
+    return theory_text
+
+
+def distributivity_independence_case(
+    theory_name: str,
+    assumption_indices: List[int],
+    goal_index: int,
+    with_involution: bool,
+    lattice_is_distributive: bool,
+) -> List[str]:
+    """
+    generate a text of ``isabelle`` theory file for checking independence of
+    one chosen non-trivial distributivity law in residuated binars from all the
+    others
+
+    :param theory_name: name of a theory file
+    :param assumption_indices: indices of assumption to use
+    :param goal_index: index of a goal to prove
+    :param with_involution: add involution operation or not
+    :param lattice_is_distributive: assume lattice reduct distributivity or not
+    :returns: a list of lines of a theory file
+    """
     all_assumptions = (
         RESIDUATED_BINAR
         + BOUNDED_LATTICE
-        + INVOLUTION
         + [ASSUMPTIONS[k] for k in assumption_indices]
     )
-    theory_text += [" &\n".join(all_assumptions)]
-    theory_text += [") \\<longrightarrow>"]
-    theory_text += [ASSUMPTIONS[goal_index]]
-    theory_text += ['"', "oops", "end"]
+    if with_involution:
+        all_assumptions += INVOLUTION
+    if lattice_is_distributive:
+        all_assumptions += [
+            RIGHT_DISTRIBUTIVITY.replace("f(", "meet(").replace("g(", "join"),
+            LEFT_DISTRIBUTIVITY.replace("f(", "meet(").replace("g(", "join"),
+        ]
+    theory_text = generate_isabelle_theory_file(
+        theory_name, all_assumptions, ASSUMPTIONS[goal_index]
+    )
     return theory_text
 
 
@@ -74,8 +105,12 @@ def generate_theories(path: str) -> None:
                 + list(range(goal_index + 1, total_assumptions_count)),
                 assumptions_count,
             ):
-                lines = get_isabelle_theory(
-                    f"T{theory_number}", list(assumption_indices), goal_index
+                lines = distributivity_independence_case(
+                    f"T{theory_number}",
+                    list(assumption_indices),
+                    goal_index,
+                    True,
+                    False,
                 )
                 with open(
                     os.path.join(path, f"T{theory_number}.thy"),
