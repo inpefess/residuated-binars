@@ -47,15 +47,15 @@ class Lattice:
     >>> print(lattice.mace4_format)
     0 ^ 0 = 0.
     0 v 0 = 0.
-    0 ^ 1 = 1.
-    0 v 1 = 0.
-    1 ^ 0 = 1.
-    1 v 0 = 0.
+    0 ^ 1 = 0.
+    0 v 1 = 1.
+    1 ^ 0 = 0.
+    1 v 0 = 1.
     1 ^ 1 = 1.
     1 v 1 = 1.
     <BLANKLINE>
     >>> print("this_is_a_test_case", lattice.tabular_format)
-    this_is_a_test_case {'^': [[0, 1], [1, 1]], 'v': [[0, 0], [0, 1]]}
+    this_is_a_test_case {'^': [[0, 0], [0, 1]], 'v': [[0, 1], [1, 1]]}
     """
 
     def __init__(
@@ -177,9 +177,9 @@ class Lattice:
         if BOT in pure_keys:
             pure_keys.remove(BOT)
         return (
-            ([TOP] if TOP in keys else [])
+            ([BOT] if BOT in keys else [])
             + list(sorted(pure_keys))
-            + ([BOT] if BOT in keys else [])
+            + ([TOP] if TOP in keys else [])
         )
 
     @property
