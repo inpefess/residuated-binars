@@ -36,13 +36,13 @@ class Lattice:
     ...     }
     ... )
     >>> lattice.canonise_symbols()
-    >>> lattice.less
-    {'⟙': [], '⟘': ['⟙']}
+    >>> sorted(lattice.more.items())
+    [('⟘', []), ('⟙', ['⟘'])]
     >>> lattice.hasse
-    [('⟘', '⟙')]
+    [('⟙', '⟘')]
     >>> print(lattice.graphviz_repr)
     graph {
-        "⟘" -- "⟙"
+        "⟙" -- "⟘"
     }
     >>> print(lattice.mace4_format)
     0 ^ 0 = 0.
@@ -68,16 +68,16 @@ class Lattice:
         self.meet: CayleyTable = operations["meet"]
 
     @property
-    def less(self) -> Dict[str, List[str]]:
+    def more(self) -> Dict[str, List[str]]:
         """
-        :returns: some representation of a 'less' relation of a lattice reduct
+        :returns: some representation of a 'more' relation of a lattice reduct
             of the lattice
         """
         relation: Dict[str, List[str]] = {}
         for one in self.symbols:
             relation[one] = []
             for two in self.symbols:
-                if self.join[one][two] == two and one != two:
+                if self.meet[one][two] == two and one != two:
                     relation[one].append(two)
         return relation
 
@@ -87,19 +87,19 @@ class Lattice:
         :returns: some representation of a Hasse diagram of a lattice reduct of
             the lattice
         """
-        less = {
+        more = {
             pair[0]: pair[1]
             for pair in sorted(
-                self.less.items(),
-                key=lambda key_value: len(key_value[1]),
+                self.more.items(),
+                key=lambda key_value: -len(key_value[1]),
             )
         }
         hasse = []
-        for lower in less:
-            nearest = set(less[lower])
-            for higher in less[lower]:
-                nearest = nearest.difference(set(less[higher]))
-            hasse += [(lower, neighbour) for neighbour in list(nearest)]
+        for higher in more:
+            nearest = set(more[higher])
+            for lower in more[higher]:
+                nearest = nearest.difference(set(more[lower]))
+            hasse += [(higher, neighbour) for neighbour in list(nearest)]
         return hasse
 
     @property
@@ -127,13 +127,13 @@ class Lattice:
         symbol_map = {
             pair[1]: pair[0]
             for pair in zip(
-                [TOP]
+                [BOT]
                 + [chr(ord("a") + i) for i in range(self.cardinality - 2)]
-                + [BOT],
+                + [TOP],
                 [
                     key
                     for key, value in sorted(
-                        self.less.items(),
+                        self.more.items(),
                         key=lambda key_value: (
                             len(key_value[1]),
                             key_value[0],

@@ -36,13 +36,13 @@ class ResiduatedBinar(Lattice):
     ...     }
     ... )
     >>> binar.canonise_symbols()
-    >>> binar.less
-    {'⟙': [], '⟘': ['⟙']}
+    >>> sorted(binar.more.items())
+    [('⟘', []), ('⟙', ['⟘'])]
     >>> binar.hasse
-    [('⟘', '⟙')]
+    [('⟙', '⟘')]
     >>> print(binar.graphviz_repr)
     graph {
-        "⟘" -- "⟙"
+        "⟙" -- "⟘"
     }
     >>> print(binar.mace4_format)
     0 ^ 0 = 0.
