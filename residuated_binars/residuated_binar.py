@@ -15,16 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
-import graphviz
-
-CayleyTable = Dict[str, Dict[str, str]]
-TOP = r"⟙"
-BOT = r"⟘"
+from residuated_binars.lattice import BOT, CayleyTable, Lattice
 
 
-class ResiduatedBinar:
+class ResiduatedBinar(Lattice):
     r"""
         a representation of a residuated binar (with involution)
 
@@ -51,21 +47,21 @@ class ResiduatedBinar:
     >>> print(binar.mace4_format)
     0 ^ 0 = 0.
     0 v 0 = 0.
+    0 ^ 1 = 1.
+    0 v 1 = 0.
+    1 ^ 0 = 1.
+    1 v 0 = 0.
+    1 ^ 1 = 1.
+    1 v 1 = 1.
     0 \ 0 = 0.
     0 / 0 = 0.
     0 * 0 = 1.
-    0 ^ 1 = 1.
-    0 v 1 = 0.
     0 \ 1 = 0.
     0 / 1 = 0.
     0 * 1 = 1.
-    1 ^ 0 = 1.
-    1 v 0 = 0.
     1 \ 0 = 0.
     1 / 0 = 0.
     1 * 0 = 1.
-    1 ^ 1 = 1.
-    1 v 1 = 1.
     1 \ 1 = 0.
     1 / 1 = 0.
     1 * 1 = 1.
@@ -88,126 +84,21 @@ class ResiduatedBinar:
         label: str,
         operations: Dict[str, Dict[str, Any]],
     ):
-        self.label = label
-        self.join: CayleyTable = operations["join"]
-        self.meet: CayleyTable = operations["meet"]
+        super().__init__(label, operations)
         self.mult: CayleyTable = operations["mult"]
         self.over: CayleyTable = operations["over"]
         self.undr: CayleyTable = operations["undr"]
         empty_dict: Dict[str, str] = {}
         self.invo: Dict[str, str] = operations.get("invo", empty_dict)
 
-    @property
-    def less(self) -> Dict[str, List[str]]:
-        """
-        :returns: some representation of a 'less' relation of a lattice reduct
-            of the binar
-        """
-        relation: Dict[str, List[str]] = {}
-        for one in self.symbols:
-            relation[one] = []
-            for two in self.symbols:
-                if self.join[one][two] == two and one != two:
-                    relation[one].append(two)
-        return relation
-
-    @property
-    def hasse(self) -> List[Tuple[str, str]]:
-        """
-        :returns: some representation of a Hasse diagram of a lattice reduct of
-            the binar
-        """
-        less = {
-            pair[0]: pair[1]
-            for pair in sorted(
-                self.less.items(),
-                key=lambda key_value: len(key_value[1]),
-            )
-        }
-        hasse = []
-        for lower in less:
-            nearest = set(less[lower])
-            for higher in less[lower]:
-                nearest = nearest.difference(set(less[higher]))
-            hasse += [(lower, neighbour) for neighbour in list(nearest)]
-        return hasse
-
-    @property
-    def graphviz_repr(self) -> str:
-        """
-        :returns: a representation usable by ``graphviz`` of a Hasse diagram of
-            a lattice reduct of the binar
-        """
-        graph = graphviz.Graph()
-        for pair in self.hasse:
-            graph.edge(pair[0], pair[1])
-        return graph
-
-    @property
-    def cardinality(self) -> int:
-        """
-        :returns: number of items in the binar
-        """
-        return len(self.mult)
-
-    def canonise_symbols(self) -> None:
-        """
-        renumerate binar's items in a canonical way
-        """
-        symbol_map = {
-            pair[1]: pair[0]
-            for pair in zip(
-                [TOP]
-                + [chr(ord("a") + i) for i in range(self.cardinality - 2)]
-                + [BOT],
-                [
-                    key
-                    for key, value in sorted(
-                        self.less.items(),
-                        key=lambda key_value: (
-                            len(key_value[1]),
-                            key_value[0],
-                        ),
-                    )
-                ],
-            )
-        }
-        self.remap_symbols(symbol_map)
-
     def remap_symbols(self, symbol_map: Dict[str, str]) -> None:
         """rename symbols in a given way"""
-        for table_name in ["mult", "join", "meet", "over", "undr"]:
-            table = getattr(self, table_name)
-            new_table: CayleyTable = {}
-            for one in symbol_map.keys():
-                new_table[symbol_map[one]] = {}
-                for two in symbol_map.keys():
-                    new_table[symbol_map[one]][symbol_map[two]] = symbol_map[
-                        table[one][two]
-                    ]
-            setattr(self, table_name, new_table)
+        super().remap_symbols(symbol_map)
         new_invo: Dict[str, str] = {}
         if self.invo != {}:
             for one in symbol_map.keys():
                 new_invo[symbol_map[one]] = symbol_map[self.invo[one]]
         self.invo = new_invo
-
-    @property
-    def symbols(self) -> List[str]:
-        """
-        :returns: a list of symbols denoting items of a binar
-        """
-        keys = list(self.mult.keys())
-        pure_keys = keys.copy()
-        if TOP in pure_keys:
-            pure_keys.remove(TOP)
-        if BOT in pure_keys:
-            pure_keys.remove(BOT)
-        return (
-            ([TOP] if TOP in keys else [])
-            + list(sorted(pure_keys))
-            + ([BOT] if BOT in keys else [])
-        )
 
     @property
     def latex_mult_table(self) -> str:
@@ -235,6 +126,14 @@ class ResiduatedBinar:
         return table
 
     @property
+    def binary_operations(self) -> List[str]:
+        """
+        :returns: a list of binary operation names existing in this algebraic
+            structure
+        """
+        return super().binary_operations + ["mult", "over", "undr"]
+
+    @property
     def mace4_format(self) -> str:
         """
         represent the binar in ``Prover9/Mace4`` format
@@ -243,38 +142,25 @@ class ResiduatedBinar:
         self.remap_symbols(
             {value: str(key) for key, value in enumerate(self.symbols)}
         )
-        result = ""
+        result = super().mace4_format
         for i in self.symbols:
             for j in self.symbols:
-                result += f"{i} ^ {j} = {self.meet[i][j]}.\n"
-                result += f"{i} v {j} = {self.join[i][j]}.\n"
                 result += f"{i} \\ {j} = {self.undr[i][j]}.\n"
                 result += f"{i} / {j} = {self.over[i][j]}.\n"
                 result += f"{i} * {j} = {self.mult[i][j]}.\n"
         return result
-
-    def _cayley_tabular_view(
-        self, cayley_table: CayleyTable
-    ) -> List[List[int]]:
-        inverse_index = {symbol: i for i, symbol in enumerate(self.symbols)}
-        table: List[List[int]] = []
-        for one in self.symbols:
-            table.append([])
-            for two in self.symbols:
-                table[inverse_index[one]].append(
-                    inverse_index[cayley_table[one][two]]
-                )
-        return table
 
     @property
     def tabular_format(self) -> Dict[str, List[List[int]]]:
         """
         :returns: a dictionary of Cayley tables as lists of lists
         """
-        return {
-            "^": self._cayley_tabular_view(self.meet),
-            "v": self._cayley_tabular_view(self.join),
-            "*": self._cayley_tabular_view(self.mult),
-            "\\": self._cayley_tabular_view(self.undr),
-            "/": self._cayley_tabular_view(self.over),
-        }
+        res = super().tabular_format
+        res.update(
+            {
+                "*": self._cayley_tabular_view(self.mult),
+                "\\": self._cayley_tabular_view(self.undr),
+                "/": self._cayley_tabular_view(self.over),
+            }
+        )
+        return res

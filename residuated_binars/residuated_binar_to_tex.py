@@ -19,12 +19,8 @@ import json
 import re
 from typing import Dict, List, Union
 
-from residuated_binars.residuated_binar import (
-    BOT,
-    TOP,
-    CayleyTable,
-    ResiduatedBinar,
-)
+from residuated_binars.lattice import BOT, TOP, CayleyTable
+from residuated_binars.residuated_binar import ResiduatedBinar
 
 
 def parse_binary_operation(line: str) -> CayleyTable:
