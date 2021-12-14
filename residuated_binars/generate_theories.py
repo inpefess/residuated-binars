@@ -24,9 +24,7 @@ from residuated_binars.constants import (
     BOUNDED_LATTICE,
     FALSE_DISTRIBUTIVITY_LAWS,
     INVOLUTION,
-    LEFT_DISTRIBUTIVITY,
     RESIDUATED_BINAR,
-    RIGHT_DISTRIBUTIVITY,
 )
 
 
@@ -57,8 +55,7 @@ def distributivity_independence_case(
     theory_name: str,
     assumption_indices: List[int],
     goal_index: int,
-    with_involution: bool,
-    lattice_is_distributive: bool,
+    additional_assumptions: List[str],
 ) -> List[str]:
     """
     generate a text of ``isabelle`` theory file for checking independence of
@@ -68,39 +65,34 @@ def distributivity_independence_case(
     :param theory_name: name of a theory file
     :param assumption_indices: indices of assumption to use
     :param goal_index: index of a goal to prove
-    :param with_involution: add involution operation or not
-    :param lattice_is_distributive: assume lattice reduct distributivity or not
+    :param additional_assumptions: a list of additional assumptions about
+        the binars like the lattice reduct distributivity, existence of
+        an involution operation, and multiplication associativity
     :returns: a list of lines of a theory file
     """
     all_assumptions = (
         RESIDUATED_BINAR
         + BOUNDED_LATTICE
         + [FALSE_DISTRIBUTIVITY_LAWS[k] for k in assumption_indices]
+        + additional_assumptions
     )
-    if with_involution:
-        all_assumptions += INVOLUTION
-    if lattice_is_distributive:
-        all_assumptions += [
-            RIGHT_DISTRIBUTIVITY.replace("f(", "meet(").replace("g(", "join"),
-            LEFT_DISTRIBUTIVITY.replace("f(", "meet(").replace("g(", "join"),
-        ]
     theory_text = generate_isabelle_theory_file(
         theory_name, all_assumptions, FALSE_DISTRIBUTIVITY_LAWS[goal_index]
     )
     return theory_text
 
 
-def generate_theories(path: str) -> None:
+def generate_theories(path: str, additional_assumptions: List[str]) -> None:
     """
     generate a bunch of initial theories to check
 
     :param path: a folder for storing initial theories to check
+    :param additional_assumptions: a list of additional assumptions
     :returns:
     """
     if not os.path.exists(path):
         os.mkdir(path)
     total_assumptions_count = len(FALSE_DISTRIBUTIVITY_LAWS)
-    theory_number = 0
     for goal_index in range(total_assumptions_count):
         for assumptions_count in range(1, total_assumptions_count):
             for assumption_indices in combinations(
@@ -108,20 +100,22 @@ def generate_theories(path: str) -> None:
                 + list(range(goal_index + 1, total_assumptions_count)),
                 assumptions_count,
             ):
+                assumption_list = list(assumption_indices)
+                theory_name = (
+                    f"T{''.join(map(str, assumption_list))}_{goal_index}"
+                )
                 lines = distributivity_independence_case(
-                    f"T{theory_number}",
-                    list(assumption_indices),
+                    theory_name,
+                    assumption_list,
                     goal_index,
-                    True,
-                    False,
+                    additional_assumptions,
                 )
                 with open(
-                    os.path.join(path, f"T{theory_number}.thy"),
+                    os.path.join(path, f"{theory_name}.thy"),
                     "w",
                     encoding="utf-8",
                 ) as theory_file:
                     theory_file.write("\n".join(lines))
-                theory_number += 1
 
 
 def parse_args(args: Optional[List[str]] = None) -> Namespace:
@@ -141,4 +135,4 @@ def parse_args(args: Optional[List[str]] = None) -> Namespace:
 
 if __name__ == "__main__":
     arguments = parse_args()
-    generate_theories(arguments.path)
+    generate_theories(arguments.path, INVOLUTION)
