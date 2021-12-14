@@ -75,6 +75,11 @@ class ResiduatedBinar(Lattice):
     \end{tabular}
     \end{table}
     <BLANKLINE>
+    >>> print(binar.markdown_mult_table)
+    |*|0|1|
+    |-|-|-|
+    |**0**|0|0|
+    |**1**|0|0|
     >>> print("this_is_a_test_case", binar.tabular_format)
     this_is_a_test_case {'^': [[0, 0], [0, 1]], 'v': [[0, 1], [1, 1]], '*': [[0, 0], [0, 0]], '\\': [[1, 1], [1, 1]], '/': [[1, 1], [1, 1]]}
     """
@@ -123,6 +128,20 @@ class ResiduatedBinar(Lattice):
                 table += r"\\"
             table += "\n"
         table += "\\end{tabular}\n" + "\\end{table}\n"
+        return table
+
+    @property
+    def markdown_mult_table(self) -> str:
+        """
+        :returns: a Markdown representation of a multiplication table
+        """
+        table = "|*|" + "|".join(self.symbols) + "|\n"
+        table += "|" + (1 + len(self.symbols)) * "-|" + "\n"
+        for row in self.symbols:
+            table += "|**" + row + "**|"
+            for col in self.symbols:
+                table += self.mult[row][col] + "|"
+            table += "\n"
         return table
 
     @property
