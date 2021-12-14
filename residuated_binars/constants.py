@@ -43,8 +43,6 @@ LATTICE = [
     ASSOCIATIVITY.replace("f(", "join("),
     ABSORPTION.replace("f(", "meet(").replace("g(", "join("),
     ABSORPTION.replace("g(", "meet(").replace("f(", "join("),
-    IDEMPOTENCE.replace("f(", "meet("),
-    IDEMPOTENCE.replace("f(", "join("),
 ]
 
 RESIDUATED_BINAR = LATTICE + [
