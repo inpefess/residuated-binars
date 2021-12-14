@@ -98,9 +98,11 @@ FALSE_DISTRIBUTIVITY_LAWS = [
     .replace("h(", "join("),
 ]
 
-MODULARITY = f"{FOR_X_Y_Z} f(g(x, z), g(y, z)) = g(f(g(x, z), y), z)".replace(
-    "f(", "join"
-).replace("g(", "meet")
+MODULARITY = (
+    f"({FOR_X_Y_Z} f(g(x, z), g(y, z)) = g(f(g(x, z), y), z))".replace(
+        "f(", "join("
+    ).replace("g(", "meet(")
+)
 
 INVOLUTION = [
     DE_MORGAN.replace("f(", "invo(")
