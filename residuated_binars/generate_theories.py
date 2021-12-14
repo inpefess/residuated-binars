@@ -31,7 +31,7 @@ from residuated_binars.constants import (
 
 
 def generate_isabelle_theory_file(
-    theory_name: str, assumptions: List[str], goal: str
+    theory_name: str, assumptions: List[str], goal: Optional[str] = None
 ) -> List[str]:
     """
     generate a text of Isabelle theory file with only ones lemma inside
@@ -44,8 +44,11 @@ def generate_isabelle_theory_file(
     theory_text = [f"theory {theory_name}"]
     theory_text += ["imports Main", "begin", 'lemma "(']
     theory_text += [" &\n".join(assumptions)]
-    theory_text += [") \\<longrightarrow>"]
-    theory_text += [goal]
+    if goal is not None:
+        theory_text += [") \\<longrightarrow>"]
+        theory_text += [goal]
+    else:
+        theory_text += [")"]
     theory_text += ['"', "oops", "end"]
     return theory_text
 

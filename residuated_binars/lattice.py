@@ -220,3 +220,6 @@ class Lattice:
             "^": self._cayley_tabular_view(self.meet),
             "v": self._cayley_tabular_view(self.join),
         }
+
+    def __repr__(self):
+        return str(self.tabular_format)
