@@ -15,3 +15,5 @@ dist/
 *.toc
 *.vrb
 *.snm
+examples/hyp*
+examples/task*
