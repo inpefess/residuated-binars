@@ -20,6 +20,7 @@ from typing import Dict, List, Tuple
 import graphviz
 
 from residuated_binars.algebraic_structure import BOT, TOP, AlgebraicStructure
+from residuated_binars.axiom_checkers import absorbs, associative, commutative
 
 
 class Lattice(AlgebraicStructure):
@@ -55,6 +56,23 @@ class Lattice(AlgebraicStructure):
     >>> print(lattice.tabular_format)
     {'join': [[0, 1], [1, 1]], 'meet': [[0, 0], [0, 1]]}
     """
+
+    def check_axioms(self) -> None:
+        self._check_commutativity_and_associativity()
+        if not absorbs(
+            self.operations["meet"], self.operations["join"]
+        ) or not absorbs(self.operations["join"], self.operations["meet"]):
+            raise ValueError("absorption laws fail")
+
+    def _check_commutativity_and_associativity(self):
+        if not commutative(self.operations["join"]):
+            raise ValueError("join is not commutative")
+        if not commutative(self.operations["meet"]):
+            raise ValueError("meet is not commutative")
+        if not associative(self.operations["join"]):
+            raise ValueError("join is not associative")
+        if not associative(self.operations["meet"]):
+            raise ValueError("meet is not associative")
 
     @property
     def operation_map(self) -> Dict[str, str]:

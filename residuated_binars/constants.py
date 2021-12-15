@@ -54,7 +54,7 @@ RESIDUATED_BINAR = LATTICE + [
     f"({FOR_X_Y_Z} join(mult(y, undr(y, x)), x) = x)",
 ]
 
-TRUE_DISTRIBUTIVITY_LAWS = [
+TRIVIAL_DISTRIBUTIVITY_LAWS = [
     LEFT_DISTRIBUTIVITY.replace("f(", "mult(").replace("g(", "join("),
     RIGHT_DISTRIBUTIVITY.replace("f(", "mult(").replace("g(", "join("),
     LEFT_DISTRIBUTIVITY.replace("f(", "undr(").replace("g(", "meet("),
@@ -83,7 +83,7 @@ ORTHOCOMPLEMENTATION = [
     "(\\<forall> x::nat. join(invo(x), x) = 1)",
 ]
 
-FALSE_DISTRIBUTIVITY_LAWS = [
+NON_TRIVIAL_DISTRIBUTIVITY_LAWS = [
     LEFT_DISTRIBUTIVITY.replace("f(", "mult(").replace("g(", "meet("),
     RIGHT_DISTRIBUTIVITY.replace("f(", "mult(").replace("g(", "meet("),
     LEFT_DISTRIBUTIVITY.replace("f(", "undr(").replace("g(", "join("),

@@ -52,6 +52,15 @@ class AlgebraicStructure:
     ):
         self.label = label
         self.operations = operations
+        self.check_axioms()
+
+    def check_axioms(self) -> None:
+        """
+        check axioms specific to that algebraic structure. If any axiom fails,
+        raise an error
+
+        :returns:
+        """
 
     @property
     def cardinality(self) -> int:

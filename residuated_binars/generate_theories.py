@@ -22,8 +22,8 @@ from typing import List, Optional
 
 from residuated_binars.constants import (
     BOUNDED_LATTICE,
-    FALSE_DISTRIBUTIVITY_LAWS,
     INVOLUTION,
+    NON_TRIVIAL_DISTRIBUTIVITY_LAWS,
     RESIDUATED_BINAR,
 )
 
@@ -73,11 +73,13 @@ def distributivity_independence_case(
     all_assumptions = (
         RESIDUATED_BINAR
         + BOUNDED_LATTICE
-        + [FALSE_DISTRIBUTIVITY_LAWS[k] for k in assumption_indices]
+        + [NON_TRIVIAL_DISTRIBUTIVITY_LAWS[k] for k in assumption_indices]
         + additional_assumptions
     )
     theory_text = generate_isabelle_theory_file(
-        theory_name, all_assumptions, FALSE_DISTRIBUTIVITY_LAWS[goal_index]
+        theory_name,
+        all_assumptions,
+        NON_TRIVIAL_DISTRIBUTIVITY_LAWS[goal_index],
     )
     return theory_text
 
@@ -92,7 +94,7 @@ def generate_theories(path: str, additional_assumptions: List[str]) -> None:
     """
     if not os.path.exists(path):
         os.mkdir(path)
-    total_assumptions_count = len(FALSE_DISTRIBUTIVITY_LAWS)
+    total_assumptions_count = len(NON_TRIVIAL_DISTRIBUTIVITY_LAWS)
     for goal_index in range(total_assumptions_count):
         for assumptions_count in range(1, total_assumptions_count):
             for assumption_indices in combinations(
