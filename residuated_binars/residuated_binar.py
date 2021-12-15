@@ -15,9 +15,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from typing import Any, Dict, List
+from typing import Dict
 
-from residuated_binars.lattice import BOT, CayleyTable, Lattice
+from residuated_binars.lattice import BOT, Lattice
 
 
 class ResiduatedBinar(Lattice):
@@ -35,6 +35,30 @@ class ResiduatedBinar(Lattice):
     ...         "invo": {"0": "1", "1": "0"}
     ...     }
     ... )
+    >>> print(binar.mace4_format)
+    0 v 0 = 0.
+    0 v 1 = 1.
+    1 v 0 = 1.
+    1 v 1 = 1.
+    0 ^ 0 = 0.
+    0 ^ 1 = 0.
+    1 ^ 0 = 0.
+    1 ^ 1 = 1.
+    0 * 0 = 0.
+    0 * 1 = 0.
+    1 * 0 = 0.
+    1 * 1 = 0.
+    0 \ 0 = 1.
+    0 \ 1 = 1.
+    1 \ 0 = 1.
+    1 \ 1 = 1.
+    0 / 0 = 1.
+    0 / 1 = 1.
+    1 / 0 = 1.
+    1 / 1 = 1.
+    invo(0) = 1.
+    invo(1) = 0.
+    <BLANKLINE>
     >>> binar.canonise_symbols()
     >>> sorted(binar.more.items())
     [('⟘', []), ('⟙', ['⟘'])]
@@ -44,66 +68,29 @@ class ResiduatedBinar(Lattice):
     graph {
         "⟙" -- "⟘"
     }
-    >>> print(binar.mace4_format)
-    0 ^ 0 = 0.
-    0 v 0 = 0.
-    0 ^ 1 = 0.
-    0 v 1 = 1.
-    1 ^ 0 = 0.
-    1 v 0 = 1.
-    1 ^ 1 = 1.
-    1 v 1 = 1.
-    0 \ 0 = 1.
-    0 / 0 = 1.
-    0 * 0 = 0.
-    0 \ 1 = 1.
-    0 / 1 = 1.
-    0 * 1 = 0.
-    1 \ 0 = 1.
-    1 / 0 = 1.
-    1 * 0 = 0.
-    1 \ 1 = 1.
-    1 / 1 = 1.
-    1 * 1 = 0.
-    <BLANKLINE>
     >>> print(binar.latex_mult_table)
     \begin{table}[]
     \begin{tabular}{l|ll}
-    $\cdot$ & $0$ & $1$\\\hline
-    $0$ & $0$ & $0$ & \\
-    $1$ & $0$ & $0$ & \\
+    $\cdot$ & $⟘$ & $⟙$\\\hline
+    $⟘$ & $⟘$$⟘$ &
+    $⟙$ & $⟘$$⟘$ & \\
     \end{tabular}
     \end{table}
     <BLANKLINE>
     >>> print(binar.markdown_mult_table)
-    |*|0|1|
+    |*|⟘|⟙|
     |-|-|-|
-    |**0**|0|0|
-    |**1**|0|0|
-    >>> print("this_is_a_test_case", binar.tabular_format)
-    this_is_a_test_case {'^': [[0, 0], [0, 1]], 'v': [[0, 1], [1, 1]], '*': [[0, 0], [0, 0]], '\\': [[1, 1], [1, 1]], '/': [[1, 1], [1, 1]]}
+    |**⟘**|⟘|⟘|
+    |**⟙**|⟘|⟘|
+    >>> print("this_is_a_test_case", binar)
+    this_is_a_test_case {'join': [[0, 1], [1, 1]], 'meet': [[0, 0], [0, 1]], 'mult': [[0, 0], [0, 0]], 'over': [[1, 1], [1, 1]], 'undr': [[1, 1], [1, 1]], 'invo': [1, 0]}
     """
 
-    def __init__(
-        self,
-        label: str,
-        operations: Dict[str, Dict[str, Any]],
-    ):
-        super().__init__(label, operations)
-        self.mult: CayleyTable = operations["mult"]
-        self.over: CayleyTable = operations["over"]
-        self.undr: CayleyTable = operations["undr"]
-        empty_dict: Dict[str, str] = {}
-        self.invo: Dict[str, str] = operations.get("invo", empty_dict)
-
-    def remap_symbols(self, symbol_map: Dict[str, str]) -> None:
-        """rename symbols in a given way"""
-        super().remap_symbols(symbol_map)
-        new_invo: Dict[str, str] = {}
-        if self.invo != {}:
-            for one in symbol_map.keys():
-                new_invo[symbol_map[one]] = symbol_map[self.invo[one]]
-        self.invo = new_invo
+    @property
+    def operation_map(self) -> Dict[str, str]:
+        res = super().operation_map
+        res.update({"over": "\\", "undr": "/", "mult": "*"})
+        return res
 
     @property
     def latex_mult_table(self) -> str:
@@ -121,7 +108,7 @@ class ResiduatedBinar(Lattice):
         for row in self.symbols:
             table += "$" + row + "$ & "
             for col in self.symbols:
-                table += "$" + self.mult[row][col] + "$"
+                table += "$" + self.operations["mult"][row][col] + "$"
                 if col != BOT:
                     table += " & "
             if row != BOT:
@@ -140,46 +127,6 @@ class ResiduatedBinar(Lattice):
         for row in self.symbols:
             table += "|**" + row + "**|"
             for col in self.symbols:
-                table += self.mult[row][col] + "|"
+                table += self.operations["mult"][row][col] + "|"
             table += "\n"
         return table
-
-    @property
-    def binary_operations(self) -> List[str]:
-        """
-        :returns: a list of binary operation names existing in this algebraic
-            structure
-        """
-        return super().binary_operations + ["mult", "over", "undr"]
-
-    @property
-    def mace4_format(self) -> str:
-        """
-        represent the binar in ``Prover9/Mace4`` format
-        :returns: a string representation
-        """
-        self.remap_symbols(
-            {value: str(key) for key, value in enumerate(self.symbols)}
-        )
-        result = super().mace4_format
-        for i in self.symbols:
-            for j in self.symbols:
-                result += f"{i} \\ {j} = {self.undr[i][j]}.\n"
-                result += f"{i} / {j} = {self.over[i][j]}.\n"
-                result += f"{i} * {j} = {self.mult[i][j]}.\n"
-        return result
-
-    @property
-    def tabular_format(self) -> Dict[str, List[List[int]]]:
-        """
-        :returns: a dictionary of Cayley tables as lists of lists
-        """
-        res = super().tabular_format
-        res.update(
-            {
-                "*": self._cayley_tabular_view(self.mult),
-                "\\": self._cayley_tabular_view(self.undr),
-                "/": self._cayley_tabular_view(self.over),
-            }
-        )
-        return res

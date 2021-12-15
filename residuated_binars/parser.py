@@ -19,7 +19,11 @@ import json
 import re
 from typing import Any, Dict, List, Union
 
-from residuated_binars.lattice import CayleyTable, Lattice
+from residuated_binars.algebraic_structure import (
+    AlgebraicStructure,
+    CayleyTable,
+)
+from residuated_binars.lattice import Lattice
 from residuated_binars.residuated_binar import ResiduatedBinar
 
 
@@ -63,21 +67,35 @@ def parse_unary_operation(line: str) -> Dict[str, str]:
     return table
 
 
-def lattice_or_binar(
+def choose_algebraic_structure(
     label: str, operations: Dict[str, Dict[str, Any]]
-) -> Lattice:
+) -> AlgebraicStructure:
     """
     :param label: a name of that particular algebraic structure example
     :param operations: a dictionary of unary and binary operations
-    :returns: a lattice or a residuated binar (with involution) depending of
-        what operations were provided
+    :returns: an algebraic structure of a concrete type (
+        depending on the signature)
     """
-    if len(operations) == 2:
+    sorted_ops = sorted(operations.keys())
+    if sorted_ops == ["join", "meet"]:
         return Lattice(label, operations)
-    return ResiduatedBinar(label, operations)
+    if sorted_ops in [
+        [
+            "join",
+            "meet",
+            "mult",
+            "over",
+            "under",
+        ],
+        ["invo", "join", "meet", "mult", "over", "under"],
+    ]:
+        return ResiduatedBinar(label, operations)
+    return AlgebraicStructure(label, operations)
 
 
-def isabelle_format_to_binar(isabelle_message: str, label: str) -> Lattice:
+def isabelle_format_to_binar(
+    isabelle_message: str, label: str
+) -> AlgebraicStructure:
     """
     :param isabelle_message: a body of reply from Isabelle server (in JSON)
     :param label: a name of the theory for which we got a relply from server
@@ -98,10 +116,10 @@ def isabelle_format_to_binar(isabelle_message: str, label: str) -> Lattice:
         operations[match.group(1)] = table
         pos = match.span()[0] + 1
         match = regex.search(isabelle_message, pos)
-    return lattice_or_binar(label, operations)
+    return choose_algebraic_structure(label, operations)
 
 
-def isabelle_response_to_binar(filename: str) -> List[Lattice]:
+def isabelle_response_to_algebra(filename: str) -> List[AlgebraicStructure]:
     """
     read file with replies from ``isabelle`` server and parse all residuated
     binars from it
@@ -111,14 +129,14 @@ def isabelle_response_to_binar(filename: str) -> List[Lattice]:
     ...     from importlib.resources import files
     ... else:
     ...     from importlib_resources import files
-    >>> len(isabelle_response_to_binar(
+    >>> len(isabelle_response_to_algebra(
     ...     files("residuated_binars").joinpath("resources/isabelle2.out")
     ... ))
     6
 
     :param filename: a name of a file to which all replies from Isabelle server
         where written
-    :returns: a list of residuated binars
+    :returns: a list of algebraic structures
     """
     with open(filename, "r", encoding="utf-8") as isabelle_log:
         nodes = json.loads(

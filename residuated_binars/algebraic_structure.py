@@ -1,0 +1,160 @@
+"""
+    A set of scripts  for automated reasoning in residuated binars
+    Copyright (C) 2021  Boris Shminke
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
+from typing import Any, Dict, List, Union
+
+CayleyTable = Dict[str, Dict[str, str]]
+TOP = r"⟙"
+BOT = r"⟘"
+
+
+class AlgebraicStructure:
+    r"""
+        a base class for difference algebraic structures
+
+    >>> magma = AlgebraicStructure(
+    ...     label="test",
+    ...     operations={
+    ...         "mult": {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}},
+    ...         "invo": {"0": "1", "1": "0"}
+    ...     }
+    ... )
+    >>> print(magma.mace4_format)
+    mult(0, 0) = 0.
+    mult(0, 1) = 1.
+    mult(1, 0) = 1.
+    mult(1, 1) = 1.
+    invo(0) = 1.
+    invo(1) = 0.
+    <BLANKLINE>
+    >>> print(magma)
+    {'mult': [[0, 1], [1, 1]], 'invo': [1, 0]}
+    """
+
+    def __init__(
+        self,
+        label: str,
+        operations: Dict[str, Dict[str, Any]],
+    ):
+        self.label = label
+        self.operations = operations
+
+    @property
+    def cardinality(self) -> int:
+        """
+        :returns: number of items in the algebraic structure
+        """
+        return len(next(iter(self.operations.items()))[1].keys())
+
+    def remap_symbols(self, symbol_map: Dict[str, str]) -> None:
+        """rename symbols in a given way"""
+        for op_label, operation in self.operations.items():
+            if isinstance(next(iter(operation.items()))[1], Dict):
+                new_table: CayleyTable = {}
+                for one in symbol_map.keys():
+                    new_table[symbol_map[one]] = {}
+                    for two in symbol_map.keys():
+                        new_table[symbol_map[one]][
+                            symbol_map[two]
+                        ] = symbol_map[operation[one][two]]
+                self.operations[op_label] = new_table
+            else:
+                new_op: Dict[str, str] = {}
+                for one in symbol_map.keys():
+                    new_op[symbol_map[one]] = symbol_map[operation[one]]
+                self.operations[op_label] = new_op
+
+    @property
+    def symbols(self) -> List[str]:
+        """
+        :returns: a list of symbols denoting items of an algebraic structure
+        """
+        keys = list(next(iter(self.operations.items()))[1].keys())
+        pure_keys = keys.copy()
+        if TOP in pure_keys:
+            pure_keys.remove(TOP)
+        if BOT in pure_keys:
+            pure_keys.remove(BOT)
+        return (
+            ([BOT] if BOT in keys else [])
+            + list(sorted(pure_keys))
+            + ([TOP] if TOP in keys else [])
+        )
+
+    @property
+    def operation_map(self) -> Dict[str, str]:
+        """
+        :returns: a map from operation labels (for functional notation) to
+            operation symbols (for infix notation)
+        """
+        return {}
+
+    @property
+    def mace4_format(self) -> str:
+        """
+        represent the algebraic structure in ``Prover9/Mace4`` format
+        :returns: a string representation
+        """
+        result = ""
+        for op_label, operation in self.operations.items():
+            op_symbol = self.operation_map.get(op_label, None)
+            if isinstance(list(operation.items())[0][1], Dict):
+                for i in self.symbols:
+                    for j in self.symbols:
+                        if op_symbol is not None:
+                            result += (
+                                f"{i} {op_symbol} {j} = {operation[i][j]}.\n"
+                            )
+                        else:
+                            result += (
+                                f"{op_label}({i}, {j}) = {operation[i][j]}.\n"
+                            )
+            else:
+                for i in self.symbols:
+                    result += f"{op_label}({i}) = {operation[i]}.\n"
+        return result
+
+    def _operation_tabular_view(
+        self, operation: Dict[str, Any]
+    ) -> Union[List[List[int]], List[int]]:
+        inverse_index = {symbol: i for i, symbol in enumerate(self.symbols)}
+        if isinstance(next(iter(operation.items()))[1], Dict):
+            table: List[List[int]] = []
+            for one in self.symbols:
+                table.append([])
+                for two in self.symbols:
+                    table[inverse_index[one]].append(
+                        inverse_index[operation[one][two]]
+                    )
+            return table
+        new_operation: List[int] = list(range(len(operation)))
+        for one in self.symbols:
+            new_operation[inverse_index[one]] = inverse_index[operation[one]]
+        return new_operation
+
+    @property
+    def tabular_format(self) -> Dict[str, Union[List[List[int]], List[int]]]:
+        """
+        :returns: a dictionary of Cayley tables as lists of lists
+        """
+        return {
+            op_label: self._operation_tabular_view(operation)
+            for op_label, operation in self.operations.items()
+        }
+
+    def __repr__(self):
+        return str(self.tabular_format)
