@@ -27,13 +27,9 @@ class Lattice(AlgebraicStructure):
     r"""
         a representation of a lattice
 
-    >>> lattice = Lattice(
-    ...     label="test",
-    ...     operations={
-    ...         "join": {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}},
-    ...         "meet": {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}},
-    ...     }
-    ... )
+    >>> join = {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}}
+    >>> meet = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
+    >>> lattice = Lattice("test", {"join": join, "meet": meet})
     >>> print(lattice.mace4_format)
     0 v 0 = 0.
     0 v 1 = 1.
@@ -45,16 +41,27 @@ class Lattice(AlgebraicStructure):
     1 ^ 1 = 1.
     <BLANKLINE>
     >>> lattice.canonise_symbols()
-    >>> sorted(lattice.more.items())
-    [('⟘', []), ('⟙', ['⟘'])]
-    >>> lattice.hasse
-    [('⟙', '⟘')]
     >>> print(lattice.graphviz_repr)
     graph {
         "⟙" -- "⟘"
     }
-    >>> print(lattice.tabular_format)
-    {'join': [[0, 1], [1, 1]], 'meet': [[0, 0], [0, 1]]}
+    >>> join["0"]["1"] = "0"
+    >>> Lattice("test", {"join": join, "meet": meet})
+    Traceback (most recent call last):
+     ...
+    ValueError: join is not commutative
+    >>> join["0"]["1"] = "1"
+    >>> meet["0"]["1"] = "1"
+    >>> Lattice("test", {"join": join, "meet": meet})
+    Traceback (most recent call last):
+     ...
+    ValueError: meet is not commutative
+    >>> meet["0"]["1"] = "0"
+    >>> join["0"]["0"] = "1"
+    >>> Lattice("test", {"join": join, "meet": meet})
+    Traceback (most recent call last):
+     ...
+    ValueError: absorption laws fail
     """
 
     def check_axioms(self) -> None:

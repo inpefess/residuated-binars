@@ -26,23 +26,40 @@ class AlgebraicStructure:
     r"""
         a base class for difference algebraic structures
 
-    >>> magma = AlgebraicStructure(
+    >>> magma_with_involution = AlgebraicStructure(
     ...     label="test",
     ...     operations={
     ...         "mult": {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}},
     ...         "invo": {"0": "1", "1": "0"}
     ...     }
     ... )
-    >>> print(magma.mace4_format)
-    mult(0, 0) = 0.
-    mult(0, 1) = 1.
-    mult(1, 0) = 1.
-    mult(1, 1) = 1.
-    invo(0) = 1.
-    invo(1) = 0.
-    <BLANKLINE>
-    >>> print(magma)
+    >>> magma_with_involution
     {'mult': [[0, 1], [1, 1]], 'invo': [1, 0]}
+    >>> magma_with_involution.symbols
+    ['0', '1']
+    >>> magma_with_involution.remap_symbols({"0": "c1", "1": "c2"})
+    >>> magma_with_involution
+    {'mult': [[0, 1], [1, 1]], 'invo': [1, 0]}
+    >>> magma_with_involution.symbols
+    ['c1', 'c2']
+    >>> print(magma_with_involution.mace4_format)
+    mult(c1, c1) = c1.
+    mult(c1, c2) = c2.
+    mult(c2, c1) = c2.
+    mult(c2, c2) = c2.
+    invo(c1) = c2.
+    invo(c2) = c1.
+    <BLANKLINE>
+    >>> class Magma(AlgebraicStructure):
+    ...     ''' an example with redefined operation symbol '''
+    ...
+    ...     @property
+    ...     def operation_map(self) -> Dict[str, str]:
+    ...         return {"mult": "*"}
+    >>> magma = Magma("test", {"mult": {"c": {"c": "c"}}})
+    >>> print(magma.mace4_format)
+    c * c = c.
+    <BLANKLINE>
     """
 
     def __init__(

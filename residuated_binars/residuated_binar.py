@@ -35,55 +35,21 @@ class ResiduatedBinar(Lattice):
     ...         "invo": {"0": "1", "1": "0"}
     ...     }
     ... )
-    >>> print(binar.mace4_format)
-    0 v 0 = 0.
-    0 v 1 = 1.
-    1 v 0 = 1.
-    1 v 1 = 1.
-    0 ^ 0 = 0.
-    0 ^ 1 = 0.
-    1 ^ 0 = 0.
-    1 ^ 1 = 1.
-    0 * 0 = 0.
-    0 * 1 = 0.
-    1 * 0 = 0.
-    1 * 1 = 0.
-    0 \ 0 = 1.
-    0 \ 1 = 1.
-    1 \ 0 = 1.
-    1 \ 1 = 1.
-    0 / 0 = 1.
-    0 / 1 = 1.
-    1 / 0 = 1.
-    1 / 1 = 1.
-    invo(0) = 1.
-    invo(1) = 0.
-    <BLANKLINE>
-    >>> binar.canonise_symbols()
-    >>> sorted(binar.more.items())
-    [('⟘', []), ('⟙', ['⟘'])]
-    >>> binar.hasse
-    [('⟙', '⟘')]
-    >>> print(binar.graphviz_repr)
-    graph {
-        "⟙" -- "⟘"
-    }
     >>> print(binar.latex_mult_table)
     \begin{table}[]
     \begin{tabular}{l|ll}
-    $\cdot$ & $⟘$ & $⟙$\\\hline
-    $⟘$ & $⟘$$⟘$ &
-    $⟙$ & $⟘$$⟘$ & \\
+    $\cdot$ & $0$ & $1$\\\hline
+    $0$ & $0$ & $0$ & \\
+    $1$ & $0$ & $0$ & \\
     \end{tabular}
     \end{table}
     <BLANKLINE>
     >>> print(binar.markdown_mult_table)
-    |*|⟘|⟙|
+    |*|0|1|
     |-|-|-|
-    |**⟘**|⟘|⟘|
-    |**⟙**|⟘|⟘|
-    >>> print("this_is_a_test_case", binar)
-    this_is_a_test_case {'join': [[0, 1], [1, 1]], 'meet': [[0, 0], [0, 1]], 'mult': [[0, 0], [0, 0]], 'over': [[1, 1], [1, 1]], 'undr': [[1, 1], [1, 1]], 'invo': [1, 0]}
+    |**0**|0|0|
+    |**1**|0|0|
+    <BLANKLINE>
     """
 
     @property
