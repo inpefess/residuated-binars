@@ -85,15 +85,15 @@ def choose_algebraic_structure(
             "meet",
             "mult",
             "over",
-            "under",
+            "undr",
         ],
-        ["invo", "join", "meet", "mult", "over", "under"],
+        ["invo", "join", "meet", "mult", "over", "undr"],
     ]:
         return ResiduatedBinar(label, operations)
     return AlgebraicStructure(label, operations)
 
 
-def isabelle_format_to_binar(
+def isabelle_format_to_algebra(
     isabelle_message: str, label: str
 ) -> AlgebraicStructure:
     """
@@ -158,7 +158,7 @@ def isabelle_response_to_algebra(filename: str) -> List[AlgebraicStructure]:
         for node in nodes
     ]
     return [
-        isabelle_format_to_binar(message[0][0], message[1])
+        isabelle_format_to_algebra(message[0][0], message[1])
         for message in messages
         if message[0] != []
     ]
