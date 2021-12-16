@@ -50,6 +50,10 @@ class TestUseNitpick(TestCase):
         shutil.rmtree("hyp2", ignore_errors=True)
         shutil.rmtree("hyp3", ignore_errors=True)
         shutil.rmtree("task2", ignore_errors=True)
-        use_nitpick(parse_args(["--max_cardinality", "2"]).max_cardinality, [])
+        use_nitpick(
+            parse_args(["--max_cardinality", "2"]).max_cardinality,
+            6 * ["True"],
+            [],
+        )
         check_assumptions("task2")
         self.assertEqual(len(os.listdir("hyp3")), 186)

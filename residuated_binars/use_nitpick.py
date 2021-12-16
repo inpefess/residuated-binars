@@ -21,24 +21,35 @@ from typing import List, Optional
 
 from residuated_binars.add_task import TaskType, add_task
 from residuated_binars.check_assumptions import check_assumptions
-from residuated_binars.constants import INVOLUTION
+from residuated_binars.constants import (
+    BOUNDED_LATTICE,
+    INVOLUTION,
+    NON_TRIVIAL_DISTRIBUTIVITY_LAWS,
+    RESIDUATED_BINAR,
+)
 from residuated_binars.filter_theories import filter_theories
-from residuated_binars.generate_theories import generate_theories
+from residuated_binars.generate_theories import independence_check
 
 
 def use_nitpick(
-    max_cardinality: int, additional_assumptions: List[str]
+    max_cardinality: int,
+    independent_assumptions: List[str],
+    additional_assumptions: List[str],
 ) -> None:
     """
     incrementally search for finite counter-examples
 
     :param max_cardinality: maximal cardinality of a model to search for
+    :param independent_assumptions: a list of assumption which independence
+        we want to check
     :param additional_assumptions: a list of additional assumptions
     :returns:
     """
     cardinality = 2
     hypotheses = f"hyp{cardinality}"
-    generate_theories(hypotheses, additional_assumptions)
+    independence_check(
+        hypotheses, independent_assumptions, additional_assumptions
+    )
     while cardinality <= max_cardinality and os.listdir(hypotheses) != []:
         tasks = f"task{cardinality}"
         add_task(hypotheses, tasks, TaskType.NITPICK, cardinality)
@@ -62,4 +73,8 @@ def parse_args(args: Optional[List[str]] = None) -> Namespace:
 
 
 if __name__ == "__main__":
-    use_nitpick(parse_args().max_cardinality, INVOLUTION)
+    use_nitpick(
+        parse_args().max_cardinality,
+        NON_TRIVIAL_DISTRIBUTIVITY_LAWS,
+        RESIDUATED_BINAR + BOUNDED_LATTICE + INVOLUTION,
+    )
