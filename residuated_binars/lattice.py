@@ -62,6 +62,18 @@ class Lattice(AlgebraicStructure):
     Traceback (most recent call last):
      ...
     ValueError: absorption laws fail
+    >>> join = {'0': {'0': '1', '1': '0'}, '1': {'0': '0', '1': '0'}}
+    >>> meet = {'0': {'0': '0', '1': '0'}, '1': {'0': '0', '1': '1'}}
+    >>> Lattice("test", {"join": join, "meet": meet})
+    Traceback (most recent call last):
+     ...
+    ValueError: join is not associative
+    >>> join = {'0': {'0': '0', '1': '0'}, '1': {'0': '0', '1': '1'}}
+    >>> meet = {'0': {'0': '1', '1': '0'}, '1': {'0': '0', '1': '0'}}
+    >>> Lattice("test", {"join": join, "meet": meet})
+    Traceback (most recent call last):
+     ...
+    ValueError: meet is not associative
     """
 
     def check_axioms(self) -> None:
