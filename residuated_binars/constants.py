@@ -16,8 +16,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-FOR_X_Y_Z = "\\<forall> x::nat. \\<forall> y::nat. \\<forall> z::nat."
-COMMUTATIVITY = "(\\<forall> x::nat. \\<forall> y::nat. f(x, y) = f(y, x))"
+FOR_X_Y = "\\<forall> x::nat. \\<forall> y::nat."
+FOR_X_Y_Z = f"{FOR_X_Y} \\<forall> z::nat."
+COMMUTATIVITY = f"({FOR_X_Y} f(x, y) = f(y, x))"
 ASSOCIATIVITY = f"({FOR_X_Y_Z} f(x, f(y, z)) = f(f(x, y), z))"
 IDEMPOTENCE = "(\\<forall> x::nat. f(x, x) = x)"
 LEFT_IDENTITY = "(\\<forall> x::nat. f(1, x) = x)"
@@ -31,10 +32,8 @@ RIGHT_ANTI_DISTRIBUTIVITY = (
     f"({FOR_X_Y_Z} f(g(x, y), z) = h(f(x, z), f(y, z)))"
 )
 PROJECTION = "(\\<forall> x::nat. f(f(x)) = x)"
-DE_MORGAN = (
-    "(\\<forall> x::nat. \\<forall> y::nat. f(g(x, y)) = h(f(x), f(y)))"
-)
-ABSORPTION = "(\\<forall> x::nat. \\<forall> y::nat. f(x, g(x, y)) = x)"
+DE_MORGAN = f"({FOR_X_Y} f(g(x, y)) = h(f(x), f(y)))"
+ABSORPTION = f"({FOR_X_Y} f(x, g(x, y)) = x)"
 
 LATTICE = [
     COMMUTATIVITY.replace("f(", "meet("),
