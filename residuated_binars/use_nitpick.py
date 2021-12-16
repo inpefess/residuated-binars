@@ -35,6 +35,7 @@ def use_nitpick(
     max_cardinality: int,
     independent_assumptions: List[str],
     additional_assumptions: List[str],
+    check_subset_independence: bool,
 ) -> None:
     """
     incrementally search for finite counter-examples
@@ -43,12 +44,17 @@ def use_nitpick(
     :param independent_assumptions: a list of assumption which independence
         we want to check
     :param additional_assumptions: a list of additional assumptions
+    :param check_subset_independence: whether to check every assumption from
+        the list against all the rest or against any combination of the rest
     :returns:
     """
     cardinality = 2
     hypotheses = f"hyp{cardinality}"
     independence_check(
-        hypotheses, independent_assumptions, additional_assumptions
+        hypotheses,
+        independent_assumptions,
+        additional_assumptions,
+        check_subset_independence,
     )
     while cardinality <= max_cardinality and os.listdir(hypotheses) != []:
         tasks = f"task{cardinality}"
@@ -77,4 +83,5 @@ if __name__ == "__main__":
         parse_args().max_cardinality,
         NON_TRIVIAL_DISTRIBUTIVITY_LAWS,
         RESIDUATED_BINAR + BOUNDED_LATTICE + INVOLUTION,
+        True,
     )

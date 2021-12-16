@@ -54,6 +54,7 @@ class TestUseNitpick(TestCase):
             parse_args(["--max_cardinality", "2"]).max_cardinality,
             6 * ["True"],
             [],
+            True,
         )
         check_assumptions("task2")
         self.assertEqual(len(os.listdir("hyp3")), 186)

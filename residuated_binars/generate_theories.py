@@ -44,18 +44,17 @@ def generate_isabelle_theory_file(
 
 
 def independence_case(
-    theory_name: str,
+    path: str,
     independent_assumptions: List[str],
     assumption_indices: List[int],
     goal_index: int,
     additional_assumptions: List[str],
-) -> List[str]:
+) -> None:
     """
     generate a text of ``isabelle`` theory file for checking independence of
-    one chosen non-trivial distributivity law in residuated binars from all the
-    others
+    one chosen assumpion from some subset of the rest
 
-    :param theory_name: name of a theory file
+    :param path: a folder for storing theory files
     :param independent_assumptions: a list of assumption which independence
         we want to check
     :param assumption_indices: indices of assumption to use
@@ -63,8 +62,10 @@ def independence_case(
     :param additional_assumptions: a list of additional assumptions about
         the binars like the lattice reduct distributivity, existence of
         an involution operation, and multiplication associativity
-    :returns: a list of lines of a theory file
+    :returns:
     """
+    assumption_list = list(assumption_indices)
+    theory_name = f"T{''.join(map(str, assumption_list))}_{goal_index}"
     all_assumptions = [
         independent_assumptions[k] for k in assumption_indices
     ] + additional_assumptions
@@ -73,13 +74,19 @@ def independence_case(
         all_assumptions,
         independent_assumptions[goal_index],
     )
-    return theory_text
+    with open(
+        os.path.join(path, f"{theory_name}.thy"),
+        "w",
+        encoding="utf-8",
+    ) as theory_file:
+        theory_file.write("\n".join(theory_text))
 
 
 def independence_check(
     path: str,
     independent_assumptions: List[str],
     additional_assumptions: List[str],
+    check_subset_independence: bool,
 ) -> None:
     """
     generate a bunch of theory files to check independence of some assumptions
@@ -89,6 +96,8 @@ def independence_check(
     :param independent_assumptions: a list of assumption which independence
         we want to check
     :param additional_assumptions: a list of additional assumptions
+    :param check_subset_independence: whether to check every assumption from
+        the list against all the rest or against any combination of the rest
     :returns:
     """
     if not os.path.exists(path):
@@ -96,25 +105,24 @@ def independence_check(
     total_assumptions_count = len(independent_assumptions)
     for goal_index in range(total_assumptions_count):
         for assumptions_count in range(1, total_assumptions_count):
-            for assumption_indices in combinations(
+            indices = tuple(
                 list(range(0, goal_index))
-                + list(range(goal_index + 1, total_assumptions_count)),
-                assumptions_count,
-            ):
-                assumption_list = list(assumption_indices)
-                theory_name = (
-                    f"T{''.join(map(str, assumption_list))}_{goal_index}"
+                + list(range(goal_index + 1, total_assumptions_count))
+            )
+            if check_subset_independence:
+                index_combinations = list(
+                    combinations(
+                        indices,
+                        assumptions_count,
+                    )
                 )
-                lines = independence_case(
-                    theory_name,
+            else:
+                index_combinations = [indices]
+            for assumption_indices in index_combinations:
+                independence_case(
+                    path,
                     independent_assumptions,
-                    assumption_list,
+                    list(assumption_indices),
                     goal_index,
                     additional_assumptions,
                 )
-                with open(
-                    os.path.join(path, f"{theory_name}.thy"),
-                    "w",
-                    encoding="utf-8",
-                ) as theory_file:
-                    theory_file.write("\n".join(lines))
