@@ -110,3 +110,6 @@ INVOLUTION = [
     .replace("g(", "meet("),
     PROJECTION.replace("f(", "invo("),
 ]
+
+LEFT_INVERSE = "(\\<forall> x::nat. f(g(x), x) = 1)"
+RIGHT_INVERSE = "(\\<forall> x::nat. f(x, g(x)) = 1)"

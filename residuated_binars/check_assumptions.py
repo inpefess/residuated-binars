@@ -42,11 +42,12 @@ def get_customised_logger(task_folder: str) -> logging.Logger:
     return logger
 
 
-def check_assumptions(path: str) -> None:
+def check_assumptions(path: str, server_info: Optional[str] = None) -> None:
     """
     ask Isabelle server to process all theory files in a given path
 
     :param path: a folder with theory files
+    :param server_info: an info string of an Isabelle server
     :returns:
     """
     nest_asyncio.apply()
@@ -57,9 +58,11 @@ def check_assumptions(path: str) -> None:
         ]
         if theory_name[1] == ".thy"
     ]
-    server_info, _ = start_isabelle_server(
-        log_file=os.path.join(path, "server.log"), name=os.path.basename(path)
-    )
+    if server_info is None:
+        server_info, _ = start_isabelle_server(
+            log_file=os.path.join(path, "server.log"),
+            name=os.path.basename(path),
+        )
     isabelle_client = get_isabelle_client(server_info)
     isabelle_client.logger = get_customised_logger(path)
     isabelle_client.use_theories(

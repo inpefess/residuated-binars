@@ -15,6 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from typing import Dict
+
 from residuated_binars.algebraic_structure import CayleyTable
 
 
@@ -39,6 +41,86 @@ def associative(cayley_table: CayleyTable) -> bool:
     return True
 
 
+def is_left_identity(cayley_table: CayleyTable, identity: str) -> bool:
+    """
+    >>> is_left_identity(
+    ...     {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}, "1"
+    ... )
+    True
+    >>> is_left_identity(
+    ...     {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}, "0"
+    ... )
+    False
+
+    :param cayley_table: a multiplication table of a binary operation
+    :returns: whether ``identity`` is a left identity for a Cayley table
+    """
+    for one in cayley_table.keys():
+        if cayley_table[identity][one] != one:
+            return False
+    return True
+
+
+def is_right_identity(cayley_table: CayleyTable, identity: str) -> bool:
+    """
+    >>> is_right_identity(
+    ...     {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}, "1"
+    ... )
+    True
+    >>> is_right_identity(
+    ...     {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}, "0"
+    ... )
+    False
+
+    :param cayley_table: a multiplication table of a binary operation
+    :returns: whether ``identity`` is a right identity for a Cayley table
+    """
+    for one in cayley_table.keys():
+        if cayley_table[one][identity] != one:
+            return False
+    return True
+
+
+def is_left_inverse(
+    cayley_table: CayleyTable, inverse: Dict[str, str], identity: str
+) -> bool:
+    """
+    >>> op = {"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}}
+    >>> inv = {"0": "1", "1": "1"}
+    >>> is_left_inverse(op, inv, "1")
+    True
+    >>> is_left_inverse(op, inv, "0")
+    False
+
+    :param cayley_table: a multiplication table of a binary operation
+    :returns: whether ``inverse`` is a left inverse for a Cayley table
+    """
+    for one in cayley_table.keys():
+        if cayley_table[inverse[one]][one] != identity:
+            return False
+    return True
+
+
+def is_right_inverse(
+    cayley_table: CayleyTable, inverse: Dict[str, str], identity: str
+) -> bool:
+    """
+    >>> op = {"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}}
+    >>> inv = {"0": "1", "1": "1"}
+    >>> is_right_inverse(op, inv, "1")
+    True
+    >>> is_right_inverse(op, inv, "0")
+    False
+
+    :param cayley_table: a multiplication table of a binary operation
+    :returns: whether ``inverse`` is a right inverse for a Cayley table
+    """
+    for one in cayley_table.keys():
+        if cayley_table[one][inverse[one]] != identity:
+            return False
+    return True
+
+
 def commutative(cayley_table: CayleyTable) -> bool:
     """
     >>> commutative({"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}})
@@ -53,6 +135,22 @@ def commutative(cayley_table: CayleyTable) -> bool:
         for two in cayley_table.keys():
             if cayley_table[one][two] != cayley_table[two][one]:
                 return False
+    return True
+
+
+def idempotent(cayley_table: CayleyTable) -> bool:
+    """
+    >>> idempotent({"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}})
+    True
+    >>> idempotent({"0": {"0": "0", "1": "1"}, "1": {"0": "0", "1": "0"}})
+    False
+
+    :param cayley_table: a multiplication table of a binary operation
+    :returns: whether the operation is idempotent or not
+    """
+    for one in cayley_table.keys():
+        if cayley_table[one][one] != one:
+            return False
     return True
 
 

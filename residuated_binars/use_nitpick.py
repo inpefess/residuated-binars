@@ -36,6 +36,7 @@ def use_nitpick(
     independent_assumptions: List[str],
     additional_assumptions: List[str],
     check_subset_independence: bool,
+    server_info: Optional[str] = None,
 ) -> None:
     """
     incrementally search for finite counter-examples
@@ -46,6 +47,7 @@ def use_nitpick(
     :param additional_assumptions: a list of additional assumptions
     :param check_subset_independence: whether to check every assumption from
         the list against all the rest or against any combination of the rest
+    :param server_info: an info string of an Isabelle server
     :returns:
     """
     cardinality = 2
@@ -59,7 +61,7 @@ def use_nitpick(
     while cardinality <= max_cardinality and os.listdir(hypotheses) != []:
         tasks = f"task{cardinality}"
         add_task(hypotheses, tasks, TaskType.NITPICK, cardinality)
-        check_assumptions(tasks)
+        check_assumptions(tasks, server_info)
         cardinality += 1
         hypotheses = f"hyp{cardinality}"
         filter_theories(tasks, hypotheses)
