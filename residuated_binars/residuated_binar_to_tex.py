@@ -15,6 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+import os
+
 from residuated_binars.lattice import BOT, TOP
 from residuated_binars.parser import isabelle_response_to_algebra
 
@@ -43,7 +45,7 @@ def generate_tex():
     """generate some TeX code"""
     models = []
     for i in [4, 7, 8, 10]:
-        output_filename = f"task{i}/isabelle.out"
+        output_filename = os.path.join(f"task{i}", "isabelle.out")
         models += isabelle_response_to_algebra(output_filename)
     binars = [
         binar
@@ -63,7 +65,7 @@ def generate_mace():
     """generate Mace4 input format"""
     models = []
     for i in [4, 7, 8, 10]:
-        output_filename = f"task{i}/isabelle.out"
+        output_filename = os.path.join(f"task{i}", "isabelle.out")
         models += isabelle_response_to_algebra(output_filename)
     binars = [binar for binar in models if binar.label in {"T123"}]
     for binar in binars:

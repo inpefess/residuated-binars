@@ -129,8 +129,10 @@ def isabelle_response_to_algebra(filename: str) -> List[AlgebraicStructure]:
     ...     from importlib.resources import files
     ... else:
     ...     from importlib_resources import files
+    >>> import os
     >>> len(isabelle_response_to_algebra(
-    ...     files("residuated_binars").joinpath("resources/isabelle2.out")
+    ...     files("residuated_binars")
+    ...     .joinpath(os.path.join("resources", "isabelle2.out"))
     ... ))
     6
 
