@@ -17,6 +17,10 @@
 """
 from typing import Dict
 
+from residuated_binars.axiom_checkers import (
+    left_distributive,
+    right_distributive,
+)
 from residuated_binars.lattice import BOT, Lattice
 
 
@@ -24,15 +28,15 @@ class ResiduatedBinar(Lattice):
     r"""
         a representation of a residuated binar (with involution)
 
+    >>> join = {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}}
+    >>> meet = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
+    >>> mult = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}}
+    >>> const = {"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}}
     >>> binar = ResiduatedBinar(
     ...     label="test",
     ...     operations={
-    ...         "join": {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}},
-    ...         "meet": {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}},
-    ...         "mult": {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}},
-    ...         "over": {"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}},
-    ...         "undr": {"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}},
-    ...         "invo": {"0": "1", "1": "0"}
+    ...         "join": join, "meet": meet, "mult": mult, "over": const,
+    ...         "undr": const, "invo": {"0": "1", "1": "0"}
     ...     }
     ... )
     >>> print(binar.latex_mult_table)
@@ -50,12 +54,85 @@ class ResiduatedBinar(Lattice):
     |**0**|0|0|
     |**1**|0|0|
     <BLANKLINE>
+    >>> mult["0"]["0"] = "1"
+    >>> ResiduatedBinar("test", {"join": join, "meet": meet, "mult": mult,
+    ...     "over": const, "undr": const})
+    Traceback (most recent call last):
+     ...
+    ValueError: multiplication must be distributive over join
+    >>> mult["0"]["0"] = "0"
+    >>> const["0"]["0"] = "0"
+    >>> ResiduatedBinar("test", {"join": join, "meet": meet, "mult": mult,
+    ...     "over": const, "undr": const})
+    Traceback (most recent call last):
+     ...
+    ValueError: check residuated binars axioms!
+    >>> mult = {"0": {"0": "0", "1": "0"}, "1": {"0": "1", "1": "1"}}
+    >>> undr = {"0": {"0": "1", "1": "1"}, "1": {"0": "0", "1": "1"}}
+    >>> ResiduatedBinar("test", {"join": join, "meet": meet, "mult": mult,
+    ...     "over": mult, "undr": undr})
+    Traceback (most recent call last):
+     ...
+    ValueError: check residuated binars axioms!
+    >>> print(binar.mace4_format[:10])
+    0 v 0 = 0.
     """
+
+    def check_axioms(self) -> None:
+        super().check_axioms()
+        if not left_distributive(
+            self.operations["mult"], self.operations["join"]
+        ) or not right_distributive(
+            self.operations["mult"], self.operations["join"]
+        ):
+            raise ValueError("multiplication must be distributive over join")
+        if not self._check_residuated_binars_axioms():
+            raise ValueError("check residuated binars axioms!")
+
+    def _check_residuated_binars_axioms(self) -> bool:
+        for one in self.symbols:
+            for two in self.symbols:
+                if (
+                    self.operations["join"][
+                        self.operations["mult"][
+                            self.operations["over"][one][two]
+                        ][two]
+                    ][one]
+                    != one
+                    or self.operations["join"][
+                        self.operations["mult"][two][
+                            self.operations["undr"][two][one]
+                        ]
+                    ][one]
+                    != one
+                ):
+                    return False
+                for three in self.symbols:
+                    if (
+                        self.operations["meet"][one][
+                            self.operations["over"][
+                                self.operations["join"][
+                                    self.operations["mult"][one][two]
+                                ][three]
+                            ][two]
+                        ]
+                        != one
+                        or self.operations["meet"][two][
+                            self.operations["undr"][one][
+                                self.operations["join"][
+                                    self.operations["mult"][one][two]
+                                ][three]
+                            ]
+                        ]
+                        != two
+                    ):
+                        return False
+        return True
 
     @property
     def operation_map(self) -> Dict[str, str]:
         res = super().operation_map
-        res.update({"over": "\\", "undr": "/", "mult": "*"})
+        res.update({"over": "/", "undr": "\\", "mult": "*"})
         return res
 
     @property
