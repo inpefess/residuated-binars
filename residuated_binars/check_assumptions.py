@@ -17,6 +17,7 @@
 """
 import logging
 import os
+import sys
 from argparse import ArgumentParser, Namespace
 from typing import List, Optional
 
@@ -62,10 +63,21 @@ def check_assumptions(path: str, server_info: Optional[str] = None) -> None:
     isabelle_client = get_isabelle_client(new_server_info)
     isabelle_client.logger = get_customised_logger(path)
     isabelle_client.use_theories(
-        theories, master_dir=os.path.abspath(path), watchdog_timeout=0
+        theories, master_dir=get_abs_path(path), watchdog_timeout=0
     )
     if server_info is None:
         isabelle_client.shutdown()
+
+
+def get_abs_path(path: str) -> str:
+    """
+    :param path: a path
+    :returns: an absolute path, corrected to CygWin path for Windows
+    """
+    abs_path = os.path.abspath(path)
+    if sys.platform == "win32":
+        abs_path = abs_path.replace("C:\\", "/cygdrive/c/").replace("\\", "/")
+    return abs_path
 
 
 def _start_server_if_needed(path: str, server_info: Optional[str]) -> str:
