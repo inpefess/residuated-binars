@@ -102,7 +102,7 @@ def isabelle_format_to_algebra(
     :returns: a residuated binar
     """
     regex = re.compile(
-        r"    (\w+) =\n? +\(\\<lambda>x\. _\)\n? *\(([^a-z]*)\)\n",
+        r"    (\w+) =\n? +\(\\<lambda>x\. _\)\n? *\(([^a-z]*)\)\n?",
         re.DOTALL,
     )
     match = regex.search(isabelle_message)
