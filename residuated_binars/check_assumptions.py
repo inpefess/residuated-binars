@@ -58,17 +58,25 @@ def check_assumptions(path: str, server_info: Optional[str] = None) -> None:
         ]
         if theory_name[1] == ".thy"
     ]
-    if server_info is None:
-        server_info, _ = start_isabelle_server(
-            log_file=os.path.join(path, "server.log"),
-            name=os.path.basename(path),
-        )
-    isabelle_client = get_isabelle_client(server_info)
+    new_server_info = _start_server_if_needed(path, server_info)
+    isabelle_client = get_isabelle_client(new_server_info)
     isabelle_client.logger = get_customised_logger(path)
     isabelle_client.use_theories(
         theories, master_dir=os.path.abspath(path), watchdog_timeout=0
     )
-    isabelle_client.shutdown()
+    if server_info is None:
+        isabelle_client.shutdown()
+
+
+def _start_server_if_needed(path: str, server_info: Optional[str]) -> str:
+    if server_info is None:
+        new_server_info, _ = start_isabelle_server(
+            log_file=os.path.join(path, "server.log"),
+            name=os.path.basename(path),
+        )
+    else:
+        new_server_info = server_info
+    return new_server_info
 
 
 def parse_args(args: Optional[List[str]] = None) -> Namespace:
