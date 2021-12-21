@@ -3,7 +3,7 @@ name = "residuated-binars"
 version = "0.0.9"
 description = ""
 authors = ["Boris Shminke <boris@shminke.ml>", "Carlos Simpson"]
-license = "GPLv3+"
+license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "^3.9"
