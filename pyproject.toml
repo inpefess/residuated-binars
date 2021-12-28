@@ -4,9 +4,26 @@ version = "0.0.9"
 description = ""
 authors = ["Boris Shminke <boris@shminke.ml>", "Carlos Simpson"]
 license = "Apache-2.0"
+repository = "https://github.com/inpefess/residuated-binars"
+readme = "README.md"
+classifiers=[
+	"Programming Language :: Python :: 3.6",
+	"Programming Language :: Python :: 3.7",
+	"Programming Language :: Python :: 3.8",
+	"Programming Language :: Python :: 3.9",
+	"License :: OSI Approved :: Apache Software License",
+	"Operating System :: OS Independent",
+	"Intended Audience :: Science/Research",
+	"Development Status :: 3 - Alpha",
+	"Environment :: Console",
+	"Natural Language :: English",
+	"Topic :: Scientific/Engineering :: Artificial Intelligence",
+	"Typing :: Typed"
+]
+include = ["residuated_binars/py.typed"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">= 3.6.1, < 3.10"
 isabelle-client = "*"
 graphviz = "*"
 
@@ -21,12 +38,15 @@ pytest = "*"
 pytest-cov = "*"
 jedi = "*"
 pre-commit = "*"
-rise = "*"
 importlib_resources = {version = "*", markers = "python_version < \"3.9\" and python_version >= \"3.7\""}
 
 [tool.black]
 line-length=79
 
+[tool.isort]
+profile = "black"
+src_paths = ["residuated_binars"]
+
 [build-system]
-requires = ["poetry-core>=1.1.11"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
