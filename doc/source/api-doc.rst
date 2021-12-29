@@ -18,7 +18,5 @@
    :members:
 .. automodule:: residuated_binars.residuated_binar
    :members:
-.. automodule:: residuated_binars.residuated_binar_to_tex
-   :members:
 .. automodule:: residuated_binars.use_nitpick
    :members:

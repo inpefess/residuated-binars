@@ -27,8 +27,6 @@ import json
 import os
 import re
 import shutil
-from argparse import ArgumentParser, Namespace
-from typing import List, Optional
 
 
 def filter_theories(source_path: str, target_path: str) -> None:
@@ -77,25 +75,3 @@ def filter_theories(source_path: str, target_path: str) -> None:
                 os.path.join(source_path, result + ".thy"),
                 os.path.join(target_path, result + ".thy"),
             )
-
-
-def parse_args(args: Optional[List[str]] = None) -> Namespace:
-    """
-    >>> print(parse_args(["--source_path", "one", "--target_path", "two"])
-    ...     .source_path)
-    one
-
-    :param args: a list of string arguments
-        (for testing and use in a non script scenario)
-    :returns: arguments namespace for the script
-    """
-    argument_parser = ArgumentParser()
-    argument_parser.add_argument("--source_path", type=str, required=True)
-    argument_parser.add_argument("--target_path", type=str, required=True)
-    parsed_args = argument_parser.parse_args(args)
-    return parsed_args
-
-
-if __name__ == "__main__":
-    arguments = parse_args()
-    filter_theories(arguments.source_path, arguments.target_path)

@@ -31,17 +31,10 @@ A wrapper ‘do all’ script.
 
 """
 import os
-from argparse import ArgumentParser, Namespace
 from typing import List, Optional
 
 from residuated_binars.add_task import TaskType, add_task
 from residuated_binars.check_assumptions import check_assumptions
-from residuated_binars.constants import (
-    BOUNDED_LATTICE,
-    INVOLUTION,
-    NON_TRIVIAL_DISTRIBUTIVITY_LAWS,
-    RESIDUATED_BINAR,
-)
 from residuated_binars.filter_theories import filter_theories
 from residuated_binars.generate_theories import independence_check
 
@@ -80,25 +73,3 @@ def use_nitpick(
         cardinality += 1
         hypotheses = f"hyp{cardinality}"
         filter_theories(tasks, hypotheses)
-
-
-def parse_args(args: Optional[List[str]] = None) -> Namespace:
-    """
-
-    :param args: a list of string arguments
-        (for testing and use in a non script scenario)
-    :returns: arguments namespace for the script
-    """
-    argument_parser = ArgumentParser()
-    argument_parser.add_argument("--max_cardinality", type=int, required=True)
-    parsed_args = argument_parser.parse_args(args)
-    return parsed_args
-
-
-if __name__ == "__main__":
-    use_nitpick(
-        parse_args().max_cardinality,
-        NON_TRIVIAL_DISTRIBUTIVITY_LAWS,
-        RESIDUATED_BINAR + BOUNDED_LATTICE + INVOLUTION,
-        True,
-    )

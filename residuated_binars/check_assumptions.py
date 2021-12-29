@@ -27,8 +27,7 @@ server <https://pypi.org/project/isabelle-client>`__.
 import logging
 import os
 import sys
-from argparse import ArgumentParser, Namespace
-from typing import List, Optional
+from typing import Optional
 
 import nest_asyncio
 from isabelle_client import get_isabelle_client
@@ -98,22 +97,3 @@ def _start_server_if_needed(path: str, server_info: Optional[str]) -> str:
     else:
         new_server_info = server_info
     return new_server_info
-
-
-def parse_args(args: Optional[List[str]] = None) -> Namespace:
-    """
-    >>> print(parse_args(["--path", "one"]).path)
-    one
-
-    :param args: a list of string arguments
-        (for testing and use in a non script scenario)
-    :returns: arguments namespace for the script
-    """
-    argument_parser = ArgumentParser()
-    argument_parser.add_argument("--path", type=str, required=True)
-    return argument_parser.parse_args(args)
-
-
-if __name__ == "__main__":
-    arguments = parse_args()
-    check_assumptions(arguments.path)

@@ -31,9 +31,7 @@ Both task types have a hard-coded timeout of ``1000000`` seconds.
 """
 import os
 import re
-from argparse import ArgumentParser, Namespace
 from enum import Enum
-from typing import List, Optional
 
 
 class TaskType(Enum):
@@ -83,39 +81,3 @@ def add_task(
             os.path.join(target_path, theory_name), "w", encoding="utf-8"
         ) as theory_file:
             theory_file.write(theory_text)
-
-
-def parse_args(args: Optional[List[str]] = None) -> Namespace:
-    """
-    >>> print(parse_args(["--source_path", "one", "--target_path", "two",
-    ...     "--task_type", "NITPICK"]).task_type)
-    NITPICK
-
-    :param args: a list of string arguments
-        (for testing and use in a non script scenario)
-    :returns: arguments namespace for the script
-    """
-    argument_parser = ArgumentParser()
-    argument_parser.add_argument("--source_path", type=str, required=True)
-    argument_parser.add_argument("--target_path", type=str, required=True)
-    argument_parser.add_argument(
-        "--task_type",
-        type=str,
-        choices=[TaskType.NITPICK.name, TaskType.SLEDGEHAMMER.name],
-        required=True,
-    )
-    argument_parser.add_argument("--cardinality", type=int, required=False)
-    parsed_args = argument_parser.parse_args(args)
-    return parsed_args
-
-
-if __name__ == "__main__":
-    arguments = parse_args()
-    add_task(
-        arguments.source_path,
-        arguments.target_path,
-        TaskType.NITPICK
-        if arguments.task_type == TaskType.NITPICK.name
-        else TaskType.SLEDGEHAMMER,
-        arguments.cardinality,
-    )
