@@ -29,14 +29,11 @@ graphviz = "*"
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "*"
-rope = "*"
 flake8 = "*"
 black = "*"
 pylint = "*"
 mypy = "*"
-pytest = "*"
 pytest-cov = "*"
-jedi = "*"
 pre-commit = "*"
 importlib_resources = {version = "*", markers = "python_version < \"3.9\" and python_version >= \"3.7\""}
 
