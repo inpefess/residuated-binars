@@ -19,6 +19,17 @@ For previous work in this field and more mathematical context see [Fussner, W., 
 * `poetry install` from the project's root
 * `python residuated_binars/use_nitpick.py` or a similar command from another working directory
 
+Alternatively, one can use Docker:
+
+```sh
+   docker build -t residuated-binars https://github.com/inpefess/residuated-binars.git
+   docker run -it --rm -p 8888:8888 residuated-binars jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser
+```
+
+and then navigate to `residuated-binars-example.ipynb`.
+
+Finally, one can run it on [Binder](https://mybinder.org/v2/gh/inpefess/residuated-binars/HEAD?labpath=residuated-binars-example.ipynb)
+
 # Scripts descriptions
 
 ## `generate_theories.py`

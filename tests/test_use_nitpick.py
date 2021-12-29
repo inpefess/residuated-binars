@@ -1,19 +1,17 @@
 """
-    A set of scripts  for automated reasoning in residuated binars
-    Copyright (C) 2021  Boris Shminke
+   Copyright 2021 Boris Shminke
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+       http://www.apache.org/licenses/LICENSE-2.0
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 """
 # pylint: disable=all
 import os
@@ -22,11 +20,8 @@ import sys
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-from residuated_binars.use_nitpick import (
-    check_assumptions,
-    parse_args,
-    use_nitpick,
-)
+from residuated_binars.check_assumptions import check_assumptions
+from residuated_binars.use_nitpick import parse_args, use_nitpick
 
 if sys.version_info.major == 3 and sys.version_info.minor >= 9:
     from importlib.resources import files
@@ -53,6 +48,11 @@ class TestUseNitpick(TestCase):
         shutil.rmtree("hyp2", ignore_errors=True)
         shutil.rmtree("hyp3", ignore_errors=True)
         shutil.rmtree("task2", ignore_errors=True)
-        use_nitpick(parse_args(["--max_cardinality", "2"]).max_cardinality)
+        use_nitpick(
+            parse_args(["--max_cardinality", "2"]).max_cardinality,
+            6 * ["True"],
+            [],
+            True,
+        )
         check_assumptions("task2")
         self.assertEqual(len(os.listdir("hyp3")), 186)

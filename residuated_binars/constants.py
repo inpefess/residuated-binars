@@ -1,23 +1,22 @@
 """
-    A set of scripts  for automated reasoning in residuated binars
-    Copyright (C) 2021  Boris Shminke
+   Copyright 2021 Boris Shminke
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+       http://www.apache.org/licenses/LICENSE-2.0
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 """
 
-FOR_X_Y_Z = "\\<forall> x::nat. \\<forall> y::nat. \\<forall> z::nat."
-COMMUTATIVITY = "(\\<forall> x::nat. \\<forall> y::nat. f(x, y) = f(y, x))"
+FOR_X_Y = "\\<forall> x::nat. \\<forall> y::nat."
+FOR_X_Y_Z = f"{FOR_X_Y} \\<forall> z::nat."
+COMMUTATIVITY = f"({FOR_X_Y} f(x, y) = f(y, x))"
 ASSOCIATIVITY = f"({FOR_X_Y_Z} f(x, f(y, z)) = f(f(x, y), z))"
 IDEMPOTENCE = "(\\<forall> x::nat. f(x, x) = x)"
 LEFT_IDENTITY = "(\\<forall> x::nat. f(1, x) = x)"
@@ -31,10 +30,8 @@ RIGHT_ANTI_DISTRIBUTIVITY = (
     f"({FOR_X_Y_Z} f(g(x, y), z) = h(f(x, z), f(y, z)))"
 )
 PROJECTION = "(\\<forall> x::nat. f(f(x)) = x)"
-DE_MORGAN = (
-    "(\\<forall> x::nat. \\<forall> y::nat. f(g(x, y)) = h(f(x), f(y)))"
-)
-ABSORPTION = "(\\<forall> x::nat. \\<forall> y::nat. f(x, g(x, y)) = x)"
+DE_MORGAN = f"({FOR_X_Y} f(g(x, y)) = h(f(x), f(y)))"
+ABSORPTION = f"({FOR_X_Y} f(x, g(x, y)) = x)"
 
 LATTICE = [
     COMMUTATIVITY.replace("f(", "meet("),
@@ -43,8 +40,6 @@ LATTICE = [
     ASSOCIATIVITY.replace("f(", "join("),
     ABSORPTION.replace("f(", "meet(").replace("g(", "join("),
     ABSORPTION.replace("g(", "meet(").replace("f(", "join("),
-    IDEMPOTENCE.replace("f(", "meet("),
-    IDEMPOTENCE.replace("f(", "join("),
 ]
 
 RESIDUATED_BINAR = LATTICE + [
@@ -56,7 +51,7 @@ RESIDUATED_BINAR = LATTICE + [
     f"({FOR_X_Y_Z} join(mult(y, undr(y, x)), x) = x)",
 ]
 
-TRUE_ASSUMPTIONS = [
+TRIVIAL_DISTRIBUTIVITY_LAWS = [
     LEFT_DISTRIBUTIVITY.replace("f(", "mult(").replace("g(", "join("),
     RIGHT_DISTRIBUTIVITY.replace("f(", "mult(").replace("g(", "join("),
     LEFT_DISTRIBUTIVITY.replace("f(", "undr(").replace("g(", "meet("),
@@ -85,7 +80,7 @@ ORTHOCOMPLEMENTATION = [
     "(\\<forall> x::nat. join(invo(x), x) = 1)",
 ]
 
-ASSUMPTIONS = [
+NON_TRIVIAL_DISTRIBUTIVITY_LAWS = [
     LEFT_DISTRIBUTIVITY.replace("f(", "mult(").replace("g(", "meet("),
     RIGHT_DISTRIBUTIVITY.replace("f(", "mult(").replace("g(", "meet("),
     LEFT_DISTRIBUTIVITY.replace("f(", "undr(").replace("g(", "join("),
@@ -98,9 +93,11 @@ ASSUMPTIONS = [
     .replace("h(", "join("),
 ]
 
-MODULARITY = f"{FOR_X_Y_Z} f(g(x, z), g(y, z)) = g(f(g(x, z), y), z)".replace(
-    "f(", "join"
-).replace("g(", "meet")
+MODULARITY = (
+    f"({FOR_X_Y_Z} f(g(x, z), g(y, z)) = g(f(g(x, z), y), z))".replace(
+        "f(", "join("
+    ).replace("g(", "meet(")
+)
 
 INVOLUTION = [
     DE_MORGAN.replace("f(", "invo(")
@@ -111,3 +108,6 @@ INVOLUTION = [
     .replace("g(", "meet("),
     PROJECTION.replace("f(", "invo("),
 ]
+
+LEFT_INVERSE = "(\\<forall> x::nat. f(g(x), x) = 1)"
+RIGHT_INVERSE = "(\\<forall> x::nat. f(x, g(x)) = 1)"

@@ -1,6 +1,6 @@
 *.*~
 *~
-venv/
+venv*/
 .ipynb_checkpoints/
 .coverage
 test-results/
@@ -15,3 +15,5 @@ dist/
 *.toc
 *.vrb
 *.snm
+examples/hyp*
+examples/task*
