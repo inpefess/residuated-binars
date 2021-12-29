@@ -645,7 +645,7 @@ test = ["pytest", "requests"]
 
 [[package]]
 name = "jupyterlab-server"
-version = "2.10.1"
+version = "2.10.2"
 description = "A set of server components for JupyterLab and JupyterLab like applications ."
 category = "dev"
 optional = false
@@ -1316,7 +1316,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "virtualenv"
-version = "20.11.0"
+version = "20.11.1"
 description = "Virtual Python Environment builder"
 category = "dev"
 optional = false
@@ -1693,8 +1693,8 @@ jupyterlab-pygments = [
 jupyterlab-server = [
     {file = "jupyterlab_server-1.2.0-py3-none-any.whl", hash = "sha256:55d256077bf13e5bc9e8fbd5aac51bef82f6315111cec6b712b9a5ededbba924"},
     {file = "jupyterlab_server-1.2.0.tar.gz", hash = "sha256:5431d9dde96659364b7cc877693d5d21e7b80cea7ae3959ecc2b87518e5f5d8c"},
-    {file = "jupyterlab_server-2.10.1-py3-none-any.whl", hash = "sha256:377ff516930e2379bb2f194fa671317f0911fbe772ed9015fd6099ce5f29d44c"},
-    {file = "jupyterlab_server-2.10.1.tar.gz", hash = "sha256:9683d661fc059ae4e2039b582d0d80cec96778dad581bd27b5941a06191397ba"},
+    {file = "jupyterlab_server-2.10.2-py3-none-any.whl", hash = "sha256:007dd2a1e27052a785bb06e38a8e6d5f7b04598125fbc46ce190a622a49551b2"},
+    {file = "jupyterlab_server-2.10.2.tar.gz", hash = "sha256:bf1ec9e49d4e26f14d70055cc293b3f8ec8410f95a4d5b4bd55c442d9b8b266c"},
 ]
 lazy-object-proxy = [
     {file = "lazy-object-proxy-1.7.1.tar.gz", hash = "sha256:d609c75b986def706743cdebe5e47553f4a5a1da9c5ff66d76013ef396b5a8a4"},
@@ -2253,8 +2253,8 @@ urllib3 = [
     {file = "urllib3-1.26.7.tar.gz", hash = "sha256:4987c65554f7a2dbf30c18fd48778ef124af6fab771a377103da0585e2336ece"},
 ]
 virtualenv = [
-    {file = "virtualenv-20.11.0-py2.py3-none-any.whl", hash = "sha256:eb0cb34160f32c6596405308ee6a8a4abbf3247b2b9794ae655a156d43abf48e"},
-    {file = "virtualenv-20.11.0.tar.gz", hash = "sha256:2f15b9226cb74b59c21e8236dd791c395bee08cdd33b99cddd18e1f866cdb098"},
+    {file = "virtualenv-20.11.1-py2.py3-none-any.whl", hash = "sha256:43973fb93cf1d04ec00a190f5e062919798a0fec94daaafcb4db1eda1aa8f340"},
+    {file = "virtualenv-20.11.1.tar.gz", hash = "sha256:17f26e9d0c4350d9df713d41077b2b3344cba59e104306e4105c8c75deeddcf7"},
 ]
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},
