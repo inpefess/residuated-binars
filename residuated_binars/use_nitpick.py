@@ -1,17 +1,34 @@
+# Copyright 2021 Boris Shminke
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-   Copyright 2021 Boris Shminke
+Use Nitpick
+============
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+A wrapper ‘do all’ script.
 
-       http://www.apache.org/licenses/LICENSE-2.0
+-  runs ``generate_theories.py`` which creates a new ``hyp2`` folder
+   with initial hypotheses templates
+-  then for each cardinality from 2 to 100 (hard-coded)
+-  runs ``add_task.py`` which creates a ``task[n]`` folder for a
+   particular cardinality with a respective task for ``Nitpick`` added
+   to the templates in ``hyp[n]``
+-  runs ``check_assumptions.py`` on a ``task[n]`` folder
+-  runs ``filter_theories.py`` which filter theories with no
+   counter-examples found to a new folder ``hyp[n+1]``
+-  if the ``hyp[n+1]`` folder is empty, the script stops (that means
+   counter-examples were found for all original hypotheses)
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
 """
 import os
 from argparse import ArgumentParser, Namespace

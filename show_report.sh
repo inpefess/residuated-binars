@@ -1,6 +1,9 @@
 #!/bin/bash
 
 set -e
+cd doc
+make clean html
+cd ..
 PACKAGE_NAME=residuated_binars
 pycodestyle --max-doc-length 1000 --ignore E203,E501,W503 \
 	    ${PACKAGE_NAME}

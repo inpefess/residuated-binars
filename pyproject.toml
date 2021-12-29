@@ -36,6 +36,8 @@ mypy = "*"
 pytest-cov = "*"
 pre-commit = "*"
 importlib_resources = {version = "*", markers = "python_version < \"3.9\" and python_version >= \"3.7\""}
+sphinx-autodoc-typehints = "*"
+sphinx-rtd-theme = "*"
 
 [tool.black]
 line-length=79

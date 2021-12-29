@@ -12,6 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-A collection of scripts for model search for different algebraic structures
-with Isabelle server
+Configuration file for the Sphinx documentation builder.
+
+This file only contains a selection of the most common options. For a full
+list see the documentation:
+https://www.sphinx-doc.org/en/master/usage/configuration.html
 """
+# pylint: disable=invalid-name
+project = "residuated-binars"
+# pylint: disable=invalid-name,redefined-builtin
+copyright = "2021, Boris Shminke"
+author = "Boris Shminke"
+release = "0.1.0"
+extensions = ["sphinx.ext.autodoc"]
+html_theme = "sphinx_rtd_theme"
