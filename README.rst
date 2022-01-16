@@ -1,7 +1,7 @@
-|CircleCI|\ |codecov|
+|CircleCI|\ |codecov|\ |RTFD|
 
-Generating Algebraic Structures with Isabelle server
-====================================================
+Generating Algebraic Structures with Isabelle
+==============================================
 
 If you're looking for a reproducible example for AITP 2021 paper, look :ref:`here<aitp2021>`.
 
@@ -37,3 +37,6 @@ See ``examples/residuated-binars-example.ipynb``.
    :target: https://circleci.com/gh/inpefess/residuated-binars
 .. |codecov| image:: https://codecov.io/gh/inpefess/residuated-binars/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/inpefess/residuated-binars
+.. |RTFD| image:: https://readthedocs.org/projects/residuated-binars/badge/?version=latest
+   :target: https://residuated-binars.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
