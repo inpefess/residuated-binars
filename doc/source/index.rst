@@ -12,6 +12,7 @@ Welcome to residuated-binars's documentation!
    :maxdepth: 5
    :caption: Contents:
 
+   aitp2021
    api-doc
 
 

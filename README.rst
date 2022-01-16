@@ -1,34 +1,21 @@
 |CircleCI|\ |codecov|
 
-Distributivity Laws in Residuated Binars with Involution
-========================================================
+Generating Algebraic Structures with Isabelle server
+====================================================
 
-This repo generates counter-examples for inter-relations between
-abstract distributivity laws in residuated binars with involution.
+If you're looking for a reproducible example for AITP 2021 paper, look :ref:`here<aitp2021>`.
 
-If you would like to listen to a talk about this work, see `6th
-Conference on Artificial Intelligence and Theorem
-Proving <http://grid01.ciirc.cvut.cz/~mptp/zoomaitp/2021-09-06a/zoom_0.mp4>`__
+This packages serves for generating and validating examples of different algebraic structures using `Isabelle proof assistant <https://isabelle.in.tum.de>`__.
 
-If you would like to cite this work, use `arXiv
-preprint <https://arxiv.org/abs/2109.05264>`__.
+.. _how-to-install:
 
-For previous work in this field and more mathematical context see
-`Fussner, W., Jipsen, P. Distributive laws in residuated binars. Algebra
-Univers. 80, 54 (2019) <https://doi.org/10.1007/s00012-019-0625-1>`__.
+How to Install
+===============
 
-``notebooks/rb-check.ipynb`` file is a contribution of `Carlos
-Simpson <https://github.com/carlostsimpson>`__.
-
-Running this code
-=================
-
--  an installation of `Isabelle proof
-   assistant <https://isabelle.in.tum.de>`__ is on the ``$PATH``
--  switch to Python 3.9 environment with ``poetry`` installed
+-  make sure that an installation of Isabelle is on the ``$PATH``
+-  ``git clone https://github.com/inpefess/residuated-binars.git``
+-  switch to Python 3.7+ environment with ``poetry`` installed
 -  ``poetry install`` from the project’s root
--  ``python residuated_binars/use_nitpick.py`` or a similar command from
-   another working directory
 
 Alternatively, one can use Docker:
 
@@ -37,37 +24,14 @@ Alternatively, one can use Docker:
       docker build -t residuated-binars https://github.com/inpefess/residuated-binars.git
       docker run -it --rm -p 8888:8888 residuated-binars jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser
 
-and then navigate to ``residuated-binars-example.ipynb``.
-
 Finally, one can run it on
 `Binder <https://mybinder.org/v2/gh/inpefess/residuated-binars/HEAD?labpath=residuated-binars-example.ipynb>`__
 
 
-Files descriptions
-===================
+How to Use
+===========
 
-``DistributiveCase.thy``
-------------------------
-
-A human-written proof of one of the known statements about
-distributivity in residuated binars.
-
-``notebooks/binars.pkl``
-------------------------
-
-A serialisation of tabular representation of six binars having some
-particular properties. Can be obtained using
-``residuated_binar_to_tex.py``
-
-``notebooks/rb-check.ipynb``
-----------------------------
-
-A file for checking algebraic properties of ``binars.pkl``
-
-``notebooks/another-check.ipynb``
----------------------------------
-
-Another file for checking algebraic properties of ``binars.pkl``
+See ``examples/residuated-binars-example.ipynb``.
 
 .. |CircleCI| image:: https://circleci.com/gh/inpefess/residuated-binars.svg?style=svg
    :target: https://circleci.com/gh/inpefess/residuated-binars
