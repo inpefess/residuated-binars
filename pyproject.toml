@@ -5,7 +5,7 @@ description = ""
 authors = ["Boris Shminke <boris@shminke.ml>", "Carlos Simpson"]
 license = "Apache-2.0"
 repository = "https://github.com/inpefess/residuated-binars"
-readme = "README.md"
+readme = "README.rst"
 classifiers=[
 	"Programming Language :: Python :: 3.7",
 	"Programming Language :: Python :: 3.8",
