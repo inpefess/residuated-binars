@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-|CircleCI|\ |codecov|\ |RTFD|
+|CircleCI|\ |codecov|\ |RTFD|\ |Binder|
 
 Generating Algebraic Structures with Isabelle
 ==============================================
@@ -55,3 +55,5 @@ See ``examples/residuated-binars-example.ipynb``.
 .. |RTFD| image:: https://readthedocs.org/projects/residuated-binars/badge/?version=latest
    :target: https://residuated-binars.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
+.. |Binder| image:: https://mybinder.org/badge_logo.svg
+   :target: https://mybinder.org/v2/gh/inpefess/residuated-binars/HEAD?labpath=reproduce-residuated-binars-papers.ipynb
