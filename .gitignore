@@ -17,3 +17,4 @@ dist/
 *.snm
 examples/hyp*
 examples/task*
+doc/build/

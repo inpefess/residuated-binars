@@ -1,5 +1,5 @@
 """
-   Copyright 2021 Boris Shminke
+   Copyright 2021-2022 Boris Shminke
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ from unittest import TestCase
 from unittest.mock import Mock, patch
 
 from residuated_binars.check_assumptions import check_assumptions
-from residuated_binars.use_nitpick import parse_args, use_nitpick
+from residuated_binars.use_nitpick import use_nitpick
 
 if sys.version_info.major == 3 and sys.version_info.minor >= 9:
     from importlib.resources import files
@@ -48,11 +48,6 @@ class TestUseNitpick(TestCase):
         shutil.rmtree("hyp2", ignore_errors=True)
         shutil.rmtree("hyp3", ignore_errors=True)
         shutil.rmtree("task2", ignore_errors=True)
-        use_nitpick(
-            parse_args(["--max_cardinality", "2"]).max_cardinality,
-            6 * ["True"],
-            [],
-            True,
-        )
+        use_nitpick(2, 6 * ["True"], [], True)
         check_assumptions("task2")
         self.assertEqual(len(os.listdir("hyp3")), 186)

@@ -1,23 +1,37 @@
+# Copyright 2021-2022 Boris Shminke
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-   Copyright 2021 Boris Shminke
+Script for adding a task
+=========================
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+-  for every theory file in a given folder
+-  creates a new file with the same name in another given folder
+-  the output file includes the same one lemma as the input
+-  but the ‘task’ is changed according to the script’s parameters
 
-       http://www.apache.org/licenses/LICENSE-2.0
+Possible task types:
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+- ``TaskType.NITPICK``, demands a ``cardinality`` to be provided as well
+  (finite model search)
+- ``TaskType.SLEDGEHAMMER`` (automated proof search)
+
+Both task types have a hard-coded timeout of ``1000000`` seconds.
+
 """
 import os
 import re
-from argparse import ArgumentParser, Namespace
 from enum import Enum
-from typing import List, Optional
 
 
 class TaskType(Enum):
@@ -67,39 +81,3 @@ def add_task(
             os.path.join(target_path, theory_name), "w", encoding="utf-8"
         ) as theory_file:
             theory_file.write(theory_text)
-
-
-def parse_args(args: Optional[List[str]] = None) -> Namespace:
-    """
-    >>> print(parse_args(["--source_path", "one", "--target_path", "two",
-    ...     "--task_type", "NITPICK"]).task_type)
-    NITPICK
-
-    :param args: a list of string arguments
-        (for testing and use in a non script scenario)
-    :returns: arguments namespace for the script
-    """
-    argument_parser = ArgumentParser()
-    argument_parser.add_argument("--source_path", type=str, required=True)
-    argument_parser.add_argument("--target_path", type=str, required=True)
-    argument_parser.add_argument(
-        "--task_type",
-        type=str,
-        choices=[TaskType.NITPICK.name, TaskType.SLEDGEHAMMER.name],
-        required=True,
-    )
-    argument_parser.add_argument("--cardinality", type=int, required=False)
-    parsed_args = argument_parser.parse_args(args)
-    return parsed_args
-
-
-if __name__ == "__main__":
-    arguments = parse_args()
-    add_task(
-        arguments.source_path,
-        arguments.target_path,
-        TaskType.NITPICK
-        if arguments.task_type == TaskType.NITPICK.name
-        else TaskType.SLEDGEHAMMER,
-        arguments.cardinality,
-    )

@@ -1,24 +1,32 @@
+# Copyright 2021-2022 Boris Shminke
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-   Copyright 2021 Boris Shminke
+Filter Theories
+================
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+-  reads from ``isabelle.out`` file from the input directory (this
+   directory should be an output of ``check_assumption.py`` script)
+-  filters only those theory files, for which neither finite model was
+   found, nor the proof (depending on the task type)
+-  copies filtered theory files from the input directory to another
+   given directory
 
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
 """
 import json
 import os
 import re
 import shutil
-from argparse import ArgumentParser, Namespace
-from typing import List, Optional
 
 
 def filter_theories(source_path: str, target_path: str) -> None:
@@ -67,25 +75,3 @@ def filter_theories(source_path: str, target_path: str) -> None:
                 os.path.join(source_path, result + ".thy"),
                 os.path.join(target_path, result + ".thy"),
             )
-
-
-def parse_args(args: Optional[List[str]] = None) -> Namespace:
-    """
-    >>> print(parse_args(["--source_path", "one", "--target_path", "two"])
-    ...     .source_path)
-    one
-
-    :param args: a list of string arguments
-        (for testing and use in a non script scenario)
-    :returns: arguments namespace for the script
-    """
-    argument_parser = ArgumentParser()
-    argument_parser.add_argument("--source_path", type=str, required=True)
-    argument_parser.add_argument("--target_path", type=str, required=True)
-    parsed_args = argument_parser.parse_args(args)
-    return parsed_args
-
-
-if __name__ == "__main__":
-    arguments = parse_args()
-    filter_theories(arguments.source_path, arguments.target_path)

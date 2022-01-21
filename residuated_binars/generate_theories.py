@@ -1,17 +1,40 @@
+# Copyright 2021-2022 Boris Shminke
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-   Copyright 2021 Boris Shminke
+Generate Theories
+==================
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+This script creates a folder with a specified name and fills it with valid
+Isabelle theory files. Each theory file contains only one lemma without a proof
+and does not depend on any other theories. The exact statement of lemmas
+is hard-coded. It may have the following assumptions:
 
-       http://www.apache.org/licenses/LICENSE-2.0
+-  lattice axioms
+-  residuation axioms
+-  existence of the latest and the greatest elements of the lattice
+   (they always exist in finite models)
+-  a definition of the involution operation
+-  some combination of abstract distributivity laws (from
+   ``ASSUMPTIONS`` variable of ``constants.py``)
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+The consequent of the lemma is one of the laws from ``ASSUMPTIONS``
+which is not in the antecedent. So, if one has six laws in
+``ASSUMPTIONS`` list, there will be ``6 * (2 ^ 5 - 1) = 186`` original
+hypotheses to check for models of different cardinalities.
+
+The theory files are called ``T[number].thy`` where ``number``
+enumerates theory files starting from zero.
 """
 import os
 from itertools import combinations

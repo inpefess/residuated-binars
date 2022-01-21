@@ -1,0 +1,54 @@
+..
+  Copyright 2021-2022 Boris Shminke
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+.. _aitp2021:
+
+Distributivity Laws in Residuated Binars with Involution
+=========================================================
+
+To reproduce `the results presented during AITP 2021 <https://arxiv.org/abs/2109.05264>`__, follow :ref:`installation instructions<how-to-install>`, then naviage to ``examples/reproducing-papers.ipynb``.
+
+If you would like to learn more about this work, see `6th
+Conference on Artificial Intelligence and Theorem
+Proving <http://grid01.ciirc.cvut.cz/~mptp/zoomaitp/2021-09-06a/zoom_0.mp4>`__
+
+For previous work in this field and more mathematical context see
+`Fussner, W., Jipsen, P. Distributive laws in residuated binars. Algebra
+Univers. 80, 54 (2019) <https://doi.org/10.1007/s00012-019-0625-1>`__.
+
+Additional Files Descriptions
+==============================
+
+``DistributiveCase.thy``
+------------------------
+
+A human-written proof of one of the known statements about
+distributivity in residuated binars.
+
+``notebooks/binars.pkl``
+------------------------
+
+A serialisation of tabular representation of six binars serving as a proof of the distributivity law independence mentioned in the paper.
+
+``notebooks/rb-check.ipynb``
+----------------------------
+
+This file is a contribution of `Carlos Simpson <https://github.com/carlostsimpson>`__.
+It checks algebraic properties of ``binars.pkl``
+
+``notebooks/another-check.ipynb``
+---------------------------------
+
+Another file for checking algebraic properties of ``binars.pkl``
