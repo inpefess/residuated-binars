@@ -40,7 +40,7 @@ Alternatively, one can use Docker:
       docker run -it --rm -p 8888:8888 residuated-binars jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser
 
 Finally, one can run it on
-`Binder <https://mybinder.org/v2/gh/inpefess/residuated-binars/HEAD?labpath=residuated-binars-example.ipynb>`__
+`Binder <https://mybinder.org/v2/gh/inpefess/residuated-binars/HEAD?labpath=reproduce-residuated-binars-papers.ipynb>`__
 
 
 How to Use
