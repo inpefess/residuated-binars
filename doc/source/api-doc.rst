@@ -26,10 +26,6 @@ Algebraic Structures
    :members:
 .. automodule:: residuated_binars.residuated_binar
    :members:
-.. automodule:: residuated_binars.abelian_group
-   :members:
-.. automodule:: residuated_binars.boolean_ring
-   :members:
 
 Using Isabelle to Generate Algebraic Structures
 ************************************************
