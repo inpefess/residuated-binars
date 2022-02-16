@@ -53,6 +53,7 @@ def is_left_identity(cayley_table: CayleyTable, identity: str) -> bool:
     False
 
     :param cayley_table: a multiplication table of a binary operation
+    :param identity: a symbol for identity
     :returns: whether ``identity`` is a left identity for a Cayley table
     """
     for one in cayley_table.keys():
@@ -73,6 +74,7 @@ def is_right_identity(cayley_table: CayleyTable, identity: str) -> bool:
     False
 
     :param cayley_table: a multiplication table of a binary operation
+    :param identity: a symbol for identity
     :returns: whether ``identity`` is a right identity for a Cayley table
     """
     for one in cayley_table.keys():
@@ -93,6 +95,8 @@ def is_left_inverse(
     False
 
     :param cayley_table: a multiplication table of a binary operation
+    :param inverse: a map for the operation of inversion
+    :param identity: a symbol for identity
     :returns: whether ``inverse`` is a left inverse for a Cayley table
     """
     for one in cayley_table.keys():
@@ -113,6 +117,8 @@ def is_right_inverse(
     False
 
     :param cayley_table: a multiplication table of a binary operation
+    :param inverse: a map for the operation of inversion
+    :param identity: a symbol for identity
     :returns: whether ``inverse`` is a right inverse for a Cayley table
     """
     for one in cayley_table.keys():
