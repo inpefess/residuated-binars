@@ -39,7 +39,7 @@ def parse_binary_operation(line: str) -> CayleyTable:
     regex = re.compile(r"\((\w+), (\w+)\) := (\w+)")
     match = regex.search(line)
     while match is not None:
-        pos = match.span()[0] + 1
+        pos = match.span()[-1] + 1
         args = list(match.groups())
         if args[0] not in table:
             table[args[0]] = {}
@@ -60,7 +60,7 @@ def parse_unary_operation(line: str) -> Dict[str, str]:
     regex = re.compile(r"(\w+) := (\w+)")
     match = regex.search(line)
     while match is not None:
-        pos = match.span()[0] + 1
+        pos = match.span()[-1] + 1
         args = list(match.groups())
         table[args[0]] = args[1]
         match = regex.search(line, pos)
