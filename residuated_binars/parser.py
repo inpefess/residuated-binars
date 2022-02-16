@@ -36,7 +36,7 @@ def parse_binary_operation(line: str) -> CayleyTable:
     :returns: a Cayley table
     """
     table: CayleyTable = {}
-    regex = re.compile(r"\((\d+), (\d+)\) := (\d+)")
+    regex = re.compile(r"\((\w+), (\w+)\) := (\w+)")
     match = regex.search(line)
     while match is not None:
         pos = match.span()[0] + 1
@@ -57,7 +57,7 @@ def parse_unary_operation(line: str) -> Dict[str, str]:
     :returns: an inner representation of an unary operation
     """
     table: Dict[str, str] = {}
-    regex = re.compile(r"(\d+) := (\d+)")
+    regex = re.compile(r"(\w+) := (\w+)")
     match = regex.search(line)
     while match is not None:
         pos = match.span()[0] + 1

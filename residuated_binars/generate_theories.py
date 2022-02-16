@@ -53,7 +53,12 @@ def generate_isabelle_theory_file(
     :returns: a list of lines of a theory file
     """
     theory_text = [f"theory {theory_name}"]
-    theory_text += ["imports Main", "begin", 'lemma "(']
+    theory_text += [
+        "imports Main",
+        "begin",
+        "datatype finite_type = finite_type_constants",
+        'lemma "(',
+    ]
     theory_text += [" &\n".join(assumptions)]
     if goal is not None:
         theory_text += [") \\<longrightarrow>"]
