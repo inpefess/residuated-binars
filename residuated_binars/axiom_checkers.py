@@ -229,3 +229,39 @@ def absorbs(table1: CayleyTable, table2: CayleyTable) -> bool:
             if table1[one][table2[one][two]] != one:
                 return False
     return True
+
+
+def is_left_zero(cayley_table: CayleyTable, zero: str) -> bool:
+    """
+    >>> table = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
+    >>> is_left_zero(table, "0")
+    True
+    >>> is_left_zero(table, "1")
+    False
+
+    :param cayley_table: a multiplication table of a binary operation
+    :param zero: a symbol for the zero
+    :returns: whether ``zero`` is a left zero for a Cayley table
+    """
+    for one in cayley_table.keys():
+        if cayley_table[zero][one] != zero:
+            return False
+    return True
+
+
+def is_right_zero(cayley_table: CayleyTable, zero: str) -> bool:
+    """
+    >>> table = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
+    >>> is_right_zero(table, "0")
+    True
+    >>> is_right_zero(table, "1")
+    False
+
+    :param cayley_table: a multiplication table of a binary operation
+    :param zero: a symbol for the zero
+    :returns: whether ``zero`` is a right zero for a Cayley table
+    """
+    for one in cayley_table.keys():
+        if cayley_table[one][zero] != zero:
+            return False
+    return True
