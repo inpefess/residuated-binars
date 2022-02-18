@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Pseudo Weak R_0 Algebra
-=======================
+Pseudo-weak-:math:`R_0` Algebra
+===============================
 """
 from residuated_binars.algebraic_structure import BOT, TOP
 from residuated_binars.axiom_checkers import (
@@ -24,8 +24,28 @@ from residuated_binars.bounded_lattice import BoundedLattice
 
 
 class PseudoWeakR0Algebra(BoundedLattice):
-    r"""
-    a representation of a peudo weak-R_0 algebra
+    """
+    a representation of a peudo-weak-:math:`R_0` algebra
+
+    for more info look `here <https://doi.org/10.1155/2014/854168>`__
+
+    >>> join = {BOT: {BOT: BOT, TOP: TOP}, TOP: {BOT: TOP, TOP: TOP}}
+    >>> meet = {BOT: {BOT: BOT, TOP: BOT}, TOP: {BOT: BOT, TOP: TOP}}
+    >>> inv = {BOT: BOT, TOP: TOP}
+    >>> imp = {BOT: {BOT: TOP, TOP: TOP}, TOP: {BOT: BOT, TOP: TOP}}
+    >>> operations = {"imp1": imp, "imp2": imp, "inv1": inv, "inv2": inv,
+    ...     "join": join, "meet": meet}
+    >>> PseudoWeakR0Algebra("no P1", operations)
+    Traceback (most recent call last):
+     ...
+    ValueError: P1 axiom doesn't hold
+    >>> imp = {BOT: {BOT: TOP, TOP: TOP}, TOP: {BOT: TOP, TOP: TOP}}
+    >>> operations = {"imp1": imp, "imp2": imp, "inv1": inv, "inv2": inv,
+    ...     "join": join, "meet": meet}
+    >>> PseudoWeakR0Algebra("no P1", operations)
+    Traceback (most recent call last):
+     ...
+    ValueError: P2 axiom doesn't hold
     """
 
     def _check_p1(self) -> str:
@@ -107,4 +127,5 @@ class PseudoWeakR0Algebra(BoundedLattice):
                 self._check_p4(),
             )
         ).strip()
-        assert res == "", res
+        if res != "":
+            raise ValueError(res)
