@@ -36,7 +36,9 @@ def parse_binary_operation(line: str) -> CayleyTable:
     :returns: a Cayley table
     """
     table: CayleyTable = {}
-    regex = re.compile(r"\((\w+), (\w+)\) := (\w+)")
+    regex = re.compile(
+        r"\(([\w\\\^\<\>]+), ([\w\\\^\<\>]+)\) := ([\w\\\^\<\>]+)"
+    )
     match = regex.search(line)
     while match is not None:
         pos = match.span()[-1] + 1
@@ -57,7 +59,7 @@ def parse_unary_operation(line: str) -> Dict[str, str]:
     :returns: an inner representation of an unary operation
     """
     table: Dict[str, str] = {}
-    regex = re.compile(r"(\w+) := (\w+)")
+    regex = re.compile(r"([\w\\\<\>\^]+) := ([\w\\\<\>\^]+)")
     match = regex.search(line)
     while match is not None:
         pos = match.span()[-1] + 1
@@ -102,7 +104,7 @@ def isabelle_format_to_algebra(
     :returns: a residuated binar
     """
     regex = re.compile(
-        r"    (\w+) =\n? +\(\\<lambda>x\. _\)\n? *\(([^a-z]*)\)\n?",
+        r"    (\w+) =\n? +\(\\<lambda>x\. _\)\n? *\(([^\.]+)\)\n?",
         re.DOTALL,
     )
     match = regex.search(isabelle_message)
