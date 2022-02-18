@@ -112,3 +112,50 @@ INVOLUTION = [
 
 LEFT_INVERSE = "(\\<forall> x::finite_type. f(g(x), x) = C1)"
 RIGHT_INVERSE = "(\\<forall> x::finite_type. f(x, g(x)) = C1)"
+# see Definition 10 from https://doi.org/10.1155/2014/854168
+PSEUDO_R0_ALGEBRA = (
+    "("
+    + " & ".join(
+        [
+            f"({FOR_X_Y} imp1(x, y) = imp2(inv1(y), inv1(x)))",
+            f"({FOR_X_Y} imp2(x, y) = imp1(inv2(y), inv2(x)))",
+        ]
+    )
+    + ")",
+    "("
+    + " & ".join(
+        [
+            LEFT_IDENTITY.replace("f(", "imp1("),
+            LEFT_IDENTITY.replace("f(", "imp2("),
+        ]
+    )
+    + ")",
+    "("
+    + " & ".join(
+        [
+            f"({FOR_X_Y_Z} meet(imp1(x, y), imp1(imp1(z, x), imp1(z, y)))"
+            + " = imp1(x, y))",
+            f"({FOR_X_Y_Z} meet(imp2(x, y), imp2(imp2(z, x), imp2(z, y)))"
+            + " = imp2(x, y))",
+        ]
+    )
+    + ")",
+    "("
+    + " & ".join(
+        [
+            LEFT_DISTRIBUTIVITY.replace("f(", "imp1(").replace("g(", "join("),
+            LEFT_DISTRIBUTIVITY.replace("f(", "imp2(").replace("g(", "join("),
+        ]
+    )
+    + ")",
+    "("
+    + " & ".join(
+        [
+            f"({FOR_X_Y} join(imp1(x, y), imp2(imp1(x, y), join(inv1(x), y)))"
+            + " = C1)",
+            f"({FOR_X_Y} join(imp2(x, y), imp1(imp2(x, y), join(inv2(x), y)))"
+            + " = C1)",
+        ]
+    )
+    + ")",
+)
