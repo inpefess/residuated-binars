@@ -58,11 +58,16 @@ def filter_theories(source_path: str, target_path: str) -> None:
         node["theory_name"][6:]: [
             message["message"]
             for message in node["messages"]
-            if "Try this: " in message["message"]
-            or "Timed out" in message["message"]
-            or "Nitpick found a potentially spurious counterexample"
-            in message["message"]
-            or "Nitpick found no counterexample" in message["message"]
+            if any(
+                nitpick_message in message["message"]
+                for nitpick_message in (
+                    "Try this: ",
+                    "Timed out",
+                    "Nitpick found a potentially spurious counterexample",
+                    "Nitpick found a counterexample",
+                    "Nitpick found no counterexample",
+                )
+            )
         ][0]
         for node in json.loads(final_line.group(1))["nodes"]
     }

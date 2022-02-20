@@ -40,7 +40,7 @@ class TaskType(Enum):
     """
 
     SLEDGEHAMMER = "sledgehammer[timeout=1000000]"
-    NITPICK = "nitpick[card nat=cardinality,timeout=1000000,max_threads=0]"
+    NITPICK = "nitpick[timeout=1000000,max_threads=0]"
 
 
 def add_task(
@@ -69,8 +69,10 @@ def add_task(
         ) as theory_file:
             theory_text = theory_file.read()
         theory_text = re.sub(
-            "cardinality",
-            str(cardinality),
+            "datatype finite_type =.*\n",
+            "datatype finite_type = "
+            + " | ".join(map(lambda i: "C" + str(i), range(cardinality)))
+            + "\n",
             re.sub(
                 '"\n.*\n?oops',
                 '"\n' + task_type.value + "\noops",

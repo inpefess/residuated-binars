@@ -30,6 +30,10 @@ Algebraic Structures
    :members:
 .. automodule:: residuated_binars.boolean_ring
    :members:
+.. automodule:: residuated_binars.pseudo_weak_r0_algebra
+   :members:
+.. automodule:: residuated_binars.pseudo_r0_algebra
+   :members:
 
 Using Isabelle to Generate Algebraic Structures
 ************************************************
@@ -45,4 +49,6 @@ Using Isabelle to Generate Algebraic Structures
 .. automodule:: residuated_binars.filter_theories
    :members:
 .. automodule:: residuated_binars.use_nitpick
+   :members:
+.. automodule:: residuated_binars.utils
    :members:
