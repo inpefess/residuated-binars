@@ -15,3 +15,4 @@
 A collection of scripts for model search for different algebraic structures
 with Isabelle server
 """
+__version__ = "0.0.1"
