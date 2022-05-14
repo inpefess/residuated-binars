@@ -1,0 +1,3 @@
+graphviz
+isabelle-client
+nest-asyncio
