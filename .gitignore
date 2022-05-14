@@ -18,3 +18,4 @@ dist/
 examples/hyp*
 examples/task*
 doc/build/
+coverage.xml
