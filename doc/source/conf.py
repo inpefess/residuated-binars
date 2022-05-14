@@ -18,6 +18,10 @@ This file only contains a selection of the most common options. For a full
 list see the documentation:
 https://www.sphinx-doc.org/en/master/usage/configuration.html
 """
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath("../.."))
 # pylint: disable=invalid-name
 project = "residuated-binars"
 # pylint: disable=invalid-name,redefined-builtin
