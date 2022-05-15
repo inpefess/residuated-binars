@@ -2,20 +2,24 @@ version: 2.1
 
 jobs:
   build-and-test:
+    parameters:
+      python_version:
+        description: "Python version to test against"
+        default: "3.10.4"
+        type: string
     docker:
-      - image: cimg/python:3.10.0
+      - image: cimg/python:<< parameters.python_version >>
     working_directory: ~/repo
     steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-<< parameters.python_version >>-{{ checksum "poetry.lock" }}
       - run:
           name: install graphviz
           command: |
             sudo apt-get update
             sudo apt-get install -y graphviz
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "poetry.lock" }}
-            - v1-dependencies-
       - run:
           name: install dependencies
           command: |
@@ -26,7 +30,7 @@ jobs:
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ checksum "poetry.lock" }}
+          key: v1-dependencies-<< parameters.python_version >>-{{ checksum "poetry.lock" }}
       - run:
           name: run linters
           command: |
@@ -51,6 +55,13 @@ jobs:
           path: test-results
 
 workflows:
-  main:
+  workflow:
     jobs:
-      - build-and-test
+      - build-and-test:
+          python_version: "3.7.13"
+      - build-and-test:
+          python_version: "3.8.13"
+      - build-and-test:
+          python_version: "3.9.12"
+      - build-and-test:
+          python_version: "3.10.4"      
