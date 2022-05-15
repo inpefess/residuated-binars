@@ -34,7 +34,7 @@ def mock_use_theories(**kwargs):
     """copy a ready file of Isabelle replies"""
     shutil.copyfile(
         files("residuated_binars").joinpath("resources/isabelle.out"),
-        "task2/isabelle.out",
+        os.path.join("task2", "isabelle.out"),
     )
 
 
