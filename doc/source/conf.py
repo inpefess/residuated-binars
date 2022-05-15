@@ -27,6 +27,6 @@ project = "residuated-binars"
 # pylint: disable=invalid-name,redefined-builtin
 copyright = "2021-2022, Boris Shminke"
 author = "Boris Shminke"
-release = "0.0.3"
+release = "0.0.1"
 extensions = ["sphinx.ext.autodoc"]
 html_theme = "sphinx_rtd_theme"
