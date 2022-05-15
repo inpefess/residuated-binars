@@ -71,5 +71,5 @@ incremental = false
 disable_error_code = "no-redef"
 
 [[tool.mypy.overrides]]
-module = ["graphviz", "nest_asyncio"]
+module = ["graphviz", "nest_asyncio", "importlib_resources"]
 ignore_missing_imports = true

@@ -71,7 +71,7 @@ def check_assumptions(path: str, server_info: Optional[str] = None) -> None:
     isabelle_client = get_isabelle_client(new_server_info)
     isabelle_client.logger = get_customised_logger(path)
     isabelle_client.use_theories(
-        theories, master_dir=get_abs_path(path), watchdog_timeout=0
+        theories=theories, master_dir=get_abs_path(path), watchdog_timeout=0
     )
     if server_info is None:
         isabelle_client.shutdown()

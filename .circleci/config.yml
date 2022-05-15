@@ -35,13 +35,13 @@ jobs:
           name: run linters
           command: |
             . venv/bin/activate
-            flake8 residuated_binars
-            pylint residuated_binars
+            flake8 residuated_binars tests
+            pylint residuated_binars tests
       - run:
           name: run type checks
           command: |
             . venv/bin/activate
-            mypy residuated_binars
+            mypy residuated_binars tests
       - run:
           name: run tests
           command: |
