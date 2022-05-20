@@ -4,3 +4,4 @@ tests/
 task*/
 .*
 doc/
+coverage.xml

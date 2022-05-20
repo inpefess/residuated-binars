@@ -2,20 +2,24 @@ version: 2.1
 
 jobs:
   build-and-test:
+    parameters:
+      python_version:
+        description: "Python version to test against"
+        default: "3.10.4"
+        type: string
     docker:
-      - image: cimg/python:3.10.0
+      - image: cimg/python:<< parameters.python_version >>
     working_directory: ~/repo
     steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-<< parameters.python_version >>-{{ checksum "poetry.lock" }}
       - run:
           name: install graphviz
           command: |
             sudo apt-get update
             sudo apt-get install -y graphviz
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "poetry.lock" }}
-            - v1-dependencies-
       - run:
           name: install dependencies
           command: |
@@ -26,27 +30,23 @@ jobs:
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ checksum "poetry.lock" }}
+          key: v1-dependencies-<< parameters.python_version >>-{{ checksum "poetry.lock" }}
       - run:
           name: run linters
           command: |
             . venv/bin/activate
-            pycodestyle --max-doc-length 1000 --ignore E203,E501,W503\
-                residuated_binars
-            pylint --rcfile=.pylintrc residuated_binars
+            flake8 residuated_binars tests
+            pylint residuated_binars tests
       - run:
           name: run type checks
           command: |
             . venv/bin/activate
-            mypy --config-file mypy.ini residuated_binars
+            mypy residuated_binars tests
       - run:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest --cov residuated_binars --cov-report xml\
-                --cov-fail-under=98\
-                --junit-xml test-results/residuated-binars.xml\
-                --doctest-modules residuated_binars tests
+            pytest --cov-report xml residuated_binars tests
       - run:
           name: upload data to codecov
           command: |
@@ -55,6 +55,13 @@ jobs:
           path: test-results
 
 workflows:
-  main:
+  workflow:
     jobs:
-      - build-and-test
+      - build-and-test:
+          python_version: "3.7.13"
+      - build-and-test:
+          python_version: "3.8.13"
+      - build-and-test:
+          python_version: "3.9.12"
+      - build-and-test:
+          python_version: "3.10.4"      
