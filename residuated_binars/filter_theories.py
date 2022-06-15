@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Filter Theories
 ================
@@ -31,9 +33,11 @@ import shutil
 
 def filter_theories(source_path: str, target_path: str) -> None:
     """
-    get theory files from an existing folder and copy to another existing
+    Filter theories which don't have neither counter-example nor a proof yet.
+
+    Get theory files from an existing folder and copy to another existing
     folder ones those of them, for which neither have a finite counter-example
-    nor a proof
+    nor a proof.
 
     :param source_path: where to look for processed theory files; should
         include an ``isabelle.out`` file with server's output

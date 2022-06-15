@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Axiom Checkers
 ===============
@@ -22,6 +24,8 @@ from residuated_binars.algebraic_structure import CayleyTable
 
 def associative(cayley_table: CayleyTable) -> bool:
     """
+    Check associativity.
+
     >>> associative({"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}})
     True
     >>> associative({"0": {"0": "1", "1": "0"}, "1": {"0": "0", "1": "0"}})
@@ -43,6 +47,8 @@ def associative(cayley_table: CayleyTable) -> bool:
 
 def is_left_identity(cayley_table: CayleyTable, identity: str) -> bool:
     """
+    Check left identity.
+
     >>> is_left_identity(
     ...     {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}, "1"
     ... )
@@ -64,6 +70,8 @@ def is_left_identity(cayley_table: CayleyTable, identity: str) -> bool:
 
 def is_right_identity(cayley_table: CayleyTable, identity: str) -> bool:
     """
+    Check right identity.
+
     >>> is_right_identity(
     ...     {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}, "1"
     ... )
@@ -87,6 +95,8 @@ def is_left_inverse(
     cayley_table: CayleyTable, inverse: Dict[str, str], identity: str
 ) -> bool:
     """
+    Check left inverse.
+
     >>> op = {"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}}
     >>> inv = {"0": "1", "1": "1"}
     >>> is_left_inverse(op, inv, "1")
@@ -109,6 +119,8 @@ def is_right_inverse(
     cayley_table: CayleyTable, inverse: Dict[str, str], identity: str
 ) -> bool:
     """
+    Check right inverse.
+
     >>> op = {"0": {"0": "1", "1": "1"}, "1": {"0": "1", "1": "1"}}
     >>> inv = {"0": "1", "1": "1"}
     >>> is_right_inverse(op, inv, "1")
@@ -129,6 +141,8 @@ def is_right_inverse(
 
 def commutative(cayley_table: CayleyTable) -> bool:
     """
+    Check commutativity.
+
     >>> commutative({"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}})
     True
     >>> commutative({"0": {"0": "0", "1": "1"}, "1": {"0": "0", "1": "0"}})
@@ -146,6 +160,8 @@ def commutative(cayley_table: CayleyTable) -> bool:
 
 def idempotent(cayley_table: CayleyTable) -> bool:
     """
+    Check idempotency.
+
     >>> idempotent({"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}})
     True
     >>> idempotent({"0": {"0": "0", "1": "1"}, "1": {"0": "0", "1": "0"}})
@@ -162,6 +178,8 @@ def idempotent(cayley_table: CayleyTable) -> bool:
 
 def left_distributive(table1: CayleyTable, table2: CayleyTable) -> bool:
     """
+    Check left distributivity.
+
     >>> operation = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}}
     >>> left_distributive(operation, operation)
     True
@@ -187,6 +205,8 @@ def left_distributive(table1: CayleyTable, table2: CayleyTable) -> bool:
 
 def right_distributive(table1: CayleyTable, table2: CayleyTable) -> bool:
     """
+    Check right distributivity.
+
     >>> operation = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "0"}}
     >>> right_distributive(operation, operation)
     True
@@ -212,6 +232,8 @@ def right_distributive(table1: CayleyTable, table2: CayleyTable) -> bool:
 
 def absorbs(table1: CayleyTable, table2: CayleyTable) -> bool:
     """
+    Check an absorption law.
+
     >>> conjuction = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
     >>> disjunction = {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}}
     >>> absorbs(conjuction, disjunction)
@@ -233,6 +255,8 @@ def absorbs(table1: CayleyTable, table2: CayleyTable) -> bool:
 
 def is_left_zero(cayley_table: CayleyTable, zero: str) -> bool:
     """
+    Check left zero.
+
     >>> table = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
     >>> is_left_zero(table, "0")
     True
@@ -251,6 +275,8 @@ def is_left_zero(cayley_table: CayleyTable, zero: str) -> bool:
 
 def is_right_zero(cayley_table: CayleyTable, zero: str) -> bool:
     """
+    Check right zero.
+
     >>> table = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
     >>> is_right_zero(table, "0")
     True

@@ -26,6 +26,7 @@ include = ["residuated_binars/py.typed"]
 python = ">= 3.7.1, < 3.11"
 isabelle-client = "*"
 graphviz = "*"
+pydocstyle = "*"
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "*"

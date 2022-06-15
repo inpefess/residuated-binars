@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Pseudo-weak-:math:`R_0` Algebra
 ===============================
@@ -25,7 +27,7 @@ from residuated_binars.bounded_lattice import BoundedLattice
 
 class PseudoWeakR0Algebra(BoundedLattice):
     """
-    a representation of a peudo-weak-:math:`R_0` algebra
+    A representation of a peudo-weak-:math:`R_0` algebra.
 
     for more info look `here <https://doi.org/10.1155/2014/854168>`__
 
@@ -111,7 +113,7 @@ class PseudoWeakR0Algebra(BoundedLattice):
         except AssertionError:
             return "P4 axiom doesn't hold"
 
-    def check_axioms(self) -> None:
+    def check_axioms(self) -> None:  # noqa: D102
         super().check_axioms()
         assert (
             self.operations["inv1"][self.operations["inv2"][BOT]] == BOT

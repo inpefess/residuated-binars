@@ -35,6 +35,7 @@ jobs:
           name: run linters
           command: |
             . venv/bin/activate
+            pydocstyle residuated_binars tests
             flake8 residuated_binars tests
             pylint residuated_binars tests
       - run:

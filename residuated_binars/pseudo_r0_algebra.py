@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Pseudo-:math:`R_0` Algebra
 ==========================
@@ -21,7 +23,7 @@ from residuated_binars.pseudo_weak_r0_algebra import PseudoWeakR0Algebra
 
 class PseudoR0Algebra(PseudoWeakR0Algebra):
     """
-    a representation of a peudo-:math:`R_0` algebra
+    A representation of a peudo-:math:`R_0` algebra.
 
     for more info look `here <https://doi.org/10.1155/2014/854168>`__
 
@@ -78,7 +80,7 @@ class PseudoR0Algebra(PseudoWeakR0Algebra):
     ValueError: P3 axiom doesn't hold
     """
 
-    def check_axioms(self) -> None:
+    def check_axioms(self) -> None:  # noqa: D102
         super().check_axioms()
         try:
             for one in self.operations["meet"].keys():

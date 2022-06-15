@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Parser
 =======
@@ -29,7 +31,7 @@ from residuated_binars.residuated_binar import ResiduatedBinar
 
 def parse_binary_operation(line: str) -> CayleyTable:
     """
-    parse text describing a binary operation in Isabelle server response
+    Parse text describing a binary operation in Isabelle server response.
 
     :param line: a part of Isabelle server response, representing a binary
         operation
@@ -52,7 +54,7 @@ def parse_binary_operation(line: str) -> CayleyTable:
 
 def parse_unary_operation(line: str) -> Dict[str, str]:
     """
-    parse text describing a unary operation in Isabelle server response
+    Parse text describing a unary operation in Isabelle server response.
 
     :param line: a part of Isabelle server response, representing an unary
         operation
@@ -73,6 +75,8 @@ def choose_algebraic_structure(
     label: str, operations: Dict[str, Dict[str, Any]]
 ) -> AlgebraicStructure:
     """
+    Decide in which algebraic structure to saved the parsed result.
+
     :param label: a name of that particular algebraic structure example
     :param operations: a dictionary of unary and binary operations
     :returns: an algebraic structure of a concrete type (
@@ -99,6 +103,8 @@ def isabelle_format_to_algebra(
     isabelle_message: str, label: str
 ) -> AlgebraicStructure:
     """
+    Parse the textual representation of operations to ``AlgebraicStructure``.
+
     :param isabelle_message: a body of reply from Isabelle server (in JSON)
     :param label: a name of the theory for which we got a relply from server
     :returns: a residuated binar
@@ -123,8 +129,7 @@ def isabelle_format_to_algebra(
 
 def isabelle_response_to_algebra(filename: str) -> List[AlgebraicStructure]:
     """
-    read file with replies from ``isabelle`` server and parse all residuated
-    binars from it
+    Read file with replies from ``isabelle`` server and parse them.
 
     >>> import sys
     >>> if sys.version_info.major == 3 and sys.version_info.minor >= 9:

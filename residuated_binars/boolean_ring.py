@@ -11,6 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+# noqa: D205, D400
 """
 Boolean Ring
 =============
@@ -30,7 +33,7 @@ from residuated_binars.axiom_checkers import (
 
 class BooleanRing(AbelianGroup):
     """
-    a Boolean ring structure
+    A Boolean ring structure.
 
     >>> add = {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "0"}}
     >>> neg = {"0": "0", "1": "1"}
@@ -50,7 +53,7 @@ class BooleanRing(AbelianGroup):
     <BLANKLINE>
     """
 
-    def check_axioms(self) -> None:
+    def check_axioms(self) -> None:  # noqa: D102
         super().check_axioms()
         assert associative(self.operations["mult"])
         assert is_left_identity(self.operations["mult"], "1")
@@ -64,5 +67,5 @@ class BooleanRing(AbelianGroup):
         assert idempotent(self.operations["mult"])
 
     @property
-    def operation_map(self) -> Dict[str, str]:
+    def operation_map(self) -> Dict[str, str]:  # noqa: D102
         return {"add": "+", "mult": "*"}

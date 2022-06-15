@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Script for adding a task
 =========================
@@ -35,9 +37,7 @@ from enum import Enum
 
 
 class TaskType(Enum):
-    """
-    type of tasks to ask ``isabelle`` server to perform
-    """
+    """Type of tasks to ask ``isabelle`` server to perform."""
 
     SLEDGEHAMMER = "sledgehammer[timeout=1000000]"
     NITPICK = "nitpick[timeout=1000000,max_threads=0]"
@@ -50,8 +50,7 @@ def add_task(
     cardinality: int = 1,
 ) -> None:
     """
-    take theory files from an existing folder and change tasks in them to given
-    ones
+    Take theory files from an existing folder and change tasks in them.
 
     :param source_path: a directory where to get theory files to add tasks to
     :param target_path: where to put new theory files with added tasks

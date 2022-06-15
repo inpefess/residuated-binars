@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Generate Theories
 ==================
@@ -45,7 +47,7 @@ def generate_isabelle_theory_file(
     theory_name: str, assumptions: List[str], goal: Optional[str] = None
 ) -> List[str]:
     """
-    generate a text of Isabelle theory file with only ones lemma inside
+    Generate a text of Isabelle theory file with only ones lemma inside.
 
     :param theory_name: name of a theory file
     :param assumptions: a list of lemma assumptions in Isabelle language
@@ -77,8 +79,7 @@ def independence_case(
     additional_assumptions: List[str],
 ) -> None:
     """
-    generate a text of ``isabelle`` theory file for checking independence of
-    one chosen assumpion from some subset of the rest
+    Generate theory of independence of one assumpion from a subset of the rest.
 
     :param path: a folder for storing theory files
     :param independent_assumptions: a list of assumption which independence
@@ -115,8 +116,7 @@ def independence_check(
     check_subset_independence: bool,
 ) -> None:
     """
-    generate a bunch of theory files to check independence of some assumptions
-    given additional ones
+    Generate a theory files to check independence given additional assumpions.
 
     :param path: a folder for storing theory files
     :param independent_assumptions: a list of assumption which independence

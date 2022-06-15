@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Bounded Lattice
 ===============
@@ -27,7 +29,7 @@ from residuated_binars.lattice import Lattice
 
 class BoundedLattice(Lattice):
     r"""
-        a representation of a bounded lattice
+    A representation of a bounded lattice.
 
     >>> join = {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}}
     >>> meet = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
@@ -37,7 +39,7 @@ class BoundedLattice(Lattice):
     {'join': [[0, 1], [1, 1]], 'meet': [[0, 0], [0, 1]]}
     """
 
-    def check_axioms(self) -> None:
+    def check_axioms(self) -> None:  # noqa: D102
         super().check_axioms()
         assert is_left_identity(self.operations["meet"], TOP)
         assert is_right_identity(self.operations["meet"], TOP)

@@ -11,10 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Short scripts useful for other submodules
 =========================================
-
 """
 import os
 import shutil
@@ -24,6 +25,8 @@ from typing import Sequence
 
 def remove_dirs(dir_list: Sequence[str]) -> None:
     """
+    Remove a list of subdirectories of a current one.
+
     >>> os.path.exists("remove-test1")
     False
     >>> os.path.exists("remove-test2")
