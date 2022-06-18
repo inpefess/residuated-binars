@@ -234,11 +234,11 @@ def absorbs(table1: CayleyTable, table2: CayleyTable) -> bool:
     """
     Check an absorption law.
 
-    >>> conjuction = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
+    >>> conjunction = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
     >>> disjunction = {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}}
-    >>> absorbs(conjuction, disjunction)
+    >>> absorbs(conjunction, disjunction)
     True
-    >>> absorbs(conjuction, conjuction)
+    >>> absorbs(conjunction, conjunction)
     False
 
     :param table1: a multiplication table of a binary operation

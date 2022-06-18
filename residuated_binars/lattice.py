@@ -137,7 +137,7 @@ class Lattice(AlgebraicStructure):
         return graph
 
     def canonise_symbols(self) -> None:
-        """Renumerate lattice's items in a canonical way."""
+        """Enumerate lattice's items in a canonical way."""
         symbol_map = {
             pair[1]: pair[0]
             for pair in zip(

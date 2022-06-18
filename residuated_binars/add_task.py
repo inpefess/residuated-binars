@@ -55,7 +55,7 @@ def add_task(
     :param source_path: a directory where to get theory files to add tasks to
     :param target_path: where to put new theory files with added tasks
     :param task_type: use Nitpick or Sledgehammer (disprove by finding a finite
-        coutner-example or prove)
+        counter-example or prove)
     :param cardinality: a cardinality of finite model to find (only for Nitpick
         tasks)
     """

@@ -14,8 +14,8 @@
 
 # noqa: D205, D400
 """
-Short scripts useful for other submodules
-=========================================
+Short scripts useful for other sub-modules
+==========================================
 """
 import os
 import shutil
@@ -25,7 +25,7 @@ from typing import Sequence
 
 def remove_dirs(dir_list: Sequence[str]) -> None:
     """
-    Remove a list of subdirectories of a current one.
+    Remove a list of sub-directories of a current one.
 
     >>> os.path.exists("remove-test1")
     False
@@ -44,7 +44,7 @@ def remove_dirs(dir_list: Sequence[str]) -> None:
     >>> os.path.exists("remove-test2")
     False
 
-    :param dir_list: subfolders of the current folder to remove completely
+    :param dir_list: sub-folders of the current folder to remove completely
         (no questions asked!)
     """
     for some_dir in dir_list:

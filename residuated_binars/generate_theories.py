@@ -79,7 +79,7 @@ def independence_case(
     additional_assumptions: List[str],
 ) -> None:
     """
-    Generate theory of independence of one assumpion from a subset of the rest.
+    Generate theory of independence of an assumption from a subset of the rest.
 
     :param path: a folder for storing theory files
     :param independent_assumptions: a list of assumption which independence
@@ -115,7 +115,7 @@ def independence_check(
     check_subset_independence: bool,
 ) -> None:
     """
-    Generate a theory files to check independence given additional assumpions.
+    Generate a theory files to check independence given additional assumptions.
 
     :param path: a folder for storing theory files
     :param independent_assumptions: a list of assumption which independence

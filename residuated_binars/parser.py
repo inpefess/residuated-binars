@@ -106,7 +106,7 @@ def isabelle_format_to_algebra(
     Parse the textual representation of operations to ``AlgebraicStructure``.
 
     :param isabelle_message: a body of reply from Isabelle server (in JSON)
-    :param label: a name of the theory for which we got a relply from server
+    :param label: a name of the theory for which we got a reply from server
     :returns: a residuated binar
     """
     regex = re.compile(

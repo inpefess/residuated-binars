@@ -114,7 +114,7 @@ class AlgebraicStructure:
 
     @property
     def symbols(self) -> List[str]:
-        """Return a list of symbols denoting items of an alg. structure."""
+        """Return a list of symbols denoting items of an the structure."""
         keys = list(next(iter(self.operations.items()))[1].keys())
         pure_keys = keys.copy()
         if TOP in pure_keys:

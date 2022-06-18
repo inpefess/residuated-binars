@@ -39,6 +39,7 @@ pre-commit = "*"
 importlib_resources = {version = "*", markers = "python_version < \"3.9\""}
 sphinx-autodoc-typehints = "*"
 sphinx-rtd-theme = "*"
+pyenchant = "*"
 
 [tool.black]
 line-length=79
@@ -64,6 +65,10 @@ load-plugins = [
     "pylint.extensions.mccabe",
     "pylint.extensions.set_membership",
 ]
+
+[tool.pylint.spelling]
+spelling-dict = "en"
+spelling-private-dict-file = "spelling.dict"
 
 [tool.pylint.parameter_documentation]
 accept-no-param-doc = false
