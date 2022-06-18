@@ -91,7 +91,11 @@ class AlgebraicStructure:
         return len(next(iter(self.operations.items()))[1].keys())
 
     def remap_symbols(self, symbol_map: Dict[str, str]) -> None:
-        """Rename symbols in a given way."""
+        """
+        Rename symbols in a given way.
+
+        :param symbol_map: what map to what
+        """
         for op_label, operation in self.operations.items():
             if isinstance(next(iter(operation.items()))[1], Dict):
                 new_table: CayleyTable = {}

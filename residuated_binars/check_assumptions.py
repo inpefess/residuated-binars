@@ -40,7 +40,7 @@ def get_customised_logger(task_folder: str) -> logging.Logger:
     """
     Get a nice logger.
 
-    :param rask_folder: a base folder (and a task name)
+    :param task_folder: a base folder (and a task name)
     """
     logfile_name = os.path.join(task_folder, "isabelle.out")
     if os.path.exists(logfile_name):
@@ -59,7 +59,6 @@ def check_assumptions(path: str, server_info: Optional[str] = None) -> None:
 
     :param path: a folder with theory files
     :param server_info: an info string of an Isabelle server
-    :returns:
     """
     nest_asyncio.apply()
     theories = [

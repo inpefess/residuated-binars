@@ -43,7 +43,8 @@ def filter_theories(source_path: str, target_path: str) -> None:
         include an ``isabelle.out`` file with server's output
     :param target_path: where to put theory files without proofs or
         counter-examples
-    :returns:
+    :raises ValueError: if there is no FINISHED message in Isabelle server
+        response
     """
     if not os.path.exists(target_path):
         os.mkdir(target_path)

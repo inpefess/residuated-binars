@@ -58,7 +58,6 @@ def add_task(
         coutner-example or prove)
     :param cardinality: a cardinality of finite model to find (only for Nitpick
         tasks)
-    :returns:
     """
     if not os.path.exists(target_path):
         os.mkdir(target_path)

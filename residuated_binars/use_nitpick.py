@@ -58,7 +58,6 @@ def use_nitpick(
     :param check_subset_independence: whether to check every assumption from
         the list against all the rest or against any combination of the rest
     :param server_info: an info string of an Isabelle server
-    :returns:
     """
     cardinality = 2
     hypotheses = f"hyp{cardinality}"

@@ -46,7 +46,6 @@ def remove_dirs(dir_list: Sequence[str]) -> None:
 
     :param dir_list: subfolders of the current folder to remove completely
         (no questions asked!)
-    :returns:
     """
     for some_dir in dir_list:
         for path in glob(os.path.join(".", some_dir)):
