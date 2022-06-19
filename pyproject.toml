@@ -28,6 +28,7 @@ isabelle-client = "*"
 graphviz = "*"
 pydocstyle = "*"
 nest-asyncio = "*"
+importlib_resources = {version = "*", markers = "python_version < \"3.9\""}
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "*"
@@ -37,7 +38,6 @@ pylint = "*"
 mypy = "*"
 pytest-cov = "*"
 pre-commit = "*"
-importlib_resources = {version = "*", markers = "python_version < \"3.9\""}
 sphinx-autodoc-typehints = "*"
 sphinx-rtd-theme = "*"
 pyenchant = "*"
