@@ -91,3 +91,24 @@ disable_error_code = "no-redef"
 [[tool.mypy.overrides]]
 module = ["graphviz", "nest_asyncio", "importlib_resources"]
 ignore_missing_imports = true
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = True
+envlist = py37,py38,py39,py310
+
+[testenv]
+deps =
+    pytest-cov
+    flake8
+    pylint
+    mypy
+    toml
+    pyenchant
+commands =
+    flake8 residuated_binars tests
+    pylint residuated_binars tests
+    mypy residuated_binars tests
+    pytest
+"""

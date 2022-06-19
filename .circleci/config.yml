@@ -1,68 +1,30 @@
 version: 2.1
-
 jobs:
   build-and-test:
-    parameters:
-      python_version:
-        description: "Python version to test against"
-        default: "3.10.4"
-        type: string
     docker:
-      - image: cimg/python:<< parameters.python_version >>
-    working_directory: ~/repo
+      - image: inpefess/multipython
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-<< parameters.python_version >>-{{ checksum "poetry.lock" }}
       - run:
           name: install graphviz
           command: |
             sudo apt-get update
-            sudo apt-get install -y graphviz
+            sudo apt-get install -y graphviz libenchant-2-2
       - run:
-          name: install dependencies
+          name: use tox
           command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install -U pip poetry
-            poetry install
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-<< parameters.python_version >>-{{ checksum "poetry.lock" }}
-      - run:
-          name: run linters
-          command: |
-            . venv/bin/activate
-            pydocstyle residuated_binars tests
-            flake8 residuated_binars tests
-            pylint residuated_binars tests
-      - run:
-          name: run type checks
-          command: |
-            . venv/bin/activate
-            mypy residuated_binars tests
-      - run:
-          name: run tests
-          command: |
-            . venv/bin/activate
-            pytest --cov-report xml residuated_binars tests
+            pip install tox
+            pyenv local 3.7.13 3.8.13 3.9.13 3.10.4
+            tox
       - run:
           name: upload data to codecov
           command: |
             bash <(curl -s https://codecov.io/bash) -X gcov -X coveragepy
+      - store_artifacts:
+          path: build
       - store_test_results:
           path: test-results
-
 workflows:
-  workflow:
+  main:
     jobs:
-      - build-and-test:
-          python_version: "3.7.13"
-      - build-and-test:
-          python_version: "3.8.13"
-      - build-and-test:
-          python_version: "3.9.12"
-      - build-and-test:
-          python_version: "3.10.4"      
+      - build-and-test
