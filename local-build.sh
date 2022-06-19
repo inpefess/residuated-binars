@@ -9,5 +9,5 @@ pydocstyle ${PACKAGE_NAME} tests
 flake8 ${PACKAGE_NAME} tests
 pylint ${PACKAGE_NAME} tests
 mypy ${PACKAGE_NAME} tests
-pytest --cov-report term-missing ${PACKAGE_NAME} tests
+pytest
 scc -i py ${PACKAGE_NAME}
