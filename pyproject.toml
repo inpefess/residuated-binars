@@ -55,7 +55,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--doctest-modules --cov residuated_binars --cov-report xml --cov-fail-under=98 --junit-xml test-results/residuated-binars.xml"
+addopts = "--doctest-modules --cov residuated_binars --cov-report xml --cov-report term-missing --cov-fail-under=98 --junit-xml test-results/residuated-binars.xml"
 testpaths = ["residuated_binars"]
 doctest_optionflags = "NORMALIZE_WHITESPACE"
 
