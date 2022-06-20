@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Residuated Binar
 =================
@@ -26,7 +28,7 @@ from residuated_binars.lattice import BOT, Lattice
 
 class ResiduatedBinar(Lattice):
     r"""
-        a representation of a residuated binar (with involution)
+    A representation of a residuated binar (with involution).
 
     >>> join = {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}}
     >>> meet = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
@@ -78,7 +80,7 @@ class ResiduatedBinar(Lattice):
     0 v 0 = 0.
     """
 
-    def check_axioms(self) -> None:
+    def check_axioms(self) -> None:  # noqa: D102
         super().check_axioms()
         if not left_distributive(
             self.operations["mult"], self.operations["join"]
@@ -130,16 +132,14 @@ class ResiduatedBinar(Lattice):
         return True
 
     @property
-    def operation_map(self) -> Dict[str, str]:
+    def operation_map(self) -> Dict[str, str]:  # noqa: D102
         res = super().operation_map
         res.update({"over": "/", "undr": "\\", "mult": "*"})
         return res
 
     @property
     def latex_mult_table(self) -> str:
-        """
-        :returns: a LaTeX representation of a multiplication table
-        """
+        """Return a LaTeX representation of a multiplication table."""
         table = (
             "\\begin{table}[]\n"
             + "\\begin{tabular}"
@@ -162,9 +162,7 @@ class ResiduatedBinar(Lattice):
 
     @property
     def markdown_mult_table(self) -> str:
-        """
-        :returns: a Markdown representation of a multiplication table
-        """
+        """Return a Markdown representation of a multiplication table."""
         table = "|*|" + "|".join(self.symbols) + "|\n"
         table += "|" + (1 + len(self.symbols)) * "-|" + "\n"
         for row in self.symbols:

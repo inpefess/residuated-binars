@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "residuated-binars"
-version = "0.0.1"
+version = "0.0.2"
 description = "Package for generating and validating examples of different algebraic structures using Isabelle proof assistant"
 authors = ["Boris Shminke <boris@shminke.ml>", "Carlos Simpson"]
 license = "Apache-2.0"
@@ -26,6 +26,9 @@ include = ["residuated_binars/py.typed"]
 python = ">= 3.7.1, < 3.11"
 isabelle-client = "*"
 graphviz = "*"
+pydocstyle = "*"
+nest-asyncio = "*"
+importlib_resources = {version = "*", markers = "python_version < \"3.9\""}
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "*"
@@ -35,9 +38,9 @@ pylint = "*"
 mypy = "*"
 pytest-cov = "*"
 pre-commit = "*"
-importlib_resources = {version = "*", markers = "python_version < \"3.9\""}
 sphinx-autodoc-typehints = "*"
 sphinx-rtd-theme = "*"
+pyenchant = "*"
 
 [tool.black]
 line-length=79
@@ -52,12 +55,28 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--doctest-modules --cov residuated_binars --cov-report xml --cov-fail-under=98 --junit-xml test-results/residuated-binars.xml"
-testpaths = ["residuated_binars"]
+addopts = "--doctest-modules --cov residuated_binars --cov-report xml --cov-report term-missing --cov-fail-under=98 --junit-xml test-results/residuated-binars.xml"
+testpaths = ["residuated_binars", "tests"]
 doctest_optionflags = "NORMALIZE_WHITESPACE"
 
-[tool.pylint.master]
-disable = "bad-continuation"
+[tool.pylint.MASTER]
+load-plugins = [
+    "pylint.extensions.consider_ternary_expression",
+    "pylint.extensions.docparams",
+    "pylint.extensions.mccabe",
+    "pylint.extensions.set_membership",
+]
+
+[tool.pylint.spelling]
+spelling-dict = "en"
+spelling-private-dict-file = "spelling.dict"
+
+[tool.pylint.parameter_documentation]
+accept-no-param-doc = false
+accept-no-raise-doc = false
+accept-no-return-doc = true
+accept-no-yields-doc = false
+default-docstring-type = "sphinx"
 
 [tool.pylint.format]
 max-line-length = 79
@@ -73,3 +92,24 @@ disable_error_code = "no-redef"
 [[tool.mypy.overrides]]
 module = ["graphviz", "nest_asyncio", "importlib_resources"]
 ignore_missing_imports = true
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = True
+envlist = py37,py38,py39,py310
+
+[testenv]
+deps =
+    pytest-cov
+    flake8
+    pylint
+    mypy
+    toml
+    pyenchant
+commands =
+    flake8 residuated_binars tests
+    pylint residuated_binars tests
+    mypy residuated_binars tests
+    pytest
+"""

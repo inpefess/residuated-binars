@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Algebraic Structure
 ====================
@@ -24,7 +26,7 @@ BOT = r"⟘"
 
 class AlgebraicStructure:
     r"""
-        a base class for difference algebraic structures
+    A base class for difference algebraic structures.
 
     >>> magma_with_involution = AlgebraicStructure(
     ...     label="test",
@@ -67,27 +69,33 @@ class AlgebraicStructure:
         label: str,
         operations: Dict[str, Dict[str, Any]],
     ):
+        """
+        Only binary and unary operations are supported.
+
+        :param label: an arbitrary name for an algebraic structure
+        :param operations: a dictionary of operations and their names
+        """
         self.label = label
         self.operations = operations
         self.check_axioms()
 
     def check_axioms(self) -> None:
-        """
-        check axioms specific to that algebraic structure. If any axiom fails,
-        raise an error
+        """Check axioms specific to that algebraic structure.
 
-        :returns:
+        If any axiom fails, raise an error.
         """
 
     @property
     def cardinality(self) -> int:
-        """
-        :returns: number of items in the algebraic structure
-        """
+        """Return the number of items in the algebraic structure."""
         return len(next(iter(self.operations.items()))[1].keys())
 
     def remap_symbols(self, symbol_map: Dict[str, str]) -> None:
-        """rename symbols in a given way"""
+        """
+        Rename symbols in a given way.
+
+        :param symbol_map: what map to what
+        """
         for op_label, operation in self.operations.items():
             if isinstance(next(iter(operation.items()))[1], Dict):
                 new_table: CayleyTable = {}
@@ -106,9 +114,7 @@ class AlgebraicStructure:
 
     @property
     def symbols(self) -> List[str]:
-        """
-        :returns: a list of symbols denoting items of an algebraic structure
-        """
+        """Return a list of symbols denoting items of an the structure."""
         keys = list(next(iter(self.operations.items()))[1].keys())
         pure_keys = keys.copy()
         if TOP in pure_keys:
@@ -123,16 +129,18 @@ class AlgebraicStructure:
 
     @property
     def operation_map(self) -> Dict[str, str]:
-        """
-        :returns: a map from operation labels (for functional notation) to
-            operation symbols (for infix notation)
+        """Return a map from operation labels to operation symbols.
+
+        Labels are used for the infix notation and symbols ---
+            for functional one.
         """
         return {}
 
     @property
     def mace4_format(self) -> str:
         """
-        represent the algebraic structure in ``Prover9/Mace4`` format
+        Represent the algebraic structure in ``Prover9/Mace4`` format.
+
         :returns: a string representation
         """
         result = ""
@@ -174,13 +182,12 @@ class AlgebraicStructure:
 
     @property
     def tabular_format(self) -> Dict[str, Union[List[List[int]], List[int]]]:
-        """
-        :returns: a dictionary of Cayley tables as lists of lists
-        """
+        """Return a dictionary of Cayley tables as lists of lists."""
         return {
             op_label: self._operation_tabular_view(operation)
             for op_label, operation in self.operations.items()
         }
 
     def __repr__(self):
+        """Return a default representation --- the tabular format."""
         return str(self.tabular_format)

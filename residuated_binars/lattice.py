@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Lattice
 ========
@@ -25,7 +27,7 @@ from residuated_binars.axiom_checkers import absorbs, associative, commutative
 
 class Lattice(AlgebraicStructure):
     r"""
-        a representation of a lattice
+    A representation of a lattice.
 
     >>> join = {"0": {"0": "0", "1": "1"}, "1": {"0": "1", "1": "1"}}
     >>> meet = {"0": {"0": "0", "1": "0"}, "1": {"0": "0", "1": "1"}}
@@ -76,7 +78,7 @@ class Lattice(AlgebraicStructure):
     ValueError: meet is not associative
     """
 
-    def check_axioms(self) -> None:
+    def check_axioms(self) -> None:  # noqa: D102
         self._check_commutativity_and_associativity()
         if not absorbs(
             self.operations["meet"], self.operations["join"]
@@ -94,15 +96,12 @@ class Lattice(AlgebraicStructure):
             raise ValueError("meet is not associative")
 
     @property
-    def operation_map(self) -> Dict[str, str]:
+    def operation_map(self) -> Dict[str, str]:  # noqa: D102
         return {"meet": "^", "join": "v"}
 
     @property
     def more(self) -> Dict[str, List[str]]:
-        """
-        :returns: some representation of a 'more' relation of a lattice reduct
-            of the lattice
-        """
+        """Return a representation of a 'more' relation of the lattice."""
         relation: Dict[str, List[str]] = {}
         for one in self.symbols:
             relation[one] = []
@@ -113,10 +112,7 @@ class Lattice(AlgebraicStructure):
 
     @property
     def hasse(self) -> List[Tuple[str, str]]:
-        """
-        :returns: some representation of a Hasse diagram of a lattice reduct of
-            the lattice
-        """
+        """Return a representation of a Hasse diagram of a lattice."""
         more = {
             pair[0]: pair[1]
             for pair in sorted(
@@ -134,19 +130,14 @@ class Lattice(AlgebraicStructure):
 
     @property
     def graphviz_repr(self) -> str:
-        """
-        :returns: a representation usable by ``graphviz`` of a Hasse diagram of
-            a lattice reduct of the lattice
-        """
+        """Return a representation usable by ``graphviz`` of Hasse diagram."""
         graph = graphviz.Graph()
         for pair in self.hasse:
             graph.edge(pair[0], pair[1])
         return graph
 
     def canonise_symbols(self) -> None:
-        """
-        renumerate lattice's items in a canonical way
-        """
+        """Enumerate lattice's items in a canonical way."""
         symbol_map = {
             pair[1]: pair[0]
             for pair in zip(

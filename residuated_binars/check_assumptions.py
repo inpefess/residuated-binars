@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Check Assumptions
 ==================
@@ -36,9 +38,9 @@ from isabelle_client.utils import start_isabelle_server
 
 def get_customised_logger(task_folder: str) -> logging.Logger:
     """
-    get a nice logger
+    Get a nice logger.
 
-    :param rask_folder: a base folder (and a task name)
+    :param task_folder: a base folder (and a task name)
     """
     logfile_name = os.path.join(task_folder, "isabelle.out")
     if os.path.exists(logfile_name):
@@ -53,11 +55,10 @@ def get_customised_logger(task_folder: str) -> logging.Logger:
 
 def check_assumptions(path: str, server_info: Optional[str] = None) -> None:
     """
-    ask Isabelle server to process all theory files in a given path
+    Ask Isabelle server to process all theory files in a given path.
 
     :param path: a folder with theory files
     :param server_info: an info string of an Isabelle server
-    :returns:
     """
     nest_asyncio.apply()
     theories = [
@@ -79,6 +80,8 @@ def check_assumptions(path: str, server_info: Optional[str] = None) -> None:
 
 def get_abs_path(path: str) -> str:
     """
+    Get an absolute path on Windows or Linux.
+
     :param path: a path
     :returns: an absolute path, corrected to CygWin path for Windows
     """

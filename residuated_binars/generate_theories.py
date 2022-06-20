@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Generate Theories
 ==================
@@ -45,7 +47,7 @@ def generate_isabelle_theory_file(
     theory_name: str, assumptions: List[str], goal: Optional[str] = None
 ) -> List[str]:
     """
-    generate a text of Isabelle theory file with only ones lemma inside
+    Generate a text of Isabelle theory file with only ones lemma inside.
 
     :param theory_name: name of a theory file
     :param assumptions: a list of lemma assumptions in Isabelle language
@@ -77,8 +79,7 @@ def independence_case(
     additional_assumptions: List[str],
 ) -> None:
     """
-    generate a text of ``isabelle`` theory file for checking independence of
-    one chosen assumpion from some subset of the rest
+    Generate theory of independence of an assumption from a subset of the rest.
 
     :param path: a folder for storing theory files
     :param independent_assumptions: a list of assumption which independence
@@ -88,7 +89,6 @@ def independence_case(
     :param additional_assumptions: a list of additional assumptions about
         the binars like the lattice reduct distributivity, existence of
         an involution operation, and multiplication associativity
-    :returns:
     """
     assumption_list = list(assumption_indices)
     theory_name = f"T{''.join(map(str, assumption_list))}_{goal_index}"
@@ -115,8 +115,7 @@ def independence_check(
     check_subset_independence: bool,
 ) -> None:
     """
-    generate a bunch of theory files to check independence of some assumptions
-    given additional ones
+    Generate a theory files to check independence given additional assumptions.
 
     :param path: a folder for storing theory files
     :param independent_assumptions: a list of assumption which independence
@@ -124,7 +123,6 @@ def independence_check(
     :param additional_assumptions: a list of additional assumptions
     :param check_subset_independence: whether to check every assumption from
         the list against all the rest or against any combination of the rest
-    :returns:
     """
     if not os.path.exists(path):
         os.mkdir(path)
@@ -135,15 +133,16 @@ def independence_check(
                 list(range(0, goal_index))
                 + list(range(goal_index + 1, total_assumptions_count))
             )
-            if check_subset_independence:
-                index_combinations = list(
+            index_combinations = (
+                list(
                     combinations(
                         indices,
                         assumptions_count,
                     )
                 )
-            else:
-                index_combinations = [indices]
+                if check_subset_independence
+                else [indices]
+            )
             for assumption_indices in index_combinations:
                 independence_case(
                     path,

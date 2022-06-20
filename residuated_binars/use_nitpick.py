@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# noqa: D205, D400
 """
 Use Nitpick
 ============
@@ -47,7 +49,7 @@ def use_nitpick(
     server_info: Optional[str] = None,
 ) -> None:
     """
-    incrementally search for finite counter-examples
+    Incrementally search for finite counter-examples.
 
     :param max_cardinality: maximal cardinality of a model to search for
     :param independent_assumptions: a list of assumption which independence
@@ -56,7 +58,6 @@ def use_nitpick(
     :param check_subset_independence: whether to check every assumption from
         the list against all the rest or against any combination of the rest
     :param server_info: an info string of an Isabelle server
-    :returns:
     """
     cardinality = 2
     hypotheses = f"hyp{cardinality}"
