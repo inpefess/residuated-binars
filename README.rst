@@ -21,6 +21,9 @@ Generating Algebraic Structures with Isabelle
 .. attention::
    If you're looking for a reproducible example for AITP 2021 paper, find it `here <https://residuated-binars.readthedocs.io/en/latest/aitp2021.html>`__.
 
+.. attention::
+   The project is inactive.
+   
 This package serves for generating and validating examples of different algebraic structures using `Isabelle proof assistant <https://isabelle.in.tum.de>`__.
 
 .. _how-to-install:

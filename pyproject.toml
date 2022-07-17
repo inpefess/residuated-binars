@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "residuated-binars"
-version = "0.0.2"
+version = "0.0.3"
 description = "Package for generating and validating examples of different algebraic structures using Isabelle proof assistant"
 authors = ["Boris Shminke <boris@shminke.ml>", "Carlos Simpson"]
 license = "Apache-2.0"
@@ -14,7 +14,7 @@ classifiers=[
 	"License :: OSI Approved :: Apache Software License",
 	"Operating System :: OS Independent",
 	"Intended Audience :: Science/Research",
-	"Development Status :: 3 - Alpha",
+	"Development Status :: 7 - Inactive",
 	"Environment :: Console",
 	"Natural Language :: English",
 	"Topic :: Scientific/Engineering :: Artificial Intelligence",
@@ -41,6 +41,7 @@ pre-commit = "*"
 sphinx-autodoc-typehints = "*"
 sphinx-rtd-theme = "*"
 pyenchant = "*"
+tbump = "*"
 
 [tool.black]
 line-length=79
@@ -113,3 +114,29 @@ commands =
     mypy residuated_binars tests
     pytest
 """
+
+[tool.tbump]
+github_url = "https://github.com/inpfess/residuated-binars/"
+
+[tool.tbump.version]
+current = "0.0.3"
+regex = '''
+  (?P<major>\d+)
+  \.
+  (?P<minor>\d+)
+  \.
+  (?P<patch>\d+)
+  '''
+
+[tool.tbump.git]
+message_template = "Bump to {new_version}"
+tag_template = "v{new_version}"
+
+[[tool.tbump.file]]
+src = "residuated_binars/__init__.py"
+
+[[tool.tbump.file]]
+src = "pyproject.toml"
+
+[[tool.tbump.file]]
+src = "doc/source/conf.py"
