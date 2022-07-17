@@ -14,4 +14,4 @@
 
 # noqa: D205, D400
 """Collection of scripts to search for models of algebraic structures."""
-__version__ = "0.0.2"
+__version__ = "0.0.3"
