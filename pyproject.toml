@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "residuated-binars"
-version = "0.0.3"
+version = "0.0.4"
 description = "Package for generating and validating examples of different algebraic structures using Isabelle proof assistant"
 authors = ["Boris Shminke <boris@shminke.ml>", "Carlos Simpson"]
 license = "Apache-2.0"
@@ -119,7 +119,7 @@ commands =
 github_url = "https://github.com/inpfess/residuated-binars/"
 
 [tool.tbump.version]
-current = "0.0.3"
+current = "0.0.4"
 regex = '''
   (?P<major>\d+)
   \.
