@@ -11,6 +11,7 @@ classifiers=[
 	"Programming Language :: Python :: 3.8",
 	"Programming Language :: Python :: 3.9",
 	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
 	"License :: OSI Approved :: Apache Software License",
 	"Operating System :: OS Independent",
 	"Intended Audience :: Science/Research",
@@ -23,15 +24,13 @@ classifiers=[
 include = ["residuated_binars/py.typed"]
 
 [tool.poetry.dependencies]
-python = ">= 3.7.1, < 3.11"
+python = ">= 3.7.1, < 3.12"
 isabelle-client = "*"
 graphviz = "*"
-pydocstyle = "*"
-nest-asyncio = "*"
-importlib_resources = {version = "*", markers = "python_version < \"3.9\""}
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "*"
+pydocstyle = "*"
 flake8 = "*"
 black = "*"
 pylint = "*"
@@ -72,6 +71,9 @@ load-plugins = [
 spelling-dict = "en"
 spelling-private-dict-file = "spelling.dict"
 
+[tool.pylint.typecheck]
+generated-members = ["os"]
+
 [tool.pylint.parameter_documentation]
 accept-no-param-doc = false
 accept-no-raise-doc = false
@@ -98,7 +100,7 @@ ignore_missing_imports = true
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py37,py38,py39,py310
+envlist = py37,py38,py39,py310,311
 
 [testenv]
 deps =

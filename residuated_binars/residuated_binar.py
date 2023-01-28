@@ -1,4 +1,4 @@
-# Copyright 2021-2022 Boris Shminke
+# Copyright 2021-2023 Boris Shminke
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ from residuated_binars.axiom_checkers import (
     left_distributive,
     right_distributive,
 )
-from residuated_binars.lattice import BOT, Lattice
+from residuated_binars.lattice import Lattice
 
 
 class ResiduatedBinar(Lattice):
@@ -42,13 +42,11 @@ class ResiduatedBinar(Lattice):
     ...     }
     ... )
     >>> print(binar.latex_mult_table)
-    \begin{table}[]
-    \begin{tabular}{l|ll}
-    $\cdot$ & $0$ & $1$\\\hline
-    $0$ & $0$ & $0$ & \\
-    $1$ & $0$ & $0$ & \\
-    \end{tabular}
-    \end{table}
+    \begin{array}{c|cc}
+    \cdot & 0 & 1\\\hline
+    0 & 0 & 0\\
+    1 & 0 & 0\\
+    \end{array}
     <BLANKLINE>
     >>> print(binar.markdown_mult_table)
     |*|0|1|
@@ -141,23 +139,17 @@ class ResiduatedBinar(Lattice):
     def latex_mult_table(self) -> str:
         """Return a LaTeX representation of a multiplication table."""
         table = (
-            "\\begin{table}[]\n"
-            + "\\begin{tabular}"
-            + f"{{l|{''.join((self.cardinality) * 'l')}}}\n"
-            + "$"
-            + "$ & $".join([r"\cdot"] + self.symbols)
-            + "$\\\\\\hline\n"
+            "\\begin{array}"
+            + f"{{c|{''.join((self.cardinality) * 'c')}}}\n"
+            + " & ".join([r"\cdot"] + self.symbols)
+            + "\\\\\\hline\n"
         )
         for row in self.symbols:
-            table += "$" + row + "$ & "
+            table += row + " & "
             for col in self.symbols:
-                table += "$" + self.operations["mult"][row][col] + "$"
-                if col != BOT:
-                    table += " & "
-            if row != BOT:
-                table += r"\\"
-            table += "\n"
-        table += "\\end{tabular}\n" + "\\end{table}\n"
+                table += self.operations["mult"][row][col] + " & "
+            table = table[:-3] + r"\\" + "\n"
+        table += "\\end{array}\n"
         return table
 
     @property
